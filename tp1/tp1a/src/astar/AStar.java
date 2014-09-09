@@ -26,27 +26,23 @@ public class AStar {
 
         open.add(etatInitial);
 
+
+        int etat_generer=0;
+        int nb_visite = 0;
+
+        Etat arrive = etatInitial;
         while(open.size() > 0){
-
-            Etat etat_init = open.first();
-
-            List<Action> actions =  monde.getActions(etat_init);
-            Action current_action = find_best_open(actions,etat_init,monde);
-
-            Etat current_etat = monde.executer(etat_init,current_action);
+            nb_visite++;
+            Etat etat_init = find_best_in_open(open);
 
 
             open.remove(etat_init);
             close.add(etat_init);
-            plan.add(current_action);
-
-            if(but.butSatisfait(current_etat)){
+            if(but.butSatisfait(etat_init)){
+                arrive = etat_init;
                 break;
             }
-            voisins(current_etat,monde,etatInitial,but,heuristique);
-
-            System.out.println(" ici");
-
+            voisins(etat_init,monde,etatInitial,but,heuristique);
 
         }
 
@@ -80,43 +76,63 @@ public class AStar {
         //  - Commentez les lignes propres au déboggage.
         
         // Un plan est une séquence (liste) d'actions.
+        Etat pas = arrive;
+        while(pas.actionDepuisParent != null){
+            plan.add(pas.actionDepuisParent);
+            pas= pas.parent;
+        }
 
+        Collections.reverse(plan);
 
         long lastDuration = System.currentTimeMillis() - starttime;
         // Les lignes écrites débutant par un dièse '#' seront ignorées par le valideur de solution.
         System.out.println("# Nombre d'états générés : " + 0);
-        System.out.println("# Nombre d'états visités : " + 0);
+        System.out.println("# Nombre d'états visités : " + nb_visite);
         System.out.println("# Durée : " + lastDuration + " ms");
-        System.out.println("# Coût : " + nf.format(Double.POSITIVE_INFINITY));
+        System.out.println("# Coût : " + nf.format(arrive.g));
         return plan;
     }
 
 
-    private static Action find_best_open(List<Action> l,Etat etat, Monde monde){
-        Etat best = monde.executer(etat,l.get(0));
-        best.actionDepuisParent = l.get(0);
-        for(Action a: l){
-            Etat etat_voisin = monde.executer(etat,a);
-            if( best.f < etat_voisin.f){
-                best = etat_voisin;
-                best.actionDepuisParent = a;
+    private static Etat find_best_in_open(TreeSet<Etat> t){
+        Etat best = t.first();
+        for( Etat e : t){
+
+
+            if( e.f < best.f ){
+                best = e;
             }
         }
-        return best.actionDepuisParent;
+        return best;
     }
 
-    private static void voisins(Etat etat, Monde monde, Etat etatInitial, But but, Heuristique heuristique){
+    private static void voisins(Etat current, Monde monde, Etat etatInitial, But but, Heuristique heuristique){
 
-        List<Action> action_voisin = monde.getActions(etat);
+        List<Action> action_voisin = monde.getActions(current);
 
         for( Action a : action_voisin ){
-            Etat voisin = monde.executer(etat,a);
+            Etat voisin = monde.executer(current,a);
             if( !close.contains(voisin)){
 
-                double newG = a.cout ;
-                open.add(voisin);
+                double newG = a.cout + current.g;
+                double newF = newG + heuristique.estimerCoutRestant(voisin,but);
+                if(!open.contains(voisin) || newF < voisin.f ){
 
 
+                    voisin.parent = current;
+                    voisin.actionDepuisParent = a;
+                    voisin.h = heuristique.estimerCoutRestant(voisin,but);
+                    voisin.g = newG;
+                    voisin.f = voisin.g+ voisin.h;
+
+
+
+                    if (!open.contains(voisin))
+                        open.add(voisin);
+                }
+
+
+            }else{
             }
 
         }
