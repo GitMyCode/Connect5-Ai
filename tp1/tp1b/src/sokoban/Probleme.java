@@ -8,6 +8,7 @@ package sokoban;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *  Représente un problème chargé d'un fichier test sokoban??.txt.
@@ -30,9 +31,19 @@ public class Probleme {
         
         Probleme probleme = new Probleme();
         // Traiter les lignes lue. La grille a lignes.size() lignes.
-        probleme.grille = new Grille();
-        probleme.but = new But();
-        probleme.etatInitial = new EtatSokoban();
+        List<Case> obstacles = char_to_list(lignes,'#');
+        List<Case> les_buts = char_to_list(lignes,'.');
+        List<Case> bonhomme = char_to_list(lignes,'@');
+        List<Case> blocks = char_to_list(lignes,'$');
+
+
+        probleme.grille = new Grille(lignes);
+        probleme.but = new But(les_buts);
+        probleme.etatInitial = new EtatSokoban(bonhomme.get(0),blocks);
+
+
+
+
         // À compléter...
         
         // Un espace ' ' est une case libre.
@@ -45,5 +56,19 @@ public class Probleme {
         // Ces symboles peuvent être ignorés et traités comme des espaces ' '.
         
         return probleme;
+    }
+
+    private static List<Case> char_to_list(List<String> lecture, char symbole){
+        List<Case> result = new ArrayList<Case>();
+        for(int i=0; i< lecture.size(); i++){
+            for(int j=0; j< lecture.get(i).length(); j++){
+                if(lecture.get(i).charAt(j) == symbole){
+                    Case c = new Case(i,j, symbole);
+                    result.add(c);
+                }
+            }
+        }
+
+        return result;
     }
 }

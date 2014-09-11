@@ -101,7 +101,7 @@ public class AStar {
         for( Etat e : t){
 
 
-            if( e.h < best.h ){
+            if( e.f < best.f ){
                 best = e;
             }
         }
@@ -135,6 +135,7 @@ public class AStar {
 
 
             }else{
+                System.out.println("test");
             }
 
         }
