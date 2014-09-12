@@ -43,7 +43,27 @@ public class But implements astar.But, astar.Heuristique {
 
         EtatSokoban etat = (EtatSokoban) e;
 
-        return 0;
+
+        double nb_but_non_atteint = les_buts.size();
+        for(Case c : les_buts){
+           if(((EtatSokoban) e).blocks.contains(c)){
+               nb_but_non_atteint--;
+           }
+        }
+
+        double distance_total =0;
+        for(Case but : les_buts){
+            for(Case block : ((EtatSokoban) e).blocks ){
+                double xx  = Math.pow(but.getX() - block.getX(),2);
+                double yy  = Math.pow(but.getY() - block.getY(),2);
+              double d = Math.pow((xx+yy),1/2);
+                distance_total += d;
+            }
+        }
+
+
+
+        return distance_total-nb_but_non_atteint;
     }
     
 }

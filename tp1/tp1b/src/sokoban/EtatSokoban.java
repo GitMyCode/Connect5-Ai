@@ -24,9 +24,12 @@ public class EtatSokoban extends Etat {
     protected Case bonhomme;
     protected List<Case> blocks;
 
+    protected boolean is_resolvable;
+
     public EtatSokoban(Case bonhomme,List<Case> blocks){
         this.bonhomme = bonhomme;
         this.blocks = blocks;
+        this.is_resolvable = true;
     }
 
     @Override

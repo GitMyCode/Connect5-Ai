@@ -38,9 +38,7 @@ public class AStar {
 
 
             open.remove(etat_init);
-            if(open.size()==0){
-                System.out.println("ici");
-            }
+
 
             close.add(etat_init);
             if(but.butSatisfait(etat_init)){
@@ -106,7 +104,7 @@ public class AStar {
         for( Etat e : t){
 
 
-            if( e.h < best.h ){
+            if( e.f < best.f ){
                 best = e;
             }
         }

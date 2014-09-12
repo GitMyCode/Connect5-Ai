@@ -48,6 +48,7 @@ public class Grille implements astar.Monde, astar.But {
 
     }
 
+
     public void setLes_buts(List<Case> les_buts) {
         this.les_buts = les_buts;
     }
@@ -112,9 +113,13 @@ public class Grille implements astar.Monde, astar.But {
             if(!obstacles.contains(temp_case)){
                 if(e.blocks.contains(temp_case)){
                     temp_case.setX(new_x+dx[i]);
-                    temp_case.setY(new_y+dy[i]);
+                    temp_case.setY(new_y + dy[i]);
                     if(!obstacles.contains(temp_case) && !e.blocks.contains(temp_case)){
-                        list.add(new ActionDeplacement(dname[i]));
+                        if(les_buts.contains(temp_case) || is_resolvable(temp_case)){
+                            list.add(new ActionDeplacement(dname[i]));
+                        }
+
+
                     }
 
                 }else{
@@ -127,6 +132,40 @@ public class Grille implements astar.Monde, astar.But {
 
         return list;
     }
+
+    private boolean is_resolvable(Case c){
+
+
+        Case temp = new Case(c.x,c.y,'%');
+
+
+        temp.applyDeplacement("W");
+        if(!obstacles.contains(temp)){
+            temp.applyDeplacement("E");
+            temp.applyDeplacement("E");
+            if(!obstacles.contains(temp)){
+                return true;
+
+            }
+        }
+
+
+        temp = new Case(c.x,c.y,'%');
+        temp.applyDeplacement("N");
+        if(!obstacles.contains(temp)){
+            temp.applyDeplacement("S");
+            temp.applyDeplacement("S");
+            if(!obstacles.contains(temp)){
+                return true;
+            }
+        }
+
+        return false;
+
+
+    }
+
+
 
     private boolean isINgrid(int x,int y){
         return (x >= 0 && x < grid.size())&&(y >= 0 && y < grid.get(x).size());
