@@ -20,6 +20,19 @@ public class Case implements Comparable<Case>,Cloneable{
     }
 
     @Override
+    public boolean equals(Object o) {
+
+        Case c = (Case) o;
+        if(this.x != c.x)
+            return false;
+
+        if( this.y != c.y)
+            return false;
+
+        return true;
+    }
+
+    @Override
     public int compareTo(Case aCase) {
 
         if(x < aCase.x ) return -1;
@@ -30,6 +43,36 @@ public class Case implements Comparable<Case>,Cloneable{
 
 
         return 0;
+
+
+   }
+
+    public void applyDeplacement(String action){
+        if(action=="E")
+            this.y -= 1;
+        if(action=="W")
+            this.y += 1;
+        if(action=="N")
+            this.x -= 1;
+        if(action=="S")
+            this.x += 1;
+    }
+
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     @Override

@@ -27,6 +27,9 @@ public class But implements astar.But, astar.Heuristique {
         EtatSokoban etat = (EtatSokoban) e;
 
         for(Case c : les_buts){
+
+
+
             if(!etat.blocks.contains(c)){
                 return false;
             }
@@ -37,6 +40,9 @@ public class But implements astar.But, astar.Heuristique {
 
     @Override
     public double estimerCoutRestant(astar.Etat e, astar.But b) {
+
+        EtatSokoban etat = (EtatSokoban) e;
+
         return 0;
     }
     

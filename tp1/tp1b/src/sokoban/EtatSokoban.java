@@ -32,12 +32,38 @@ public class EtatSokoban extends Etat {
     @Override
     public EtatSokoban clone() throws CloneNotSupportedException{
 
-        List<Case> cloned_blocks = new ArrayList<Case>(blocks);
+        List<Case> cloned_blocks = new ArrayList<Case>();
+        for(Case c: blocks){
+            cloned_blocks.add((Case)c.clone());
+        }
+
+
         Case cloned_bonhomme = (Case) bonhomme.clone();
         EtatSokoban cloned =  new EtatSokoban(cloned_bonhomme,cloned_blocks);
 
         // À compléter : vous devez faire une copie complète de l'objet.
         return cloned;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EtatSokoban that = (EtatSokoban) o;
+
+        if (blocks != null ? !blocks.equals(that.blocks) : that.blocks != null) return false;
+        if (bonhomme != null ? !bonhomme.equals(that.bonhomme) : that.bonhomme != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = bonhomme != null ? bonhomme.hashCode() : 0;
+        result = 31 * result + (blocks != null ? blocks.hashCode() : 0);
+        return result;
     }
 
     @Override

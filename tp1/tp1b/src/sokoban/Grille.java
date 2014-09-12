@@ -27,7 +27,7 @@ public class Grille implements astar.Monde, astar.But {
 
     private int[] dx = {-1,1,0,0};
     private int[] dy = {0,0,-1,1};
-    private String[] dname = {"S","N","W","E"};
+    private String[] dname = {"N","S","E","W"};
 
 
     public List<List<Character>> grid ;
@@ -48,7 +48,14 @@ public class Grille implements astar.Monde, astar.But {
 
     }
 
-    
+    public void setLes_buts(List<Case> les_buts) {
+        this.les_buts = les_buts;
+    }
+
+    public void setObstacles(List<Case> obstacles) {
+        this.obstacles = obstacles;
+    }
+
     @Override
     public List<astar.Action> getActions(astar.Etat e) {
         EtatSokoban etat = (EtatSokoban) e;
@@ -59,8 +66,28 @@ public class Grille implements astar.Monde, astar.But {
     @Override
     public astar.Etat executer(astar.Etat e, astar.Action a) {
 
+        EtatSokoban etat = (EtatSokoban) e;
+        ActionDeplacement actionDeplacement = (ActionDeplacement) a;
+        try {
+            EtatSokoban new_etat = etat.clone();
 
-        return e;
+            Case temp = new Case(new_etat.bonhomme.x,new_etat.bonhomme.y,'%');
+            temp.applyDeplacement(actionDeplacement.nom);
+            if(new_etat.blocks.contains(temp)){
+                new_etat.blocks.get(new_etat.blocks.indexOf(temp)).applyDeplacement(actionDeplacement.nom);
+            }
+            new_etat.bonhomme.applyDeplacement(actionDeplacement.nom);
+
+
+            etat = new_etat;
+
+        }catch (CloneNotSupportedException ex){
+            System.out.println(ex);
+        }
+
+
+
+        return etat;
     }
     
     /** Retourne */
@@ -77,23 +104,26 @@ public class Grille implements astar.Monde, astar.But {
 
 
         for(int i=0; i<4;i++){
-            int new_x = dx[i];
-            int new_y = dy[i];
+            int new_x = dx[i] +x;
+            int new_y = dy[i] +y;
+            Case temp_case = new Case(new_x,new_y,'%');
 
-            char grid_position = grid.get(new_x).get(new_y);
-            if(isINgrid(new_x,new_y) && grid_position != '#' ){
-                char etat_position = e.blocks
-                if(new_position ==)
+
+            if(!obstacles.contains(temp_case)){
+                if(e.blocks.contains(temp_case)){
+                    temp_case.setX(new_x+dx[i]);
+                    temp_case.setY(new_y+dy[i]);
+                    if(!obstacles.contains(temp_case) && !e.blocks.contains(temp_case)){
+                        list.add(new ActionDeplacement(dname[i]));
+                    }
+
+                }else{
+                    list.add(new ActionDeplacement(dname[i]));
+                }
+
             }
+
         }
-        if(isINgrid(x-1,y) && grid.get(x-1).get(y) != '#')
-            list.add(new ActionDeplacement("W"));
-        if(isINgrid(x+1,y) && grid.get(x+1).get(y) != '#')
-            list.add(new ActionDeplacement("E"));
-        if(isINgrid(x,y-1) && grid.get(x).get(y-1) != '#')
-            list.add(new ActionDeplacement("N"));
-        if(isINgrid(x,y+1) && grid.get(x).get(y+1) != '#')
-            list.add(new ActionDeplacement("S"));
 
         return list;
     }
@@ -102,6 +132,5 @@ public class Grille implements astar.Monde, astar.But {
         return (x >= 0 && x < grid.size())&&(y >= 0 && y < grid.get(x).size());
     }
 
-    private
 
 }

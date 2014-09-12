@@ -36,8 +36,14 @@ public class Probleme {
         List<Case> bonhomme = char_to_list(lignes,'@');
         List<Case> blocks = char_to_list(lignes,'$');
 
+        List<Case> test = char_to_list(lignes,'.');
+
+        les_buts.equals(test);
 
         probleme.grille = new Grille(lignes);
+        probleme.grille.setLes_buts(les_buts);
+        probleme.grille.setObstacles(obstacles);
+
         probleme.but = new But(les_buts);
         probleme.etatInitial = new EtatSokoban(bonhomme.get(0),blocks);
 

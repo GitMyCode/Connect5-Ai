@@ -32,11 +32,16 @@ public class AStar {
 
         Etat arrive = etatInitial;
         while(open.size() > 0){
+
             nb_visite++;
             Etat etat_init = find_best_in_open(open);
 
 
             open.remove(etat_init);
+            if(open.size()==0){
+                System.out.println("ici");
+            }
+
             close.add(etat_init);
             if(but.butSatisfait(etat_init)){
                 arrive = etat_init;
