@@ -19,6 +19,12 @@ public class Case implements Comparable<Case>,Cloneable{
         this.symbole = symbole;
     }
 
+    public Case(Case c){
+        this.x = c.x;
+        this.y = c.y;
+        this.symbole = c.symbole;
+    }
+
     @Override
     public boolean equals(Object o) {
 

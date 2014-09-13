@@ -63,6 +63,7 @@ public class But implements astar.But, astar.Heuristique {
 
 
 
+
         return distance_total-nb_but_non_atteint;
     }
     
