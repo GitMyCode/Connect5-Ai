@@ -128,10 +128,7 @@ public class Grille implements astar.Monde, astar.But {
                         if(is_not_blocked(e)){
                             list.add(new ActionDeplacement(dname[i]));
                         }
-
-
                     }
-
                 }else{
                     list.add(new ActionDeplacement(dname[i]));
                 }
@@ -151,7 +148,7 @@ public class Grille implements astar.Monde, astar.But {
         List<Case> stack = new LinkedList<Case>(e.blocks);
         while (!stack.isEmpty()){
             Case c = stack.remove(0);
-            if(!can_move(e,c,stack)){
+            if(!can_move2(e,c,stack)){
 
                 System.out.println("FALSE");
                 StateToString(e);
@@ -167,6 +164,11 @@ public class Grille implements astar.Monde, astar.But {
     private boolean cant_reach_goal(EtatSokoban e){
 
         boolean no_goal = false;
+
+
+        setGridWithSymbole(array_grid,e.blocks,'$');
+
+
         for(Case block : e.blocks){
             no_goal = false;
             for(Case goal : les_buts){
@@ -182,6 +184,48 @@ public class Grille implements astar.Monde, astar.But {
         }
         return true;
 
+    }
+
+    private void setGridWithSymbole(Case[][] clean_grid, List<Case> caseToSet, Character sym){
+
+        for(Case c : caseToSet){
+            clean_grid[c.x][c.y].symbole = sym;
+        }
+    }
+
+
+    private boolean can_move2(EtatSokoban e, Case c, List<Case> stack){
+
+
+        if(les_buts.contains(c))
+            return true;
+
+        Case NORTH = array_grid[c.x-1][c.y];
+        Case SOUTH = array_grid[c.x+1][c.y];
+        Case WEST = array_grid[c.x][c.y-1];
+        Case EAST = array_grid[c.x][c.y+1];
+
+        if(WEST.symbole != '#' && EAST.symbole != '#'){
+
+
+
+            if(WEST.symbole == '$' && !can_move2(e,WEST,stack) ){
+
+            }
+            if(EAST.symbole == '$' && can_move2(e,EAST,stack)){
+                return true;
+            }
+        }
+
+        if(NORTH.symbole != '#' && SOUTH.symbole != '#'){
+            if(WEST.symbole == '$' && can_move2(e,WEST,stack)){
+                return true;
+            }
+            if(EAST.symbole == '$' && can_move2(e,EAST,stack)){
+                return true;
+            }
+        }
+        return false;
     }
 
 
