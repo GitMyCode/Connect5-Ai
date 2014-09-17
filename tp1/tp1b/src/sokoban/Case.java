@@ -5,13 +5,18 @@ import java.util.Comparator;
 /**
  * Created by MB on 9/10/2014.
  */
-public class Case implements Comparable<Case>,Cloneable{
+public class Case extends Noeud implements Comparable<Case>,Cloneable{
 
 
     protected int x;
     protected int y;
     protected char symbole;
 
+
+
+    public Case(){
+
+    }
 
     public Case( int x, int y, char symbole){
         this.x = x;

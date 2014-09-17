@@ -22,5 +22,10 @@ public class Etat extends astar.Etat{
         Etat e = (Etat) o;
         return emplacement.compareTo(e.emplacement);
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        Etat e = (Etat) obj;
+        return emplacement.id == e.emplacement.id;
+    }
 }

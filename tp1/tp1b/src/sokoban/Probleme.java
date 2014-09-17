@@ -25,9 +25,18 @@ public class Probleme {
         // Lire les lignes dans fichiers
         String line = "";
         ArrayList<String> lignes = new ArrayList<String>();
+
+        int max_x=0;
+        int max_y=0;
         while((line = br.readLine())!=null && !line.isEmpty()){
+
             lignes.add(line);
+            if(line.length() > max_y) {
+                max_y = line.length();
+            }
         }
+        max_x = lignes.size();
+
         
         Probleme probleme = new Probleme();
         // Traiter les lignes lue. La grille a lignes.size() lignes.
@@ -36,6 +45,9 @@ public class Probleme {
         List<Case> bonhomme = char_to_list(lignes,'@');
         List<Case> blocks = char_to_list(lignes,'$');
 
+        Case[][] grid =make_grid(lignes,max_x,max_y);
+
+
         List<Case> test = char_to_list(lignes,'.');
 
         les_buts.equals(test);
@@ -43,8 +55,12 @@ public class Probleme {
         probleme.grille = new Grille(lignes);
         probleme.grille.setLes_buts(les_buts);
         probleme.grille.setObstacles(obstacles);
+        probleme.grille.array_grid = grid;
 
         probleme.but = new But(les_buts);
+        probleme.but.mures = obstacles;
+        probleme.but.grid = grid;
+
         probleme.etatInitial = new EtatSokoban(bonhomme.get(0),blocks);
 
 
@@ -62,6 +78,24 @@ public class Probleme {
         // Ces symboles peuvent être ignorés et traités comme des espaces ' '.
         
         return probleme;
+    }
+
+    private static Case[][] make_grid(List<String> lecture, int max_x, int max_y){
+
+        Case[][] grid = new Case[max_x][max_y];
+
+        for(int i=0; i< max_x; i++){
+            for(int j=0; j< lecture.get(i).length() ; j++){
+                char current_char = lecture.get(i).charAt(j);
+                if(current_char != '#')
+                    current_char = ' ';
+
+                Case new_case = new Case(i,j,current_char);
+                grid[i][j] = new_case;
+            }
+        }
+
+        return grid;
     }
 
     private static List<Case> char_to_list(List<String> lecture, char symbole){

@@ -56,7 +56,25 @@ public class EtatSokoban extends Etat {
 
         EtatSokoban that = (EtatSokoban) o;
 
-        if (blocks != null ? !blocks.equals(that.blocks) : that.blocks != null) return false;
+        int cmp=0;
+        //if (blocks != null ? !blocks.equals(that.blocks) : that.blocks != null) return false;
+
+        for(int i =0; i< that.blocks.size(); i++){
+
+            if(!blocks.contains(that.blocks.get(i))){
+                return false;
+            }
+            /*Case block_ici = blocks.get(i);
+            Case block_o   = that.blocks.get(i);
+
+            cmp = block_ici.compareTo(block_o);
+            if(cmp !=0){
+                return false;
+            }*/
+        }
+
+
+
         if (bonhomme != null ? !bonhomme.equals(that.bonhomme) : that.bonhomme != null) return false;
 
         return true;

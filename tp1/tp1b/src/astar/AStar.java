@@ -32,19 +32,18 @@ public class AStar {
 
         Etat arrive = etatInitial;
         while(open.size() > 0){
-
             nb_visite++;
             Etat etat_init = find_best_in_open(open);
 
 
-            open.remove(etat_init);
 
-
-            close.add(etat_init);
             if(but.butSatisfait(etat_init)){
                 arrive = etat_init;
                 break;
             }
+            open.remove(etat_init);
+            close.add(etat_init);
+
             voisins(etat_init,monde,etatInitial,but,heuristique);
 
         }
@@ -120,24 +119,24 @@ public class AStar {
             if( !close.contains(voisin)){
 
                 double newG = a.cout + current.g;
-                double newF = newG + heuristique.estimerCoutRestant(voisin,but);
-                if(!open.contains(voisin) || newF < voisin.f ){
+                Etat open_voisin = getEtat(open,voisin);
+                if( open_voisin==null || newG < open_voisin.g ){
 
+                    voisin = (open_voisin == null) ? voisin : open_voisin;
 
                     voisin.parent = current;
                     voisin.actionDepuisParent = a;
                     voisin.h = heuristique.estimerCoutRestant(voisin,but);
                     voisin.g = newG;
-                    voisin.f = voisin.g+ voisin.h;
+                    voisin.f = voisin.g + voisin.h;
 
 
 
-                    if (!open.contains(voisin))
+                    if (open_voisin == null)
                         open.add(voisin);
                 }
 
 
-            }else{
             }
 
         }
@@ -145,7 +144,17 @@ public class AStar {
 
 
     }
-    
+
+    static Etat getEtat(TreeSet<Etat> treeSet, Etat equivalent){
+
+        for(Etat e: treeSet){
+            if( e.equals(equivalent)){
+                return  e;
+            }
+        }
+        return null;
+    }
+
     static final NumberFormat nf = NumberFormat.getNumberInstance(Locale.ENGLISH);
     static {
         nf.setMaximumFractionDigits(1);
