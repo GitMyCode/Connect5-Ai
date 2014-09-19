@@ -110,7 +110,17 @@ public class But implements astar.But, astar.Heuristique {
         }
 
 
-        return (min_distance ) * 20; //* block_to_choose;
+
+        int distance_player_box = Integer.MAX_VALUE;
+        for(Case c : etat.blocks){
+            int dis = distance(etat.bonhomme, c);
+            if( distance_player_box > dis ){
+                distance_player_box = dis;
+
+            }
+        }
+
+        return Math.pow(Double.valueOf(min_distance + (distance_player_box/2)),2) ;//+ distance_player_box * 10; //* block_to_choose;
     }
 
 
@@ -261,7 +271,7 @@ public class But implements astar.But, astar.Heuristique {
             return false;
         }
 
-        return  grid[x][y].symbole == ' ' || grid[x][y].symbole == '.';
+        return  grid[x][y].symbole == ' ' || grid[x][y].symbole == '.' || grid[x][y].symbole == '$';
     }
 
 
@@ -379,6 +389,11 @@ public class But implements astar.But, astar.Heuristique {
     }
 
 
+   private void setGridWithSymbole(Case[][] clean_grid, List<Case> caseToSet, Character sym){
 
+        for(Case c : caseToSet){
+            clean_grid[c.x][c.y].symbole = sym;
+        }
+    }
 
 }

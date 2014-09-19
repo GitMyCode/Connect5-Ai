@@ -11,6 +11,8 @@ public class CheckPath {
 
     static Case[][] grid;
 
+
+
     public static boolean canGo(Case start, Case end, Case[][] grid2){
         grid = grid2;
 
@@ -26,19 +28,20 @@ public class CheckPath {
                 end.parent = current.parent;
 
                 cleanGrid();
-                grid = null;
                 return true;
             }
 
             open.remove(current);
             close.add(current);
 
+          //  printCurrentPath(close);
+
             calculate_voisinage(grid, open, close, current, end);
         }
 
 
+
         cleanGrid();
-        grid = null;
         return false;
 
     }
@@ -73,15 +76,20 @@ public class CheckPath {
     private static List<Case> voisin(Case current, Case[][] grid){
         Case c = (Case) current;
         List<Case> voisins = new ArrayList<Case>();
-        if(in_grid(c.x -1,c.y) && in_grid(c.x+1,c.y) )
-
+        if(in_grid(c.x -1,c.y) && in_grid(c.x+1,c.y) ){
             voisins.add(grid[c.x-1][c.y]);
-        if(in_grid(c.x+1,c.y) && in_grid(c.x-1,c.y)   )
+        }
+
+        if(in_grid(c.x+1,c.y) && in_grid(c.x-1,c.y)   ){
+
             voisins.add(grid[c.x+1][c.y]);
-        if(in_grid(c.x,c.y+1) && in_grid(c.x,c.y-1)  )
+        }
+        if(in_grid(c.x,c.y+1) && in_grid(c.x,c.y-1)  ){
             voisins.add(grid[c.x][c.y+1]);
-        if(in_grid(c.x,c.y-1) && in_grid(c.x,c.y+1)   )
+        }
+        if(in_grid(c.x,c.y-1) && in_grid(c.x,c.y+1)   ){
             voisins.add(grid[c.x][c.y-1]);
+        }
 
         return voisins;
     }
@@ -131,6 +139,63 @@ public class CheckPath {
         /*for(Case c : etat.blocks){
             grid[c.x][c.y].symbole = ' ';
         }*/
+    }
+    private static void printPath(Case start,Case end ){
+
+        List<List<Character>> print = new ArrayList<List<Character>>();
+        for(int i=0 ; i < grid.length; i++){
+            print.add(new ArrayList<Character>());
+            for(Case c: grid[i]){
+                if( c!= null)
+                    print.get(i).add(c.symbole);
+            }
+        }
+
+
+
+        Case path = end;
+        while (path!= null){
+            print.get(path.x).set(path.y,'+');
+            path = path.parent;
+        }
+
+        print.get(start.x).set(start.y,'S');
+
+        for(int i=0; i< print.size(); i++){
+            for(Character c : print.get(i)){
+                System.out.print(c + "");
+            }
+            System.out.println();
+        }
+
+    }
+
+    private static void printCurrentPath(List<Case> visited ){
+
+        List<List<Character>> print = new ArrayList<List<Character>>();
+        for(int i=0 ; i < grid.length; i++){
+            print.add(new ArrayList<Character>());
+            for(Case c: grid[i]){
+                if( c!= null)
+                    print.get(i).add(c.symbole);
+            }
+        }
+
+
+
+        for(Case c : visited){
+            print.get(c.x).set(c.y,'+');
+        }
+
+
+
+        for(int i=0; i< print.size(); i++){
+            for(Character c : print.get(i)){
+                System.out.print(c + "");
+            }
+            System.out.println();
+        }
+
     }
 
 }

@@ -87,11 +87,17 @@ public class Case extends Noeud implements Comparable<Case>,Cloneable{
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-        Case result = (Case) super.clone();
-        result.x = x;
-        result.y = y;
-        result.symbole = symbole;
+    protected Object clone() {
+        Case result = null;
+        try{
+            result = (Case) super.clone();
+            result.x = x;
+            result.y = y;
+            result.symbole = symbole;
+
+        }catch(CloneNotSupportedException e){
+
+        }
 
         return result;
     }
