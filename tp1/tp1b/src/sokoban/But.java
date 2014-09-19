@@ -120,7 +120,7 @@ public class But implements astar.But, astar.Heuristique {
             }
         }
 
-        return Math.pow(Double.valueOf(min_distance + (distance_player_box/2)),2) ;//+ distance_player_box * 10; //* block_to_choose;
+        return Math.pow(Double.valueOf(min_distance + (distance_player_box/1.5)),2)/15 ;//+ distance_player_box * 10; //* block_to_choose;
     }
 
 

@@ -59,9 +59,9 @@ public class Case extends Noeud implements Comparable<Case>,Cloneable{
    }
 
     public void applyDeplacement(String action){
-        if(action=="E")
-            this.y -= 1;
         if(action=="W")
+            this.y -= 1;
+        if(action=="E")
             this.y += 1;
         if(action=="N")
             this.x -= 1;

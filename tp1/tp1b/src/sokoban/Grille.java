@@ -27,7 +27,7 @@ public class Grille implements astar.Monde, astar.But {
 
     private int[] dx = {-1,1,0,0};
     private int[] dy = {0,0,-1,1};
-    private String[] dname = {"N","S","E","W"};
+    private String[] dname = {"N","S","W","E"};
 
 
 
