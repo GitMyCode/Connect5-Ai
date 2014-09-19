@@ -74,6 +74,14 @@ public class Case extends Noeud implements Comparable<Case>,Cloneable{
         return x;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 17 * hash + this.x;
+        hash = 17 * hash + this.y;
+        return hash;
+    }
+
     public void setX(int x) {
         this.x = x;
     }

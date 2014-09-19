@@ -14,17 +14,61 @@ public class AStar {
 
 
 
+    public static HashMap<Integer,Etat> open_hash;
+
     public static List<Action> genererPlan(Monde monde, Etat etatInitial, But but, Heuristique heuristique){
         long starttime = System.currentTimeMillis();
-        
+
         // À Compléter.
         // Implémentez l'algorithme A* ici.
 
-         open = new TreeSet<Etat>();
-         close = new TreeSet<Etat>();
-         List<Action> plan = new LinkedList<Action>();
+        open_hash = new HashMap<Integer, Etat>();
+    /*    open = new TreeSet<Etat>(new Comparator<Etat>(){
+            public int compare(Etat a, Etat b){
+
+                int cmp = a.compareTo(b);
+                if(cmp != 0){
+                    if(a.f < b.f){
+                        return -1;
+                    }
+                    if( a.f > b.f){
+                        return 1;
+                    }
+                }
+                return cmp;
+
+
+
+            }
+        });
+
+        // open = new TreeSet<Etat>();
+        close = new TreeSet<Etat>(new Comparator<Etat>(){
+            public int compare(Etat a, Etat b){
+                int cmp = a.compareTo(b);
+                if(cmp != 0){
+                    if(a.f < b.f){
+                        return -1;
+                    }
+                    if( a.f > b.f){
+                        return 1;
+                    }
+
+                }
+                return cmp;
+
+            }
+        });*/
+
+        open = new TreeSet<Etat>();
+        close = new TreeSet<Etat>();
+
+
+        List<Action> plan = new LinkedList<Action>();
 
         open.add(etatInitial);
+        int key = etatInitial.hashCode();
+        open_hash.put(key,etatInitial);
 
 
         int etat_generer=0;
@@ -35,6 +79,7 @@ public class AStar {
             nb_visite++;
             Etat etat_init = find_best_in_open(open);
 
+            key = etat_init.hashCode();
 
 
             if(but.butSatisfait(etat_init)){
@@ -42,6 +87,8 @@ public class AStar {
                 break;
             }
             open.remove(etat_init);
+
+            open_hash.remove(key);
             close.add(etat_init);
 
             voisins(etat_init,monde,etatInitial,but,heuristique);
@@ -76,7 +123,7 @@ public class AStar {
         //  -- Ajoutez un TreeSet<Etat> open2 avec un comparateur basé sur f.
         //  -- Évaluez la pertinence d'un PriorityQueue.
         //  - Commentez les lignes propres au déboggage.
-        
+
         // Un plan est une séquence (liste) d'actions.
         Etat pas = arrive;
         while(pas.actionDepuisParent != null){
@@ -119,7 +166,40 @@ public class AStar {
             if( !close.contains(voisin)){
 
                 double newG = a.cout + current.g;
-                Etat open_voisin = getEtat(open,voisin);
+
+                int key = voisin.hashCode();
+                Etat open_voisin = open_hash.get(key);
+                Etat open_ceil = open.ceiling(voisin);
+                Etat open_voisin2 = getEtat(open,voisin);
+                /*if(open_ceil != null && open_ceil.compareTo(voisin) == 0){
+                    open_voisin2 = open_ceil;
+                }*/
+
+
+
+                if( open_voisin2 == null && open_voisin == null){
+                   /* if(open_voisin2.compareTo(open_voisin) != 0){
+                        System.out.println("sad");
+                    }*/
+                }else{
+                     if(open_voisin2 == null &&  open_voisin != null) {
+                         System.out.println("sad");
+                     }else if(open_voisin == null && open_voisin2 !=null){
+                         System.out.println("dsf");
+                     }
+
+
+
+                }
+
+/*
+                Etat open_floor = (open_ceil == null)? null : open.floor(voisin);
+                Etat open_voisin = (open_floor!=null && open_floor == open_ceil ) ? open_ceil : null;
+*/
+
+
+
+                //Etat open_voisin = getEtat(open,voisin);
                 if( open_voisin==null || newG < open_voisin.g ){
 
                     voisin = (open_voisin == null) ? voisin : open_voisin;
@@ -132,8 +212,10 @@ public class AStar {
 
 
 
-                    if (open_voisin == null)
+                    if (open_voisin == null){
+                        open_hash.put(key,voisin);
                         open.add(voisin);
+                    }
                 }
 
 
@@ -148,7 +230,7 @@ public class AStar {
     static Etat getEtat(TreeSet<Etat> treeSet, Etat equivalent){
 
         for(Etat e: treeSet){
-            if( e.equals(equivalent)){
+            if( e.compareTo(equivalent) ==0){
                 return  e;
             }
         }

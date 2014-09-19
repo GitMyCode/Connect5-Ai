@@ -82,8 +82,18 @@ public class EtatSokoban extends Etat {
 
     @Override
     public int hashCode() {
-        int result = bonhomme != null ? bonhomme.hashCode() : 0;
-        result = 31 * result + (blocks != null ? blocks.hashCode() : 0);
+        int result = 17;
+        result = 31 * result + bonhomme.hashCode();
+
+        long blocks_res = 0;
+        int i=3;
+        for(Case c : blocks){
+            blocks_res = c.hashCode();
+           result = i * result +  (int) (blocks_res ^ (blocks_res >> 32));
+            i = i*3;
+        }
+
+        //result = 7 * result + (int) (blocks_res ^ (blocks_res >> 32));
         return result;
     }
 
@@ -95,14 +105,17 @@ public class EtatSokoban extends Etat {
         if(cmp !=0){
             return cmp;
         }
+
         for(int i =0; i< es.blocks.size(); i++){
             Case block_ici = blocks.get(i);
             Case block_o   = es.blocks.get(i);
 
            cmp = block_ici.compareTo(block_o);
+
             if(cmp !=0){
                 return cmp;
             }
+
         }
 
         // À compléter.
