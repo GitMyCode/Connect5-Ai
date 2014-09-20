@@ -71,7 +71,7 @@ public class Grille implements astar.Monde, astar.But {
     public List<astar.Action> getActions(astar.Etat e) {
         EtatSokoban etat = (EtatSokoban) e;
 
-        return checkPossibleActions2(etat);
+        return checkPossibleActions(etat);
     }
 
     @Override
@@ -82,12 +82,13 @@ public class Grille implements astar.Monde, astar.But {
         try {
             EtatSokoban new_etat = etat.clone();
 
-            Case temp = new Case(new_etat.bonhomme.x,new_etat.bonhomme.y,'%');
+            new_etat.applyDeplacement(a);
+          /*  Case temp = new Case(new_etat.bonhomme.x,new_etat.bonhomme.y,'%');
             temp.applyDeplacement(actionDeplacement.nom);
             if(new_etat.blocks.contains(temp)){
                 new_etat.blocks.get(new_etat.blocks.indexOf(temp)).applyDeplacement(actionDeplacement.nom);
             }
-            new_etat.bonhomme.applyDeplacement(actionDeplacement.nom);
+            new_etat.bonhomme.applyDeplacement(actionDeplacement.nom);*/
 
 
             etat = new_etat;
@@ -107,7 +108,7 @@ public class Grille implements astar.Monde, astar.But {
         return false;
     }
 
-    private List<Action> checkPossibleActions2(EtatSokoban e){
+    private List<Action> checkPossibleActions(EtatSokoban e){
         List<Action> list = new ArrayList<Action>();
         int x = e.bonhomme.x;
         int y = e.bonhomme.y;
@@ -157,7 +158,7 @@ public class Grille implements astar.Monde, astar.But {
                         setGridWithSymbole(array_grid,next_block_state,' ');
 
                         setGridWithSymbole(array_grid,e.blocks,' ');
-                        if (is_not_blocked(next_block_state)) {
+                        if (is_not_blocked(next_block_state,temp_case)) {
                             list.add(new ActionDeplacement(dname[i]));
                         }else{
                           /*  setGridWithSymbole(array_grid,next_block_state,'$');
@@ -177,65 +178,16 @@ public class Grille implements astar.Monde, astar.But {
         return list;
     }
 
-    private List<Action> checkPossibleActions(EtatSokoban e){
-        List<Action> list = new ArrayList<Action>();
-        int x = e.bonhomme.x;
-        int y = e.bonhomme.y;
 
 
-        setGridWithSymbole(array_grid,e.blocks,'$');
-
-        Case NORTH = array_grid[x-1][y];
-        Case SOUTH = array_grid[x+1][y];
-        Case EAST = array_grid[x][y+1];
-        Case WEST = array_grid[x][y-1];
-
-
-        for(int i=0; i<4;i++){
-            int new_x = dx[i] +x;
-            int new_y = dy[i] +y;
-            Case temp_case = new Case(new_x,new_y,'%');
-
-
-            if(!obstacles.contains(temp_case)){
-                if(e.blocks.contains(temp_case)){
-                    temp_case.setX(new_x+dx[i]);
-                    temp_case.setY(new_y + dy[i]);
-                    if(!obstacles.contains(temp_case) && !e.blocks.contains(temp_case)){
-                        List<Case> next_blocks = new ArrayList<Case>(e.blocks);
-                        temp_case.setX((new_x-dx[i]));
-                        temp_case.setY((new_y-dy[i]));
-
-                        Case sdf = next_blocks.get(next_blocks.indexOf(temp_case));
-                        sdf.setX(new_x +dx[i]);
-                        sdf.setY(new_y +dy[i]);
-
-                        if(is_not_blocked(next_blocks)){
-                            list.add(new ActionDeplacement(dname[i]));
-                        }else{
-                            System.out.println("");
-                        }
-                    }
-                }else{
-                    list.add(new ActionDeplacement(dname[i]));
-                }
-
-            }
-
-        }
-
-        return list;
-    }
-
-
-    private boolean is_not_blocked(List<Case> blocks){
+    private boolean is_not_blocked(List<Case> blocks,Case ref_block_pos){
 
 
 
         setGridWithSymbole(array_grid,blocks,'$');
         for(Case c : blocks){
             List<Case> stack = new LinkedList<Case>();
-            if(!can_move2(c,stack)){
+            if(!can_move(c,stack)){
 
                // System.out.println("FALSE");
                // StateToString(e);
@@ -245,18 +197,25 @@ public class Grille implements astar.Monde, astar.But {
             }
         }
         setGridWithSymbole(array_grid,blocks,' ');
-        return  cant_reach_goal(blocks);
+        return  cant_reach_goal(ref_block_pos);
         //System.out.println("TRUE");
        // StateToString(e);
      //   return true;
     }
 
-    private boolean cant_reach_goal(List<Case> blocks){
+    private boolean cant_reach_goal(Case new_block_pos){
 
         boolean no_goal = false;
 
 
 
+        for(Case goal : les_buts){
+            if(CheckPath.canGo(new_block_pos,goal,array_grid)){
+                return true;
+            }
+        }
+        return false;
+        /*
 
         for(Case block : blocks){
             no_goal = false;
@@ -276,7 +235,7 @@ public class Grille implements astar.Monde, astar.But {
 
         setGridWithSymbole(array_grid,blocks,' ');
         return true;
-
+*/
     }
 
     private void setGridWithSymbole(Case[][] clean_grid, List<Case> caseToSet, Character sym){
@@ -287,7 +246,7 @@ public class Grille implements astar.Monde, astar.But {
     }
 
 
-    private boolean can_move2(Case c, List<Case> stack){
+    private boolean can_move(Case c, List<Case> stack){
 
 
         if(les_buts.contains(c)){
@@ -348,121 +307,13 @@ public class Grille implements astar.Monde, astar.But {
         }
 
         if(c.symbole == '$'){
-            return can_move2(c,stack);
+            return can_move(c,stack);
         }
 
         return false;
 
     }
 
-
-    private boolean can_move(EtatSokoban e, Case c,List<Case> stack){
-
-        if(les_buts.contains(c)){
-            return true;
-        }
-
-        Case temp = new Case(c);
-
-        temp.applyDeplacement("W");
-        if(!obstacles.contains(temp) && checkLine("Y",stack,temp)){
-
-
-            temp.applyDeplacement("E");
-            temp.applyDeplacement("E");
-            if(!obstacles.contains(temp) && checkLine("Y",stack,temp)){
-
-                   return true;
-            }
-        }
-
-        temp.setX(c.x);
-        temp.setY(c.y);
-        temp.applyDeplacement("N");
-        if(!obstacles.contains(temp) && checkLine("X",stack,temp)){
-
-            temp.applyDeplacement("S");
-            temp.applyDeplacement("S");
-            if(!obstacles.contains(temp) && checkLine("X", stack, temp)){
-                return true;
-            }
-        }
-
-
-
-        return false;
-    }
-
-    private boolean checkLine(String axes,List<Case> stack, Case c){
-
-        Case temp = new Case(c);
-
-        if(!stack.contains(c)){
-            return true;
-        }
-
-        if(axes == "X"){
-            temp.applyDeplacement("W");
-            if(!obstacles.contains(temp) && !stack.contains(temp)){
-
-
-                temp.applyDeplacement("E");
-                temp.applyDeplacement("E");
-                if(!obstacles.contains(temp) && !stack.contains(temp)){
-                    return true;
-                }
-            }
-
-        }else{
-            temp.applyDeplacement("N");
-            if(!obstacles.contains(temp) && !stack.contains(temp)){
-
-
-                temp.applyDeplacement("S");
-                temp.applyDeplacement("S");
-                if(!obstacles.contains(temp) && !stack.contains(temp)){
-                    return true;
-                }
-            }
-        }
-
-
-
-        return false;
-    }
-
-
-    private boolean is_resolvable(Case c){
-
-
-        Case temp = new Case(c.x,c.y,'%');
-
-
-        temp.applyDeplacement("W");
-        if(!obstacles.contains(temp)){
-            temp.applyDeplacement("E");
-            temp.applyDeplacement("E");
-            if(!obstacles.contains(temp)){
-                return true;
-
-            }
-        }
-
-
-        temp = new Case(c.x,c.y,'%');
-        temp.applyDeplacement("N");
-        if(!obstacles.contains(temp)){
-            temp.applyDeplacement("S");
-            temp.applyDeplacement("S");
-            if(!obstacles.contains(temp)){
-                return true;
-            }
-        }
-
-        return false;
-
-
-    }
 
     private void printGrid(){
 

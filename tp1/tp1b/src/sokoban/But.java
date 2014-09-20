@@ -60,16 +60,8 @@ public class But implements astar.But, astar.Heuristique {
     @Override
     public double estimerCoutRestant(astar.Etat e, astar.But b) {
 
-        EtatSokoban etat = (EtatSokoban) e;
+       EtatSokoban etat = (EtatSokoban) e;
 
-
-
-        double nb_but_non_atteint = les_buts.size();
-        for(Case c : les_buts){
-            if(((EtatSokoban) e).blocks.contains(c)){
-                nb_but_non_atteint--;
-            }
-        }
 
         double distance_total =0;
 
@@ -77,16 +69,7 @@ public class But implements astar.But, astar.Heuristique {
             for(int j=0; j< les_buts.size(); j++){
                 Case block = etat.blocks.get(i);
                 Case but   = les_buts.get(j);
-
-
                 matrix_distance[i][j] = can_go(block,but,etat);
-                /*if(can_go(block,but,etat)){
-                    matrix_distance[i][j] = distance(block,but);
-                }else{
-                    matrix_distance[i][j] = 999;
-                }
-*/
-
 
             }
         }
@@ -95,7 +78,7 @@ public class But implements astar.But, astar.Heuristique {
         min_distance = Integer.MAX_VALUE;
         min_matrix(new ArrayList<Integer>(),0,0);
 
-        int block_to_choose = Integer.MAX_VALUE;
+       /* int block_to_choose = Integer.MAX_VALUE;
         int distance_choosens_block =0;
         for(int i=0; i< matrix_distance.length ; i++){
             for(Integer min : list_distances ){
@@ -108,7 +91,7 @@ public class But implements astar.But, astar.Heuristique {
                 }
             }
         }
-
+*/
 
 
         int distance_player_box = Integer.MAX_VALUE;
@@ -120,7 +103,7 @@ public class But implements astar.But, astar.Heuristique {
             }
         }
 
-        return Math.pow(Double.valueOf(min_distance + (distance_player_box/1.5)),2)/15 ;//+ distance_player_box * 10; //* block_to_choose;
+        return Math.pow(Double.valueOf(min_distance + (distance_player_box/1.5)),2)/7 ;//+ distance_player_box * 10; /*//* block_to_choose;
     }
 
 
@@ -171,8 +154,6 @@ public class But implements astar.But, astar.Heuristique {
         List<Case> open = new ArrayList<Case>();
         List<Case> close = new ArrayList<Case>();
 
-        g_count = new HashMap<Case, Integer>();
-        h_count = new HashMap<Case, Integer>();
 
         open.add(start);
         prepareGrid(grid, etat, start);

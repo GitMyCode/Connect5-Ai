@@ -34,11 +34,13 @@ public class Case extends Noeud implements Comparable<Case>,Cloneable{
     public boolean equals(Object o) {
 
         Case c = (Case) o;
-        if(this.x != c.x)
+        if(this.x != c.x){
             return false;
+        }
 
-        if( this.y != c.y)
+        if( this.y != c.y){
             return false;
+        }
 
         return true;
     }
@@ -47,10 +49,10 @@ public class Case extends Noeud implements Comparable<Case>,Cloneable{
     public int compareTo(Case aCase) {
 
         if(x < aCase.x ) return -1;
-        if(x > aCase.x ) return +1;
+        if(x > aCase.x ) return 1;
 
         if(y < aCase.y) return -1;
-        if(y > aCase.y) return +1;
+        if(y > aCase.y) return 1;
 
 
         return 0;
@@ -77,8 +79,8 @@ public class Case extends Noeud implements Comparable<Case>,Cloneable{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 17 * hash + this.x;
-        hash = 17 * hash + this.y;
+        hash = 1260000  * hash + (this.x+1);
+        hash = 17 * hash + (this.y+3);
         return hash;
     }
 

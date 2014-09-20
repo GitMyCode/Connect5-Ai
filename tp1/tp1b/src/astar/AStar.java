@@ -14,7 +14,8 @@ public class AStar {
 
 
 
-    public static HashMap<Integer,Etat> open_hash;
+    public static Map<Etat,Etat> open_map;
+
 
     public static List<Action> genererPlan(Monde monde, Etat etatInitial, But but, Heuristique heuristique){
         long starttime = System.currentTimeMillis();
@@ -22,28 +23,31 @@ public class AStar {
         // À Compléter.
         // Implémentez l'algorithme A* ici.
 
-        open_hash = new HashMap<Integer, Etat>();
-    /*    open = new TreeSet<Etat>(new Comparator<Etat>(){
+        Hashtable test = new Hashtable();
+
+        LinkedHashMap<Etat,Etat> test2 = new LinkedHashMap<Etat, Etat>();
+
+        open_map = new TreeMap<Etat, Etat>();
+        open = new TreeSet<Etat>(new Comparator<Etat>(){
             public int compare(Etat a, Etat b){
-
-                int cmp = a.compareTo(b);
-                if(cmp != 0){
-                    if(a.f < b.f){
-                        return -1;
-                    }
-                    if( a.f > b.f){
-                        return 1;
-                    }
+                if(a.equals(b)){
+                    return 0;
                 }
-                return cmp;
+                if(a.f < b.f){
+                    return 1;
+                }
+                if( a.f > b.f){
+                    return -1;
+                }
 
+                return a.compareTo(b);
 
 
             }
         });
 
-        // open = new TreeSet<Etat>();
-        close = new TreeSet<Etat>(new Comparator<Etat>(){
+  //      open = new TreeSet<Etat>();
+/*        close = new TreeSet<Etat>(new Comparator<Etat>(){
             public int compare(Etat a, Etat b){
                 int cmp = a.compareTo(b);
                 if(cmp != 0){
@@ -60,15 +64,17 @@ public class AStar {
             }
         });*/
 
-        open = new TreeSet<Etat>();
+
+//        open = new TreeSet<Etat>();
         close = new TreeSet<Etat>();
+
 
 
         List<Action> plan = new LinkedList<Action>();
 
         open.add(etatInitial);
-        int key = etatInitial.hashCode();
-        open_hash.put(key,etatInitial);
+        //int key = etatInitial.hashCode();
+        open_map.put(etatInitial, etatInitial);
 
 
         int etat_generer=0;
@@ -77,21 +83,47 @@ public class AStar {
         Etat arrive = etatInitial;
         while(open.size() > 0){
             nb_visite++;
-            Etat etat_init = find_best_in_open(open);
+            Etat etat_init = open.last();//find_best_in_open(open);
 
-            key = etat_init.hashCode();
+      /*     if( !etat_init.equals(find_best_in_open(open))){
+//                System.out.println("problem");
+            }*/
+           // key = etat_init.hashCode();
 
 
             if(but.butSatisfait(etat_init)){
                 arrive = etat_init;
                 break;
             }
-            open.remove(etat_init);
 
-            open_hash.remove(key);
+
+            int si_open = open.size();
+            if(!open.remove(etat_init)){
+                System.out.println("falsde");
+            }
+            if(si_open != open.size()+1){
+                System.out.println("problem");
+            }
+
+            open_map.remove(etat_init);
+
+            /*if(!etat_init.equals(open_map.remove(etat_init))){
+               System.out.println("false");
+            }
+            if(si_open_hash != open_map.size()+1){
+              System.out.println("probleme");
+            }
+*/
+
+            if(open.size() != open_map.size()){
+                System.out.println("ope");
+            }
             close.add(etat_init);
 
             voisins(etat_init,monde,etatInitial,but,heuristique);
+
+
+
 
         }
 
@@ -167,41 +199,31 @@ public class AStar {
 
                 double newG = a.cout + current.g;
 
-                int key = voisin.hashCode();
-                Etat open_voisin = open_hash.get(key);
-                Etat open_ceil = open.ceiling(voisin);
-                Etat open_voisin2 = getEtat(open,voisin);
-                /*if(open_ceil != null && open_ceil.compareTo(voisin) == 0){
-                    open_voisin2 = open_ceil;
+
+                Etat open_voisin = null;
+
+                open_voisin = open_map.get(voisin);
+              /*  Etat open_voisin2 = getEtat(open,voisin);
+
+
+                if( open_voisin == null && open_voisin == null){
+                }else{
+                    if(open_voisin2 == null &&  open_voisin != null) {
+                        System.out.println("sad");
+                    }else if(open_voisin == null && open_voisin2 !=null){
+                        System.out.println("dsf");
+                    }
                 }*/
 
 
 
-                if( open_voisin2 == null && open_voisin == null){
-                   /* if(open_voisin2.compareTo(open_voisin) != 0){
-                        System.out.println("sad");
-                    }*/
-                }else{
-                     if(open_voisin2 == null &&  open_voisin != null) {
-                         System.out.println("sad");
-                     }else if(open_voisin == null && open_voisin2 !=null){
-                         System.out.println("dsf");
-                     }
 
-
-
-                }
-
-/*
-                Etat open_floor = (open_ceil == null)? null : open.floor(voisin);
-                Etat open_voisin = (open_floor!=null && open_floor == open_ceil ) ? open_ceil : null;
-*/
-
-
-
-                //Etat open_voisin = getEtat(open,voisin);
                 if( open_voisin==null || newG < open_voisin.g ){
 
+
+                    if(open_voisin !=null){
+                        open.remove(open_voisin);
+                    }
                     voisin = (open_voisin == null) ? voisin : open_voisin;
 
                     voisin.parent = current;
@@ -212,10 +234,35 @@ public class AStar {
 
 
 
-                    if (open_voisin == null){
-                        open_hash.put(key,voisin);
+                    open_map.put(voisin,voisin);
+                    open.add(voisin);
+
+
+                    /*if (open_voisin == null){
+                       if(open.contains(voisin)){
+                            System.out.println("wtfd");
+                       }
+
+                        if(open.contains(voisin)){
+                            System.out.println("wtfd");
+                        }
+                        Etat test = getEtat(open,voisin);
+                        if(test != null && test.compareTo(voisin) != 0){
+                            System.out.println("probleme ici");
+                        }
+
+                        int si = open_map.size();
+                        open_map.put(voisin, voisin);
+                        if(si != open_map.size()-1){
+                            System.out.println("ok");
+                        }
+
+
                         open.add(voisin);
-                    }
+                    }else{
+                        open.remove(voisin);
+                        open.add(voisin);
+                    }*/
                 }
 
 
@@ -230,7 +277,7 @@ public class AStar {
     static Etat getEtat(TreeSet<Etat> treeSet, Etat equivalent){
 
         for(Etat e: treeSet){
-            if( e.compareTo(equivalent) ==0){
+            if( e.equals(equivalent)){
                 return  e;
             }
         }
