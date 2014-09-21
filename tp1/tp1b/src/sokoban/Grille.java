@@ -141,9 +141,12 @@ public class Grille implements astar.Monde, astar.But {
                         for (Case c : e.blocks) {
                             next_block_state.add((Case) c.clone());
                             if (c.equals(temp_case)) {
+
                                 temp_case = next_block_state.get(next_block_state.size()-1);
                             }
+
                         }
+                        int index_moved_block = e.blocks.indexOf(temp_case);
 
                         temp_case.symbole = ' ';
                         temp_case.setX(new_x + dx[i]);
@@ -158,8 +161,20 @@ public class Grille implements astar.Monde, astar.But {
                         setGridWithSymbole(array_grid,next_block_state,' ');
 
                         setGridWithSymbole(array_grid,e.blocks,' ');
-                        if (is_not_blocked(next_block_state,temp_case)) {
-                            list.add(new ActionDeplacement(dname[i]));
+
+                        int[] matrix_distance = new int[e.blocks.size()];
+                        if (is_not_blocked(next_block_state,temp_case,matrix_distance)) {
+
+                            ActionDeplacement action = new ActionDeplacement(dname[i]);
+                            action.index_moved_block = index_moved_block;
+                            action.moves_to_goals = matrix_distance;
+                            action.is_moving_block = true;
+                            list.add(action);
+
+
+
+
+
                         }else{
                           /*  setGridWithSymbole(array_grid,next_block_state,'$');
                             System.out.println("");
@@ -169,7 +184,9 @@ public class Grille implements astar.Monde, astar.But {
 
                     }
                 } else {
-                    list.add(new ActionDeplacement(dname[i]));
+                    ActionDeplacement action = new ActionDeplacement(dname[i]);
+                    action.is_moving_block = false;
+                    list.add(action);
                 }
             }
         }
@@ -180,7 +197,7 @@ public class Grille implements astar.Monde, astar.But {
 
 
 
-    private boolean is_not_blocked(List<Case> blocks,Case ref_block_pos){
+    private boolean is_not_blocked(List<Case> blocks,Case ref_block_pos, int[] matrix_distance){
 
 
 
@@ -197,24 +214,30 @@ public class Grille implements astar.Monde, astar.But {
             }
         }
         setGridWithSymbole(array_grid,blocks,' ');
-        return  cant_reach_goal(ref_block_pos);
+        return  cant_reach_goal(ref_block_pos, matrix_distance);
         //System.out.println("TRUE");
        // StateToString(e);
      //   return true;
     }
 
-    private boolean cant_reach_goal(Case new_block_pos){
+    private boolean cant_reach_goal(Case new_block_pos, int[] matrix_distance){
 
         boolean no_goal = false;
 
 
 
+        int i=0;
         for(Case goal : les_buts){
-            if(CheckPath.canGo(new_block_pos,goal,array_grid)){
-                return true;
+            int distance = CheckPath.canGo(new_block_pos,goal,array_grid);
+            if(distance != 9999){
+                no_goal = true;
             }
+            matrix_distance[i] = distance;
+            i++;
+
+
         }
-        return false;
+        return no_goal;
         /*
 
         for(Case block : blocks){
@@ -329,13 +352,22 @@ public class Grille implements astar.Monde, astar.But {
 
 
 
-    private void StateToString(EtatSokoban e){
+    private void StateToString(EtatSokoban e,List<Case> blocks){
         char[][] printable = new char[100][100];
 
 
-        for(Case c : obstacles){
-            printable[c.x][c.y] = '#';
+
+        for(int i =0; i< array_grid.length; i++){
+            for (Case c : array_grid[i]){
+                if(c != null)
+                    printable[c.x][c.y] = c.symbole;
+            }
+            System.out.println();
         }
+
+       /* for(Case c : obstacles){
+            printable[c.x][c.y] = '#';
+        }*/
 
         for(Case c: les_buts){
             printable[c.x][c.y] = '.';

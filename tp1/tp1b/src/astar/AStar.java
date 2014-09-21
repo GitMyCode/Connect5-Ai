@@ -11,11 +11,13 @@ import java.util.*;
 public class AStar {
 
     public static TreeSet<Etat> open, close;
-
+    public static TreeSet<Etat> open2;
 
 
     public static Map<Etat,Etat> open_map;
+    public static Map<Etat,Etat> open_map2;
 
+    public static Etat last_visited;
 
     public static List<Action> genererPlan(Monde monde, Etat etatInitial, But but, Heuristique heuristique){
         long starttime = System.currentTimeMillis();
@@ -23,16 +25,14 @@ public class AStar {
         // À Compléter.
         // Implémentez l'algorithme A* ici.
 
-        Hashtable test = new Hashtable();
 
         LinkedHashMap<Etat,Etat> test2 = new LinkedHashMap<Etat, Etat>();
 
         open_map = new TreeMap<Etat, Etat>();
+        open_map2 = new TreeMap<Etat, Etat>();
         open = new TreeSet<Etat>(new Comparator<Etat>(){
             public int compare(Etat a, Etat b){
-                if(a.equals(b)){
-                    return 0;
-                }
+
                 if(a.f < b.f){
                     return 1;
                 }
@@ -40,11 +40,33 @@ public class AStar {
                     return -1;
                 }
 
+                if(a.equals(b)){
+                    return 0;
+                }
                 return a.compareTo(b);
 
 
             }
         });
+        open2 = new TreeSet<Etat>(new Comparator<Etat>(){
+            public int compare(Etat a, Etat b){
+
+                if(a.f < b.f){
+                    return 1;
+                }
+                if( a.f > b.f){
+                    return -1;
+                }
+
+                if(a.equals(b)){
+                    return 0;
+                }
+                return a.compareTo(b);
+
+
+            }
+        });
+
 
   //      open = new TreeSet<Etat>();
 /*        close = new TreeSet<Etat>(new Comparator<Etat>(){
@@ -72,60 +94,78 @@ public class AStar {
 
         List<Action> plan = new LinkedList<Action>();
 
-        open.add(etatInitial);
         //int key = etatInitial.hashCode();
-        open_map.put(etatInitial, etatInitial);
 
 
         int etat_generer=0;
         int nb_visite = 0;
 
         Etat arrive = etatInitial;
-        while(open.size() > 0){
-            nb_visite++;
-            Etat etat_init = open.last();//find_best_in_open(open);
+        last_visited = etatInitial;
+        open2.add(etatInitial);
+        open_map2.put(etatInitial,etatInitial);
 
-      /*     if( !etat_init.equals(find_best_in_open(open))){
-//                System.out.println("problem");
-            }*/
-           // key = etat_init.hashCode();
+        int deep_limit = 400;
+        boolean but_statisfait = false;
+        while (  !(but_statisfait || open2.isEmpty()) ){
+            deep_limit = (int) Math.pow((deep_limit ),1.25);
+
+            System.out.println("deep: "+deep_limit +" nb visite: "+nb_visite);
+
+            open.addAll(open2);
+            open_map.putAll(open_map2);
+
+            close.removeAll(open);
+           // close.clear();
+            open_map2.clear();
+            open2.clear();
 
 
-            if(but.butSatisfait(etat_init)){
-                arrive = etat_init;
-                break;
+            while(open.size() > 0){
+                nb_visite++;
+                Etat etat_init = open.last();
+
+
+                if(but.butSatisfait(etat_init)){
+                    arrive = etat_init;
+                    but_statisfait = true;
+                    break;
+                }
+
+
+
+
+
+                int si_open = open.size();
+                if(!open.remove(etat_init)){
+                    System.out.println("falsde");
+                }
+                if(si_open != open.size()+1){
+                    System.out.println("problem");
+                }
+
+                open_map.remove(etat_init);
+
+
+                if(open.size() != open_map.size()){
+                    System.out.println("ope");
+                }
+                close.add(etat_init);
+
+                if(deep_limit < etat_init.g){
+                    open2.add(etat_init);
+                    open_map2.put(etat_init,etat_init);
+                    continue;
+                }
+
+                voisins(etat_init,monde,etatInitial,but,heuristique,deep_limit);
+
+
+
+
             }
-
-
-            int si_open = open.size();
-            if(!open.remove(etat_init)){
-                System.out.println("falsde");
-            }
-            if(si_open != open.size()+1){
-                System.out.println("problem");
-            }
-
-            open_map.remove(etat_init);
-
-            /*if(!etat_init.equals(open_map.remove(etat_init))){
-               System.out.println("false");
-            }
-            if(si_open_hash != open_map.size()+1){
-              System.out.println("probleme");
-            }
-*/
-
-            if(open.size() != open_map.size()){
-                System.out.println("ope");
-            }
-            close.add(etat_init);
-
-            voisins(etat_init,monde,etatInitial,but,heuristique);
-
-
-
-
         }
+
 
 
 
@@ -177,21 +217,12 @@ public class AStar {
     }
 
 
-    private static Etat find_best_in_open(TreeSet<Etat> t){
-        Etat best = t.first();
-        for( Etat e : t){
 
 
-            if( e.f < best.f ){
-                best = e;
-            }
-        }
-        return best;
-    }
-
-    private static void voisins(Etat current, Monde monde, Etat etatInitial, But but, Heuristique heuristique){
+    private static void voisins(Etat current, Monde monde, Etat etatInitial, But but, Heuristique heuristique,int deep_limit){
 
         List<Action> action_voisin = monde.getActions(current);
+
 
         for( Action a : action_voisin ){
             Etat voisin = monde.executer(current,a);
@@ -203,19 +234,6 @@ public class AStar {
                 Etat open_voisin = null;
 
                 open_voisin = open_map.get(voisin);
-              /*  Etat open_voisin2 = getEtat(open,voisin);
-
-
-                if( open_voisin == null && open_voisin == null){
-                }else{
-                    if(open_voisin2 == null &&  open_voisin != null) {
-                        System.out.println("sad");
-                    }else if(open_voisin == null && open_voisin2 !=null){
-                        System.out.println("dsf");
-                    }
-                }*/
-
-
 
 
                 if( open_voisin==null || newG < open_voisin.g ){
@@ -233,41 +251,14 @@ public class AStar {
                     voisin.f = voisin.g + voisin.h;
 
 
-
-                    open_map.put(voisin,voisin);
+                    if(open_voisin == null){
+                        open_map.put(voisin,voisin);
+                    }
                     open.add(voisin);
 
 
-                    /*if (open_voisin == null){
-                       if(open.contains(voisin)){
-                            System.out.println("wtfd");
-                       }
-
-                        if(open.contains(voisin)){
-                            System.out.println("wtfd");
-                        }
-                        Etat test = getEtat(open,voisin);
-                        if(test != null && test.compareTo(voisin) != 0){
-                            System.out.println("probleme ici");
-                        }
-
-                        int si = open_map.size();
-                        open_map.put(voisin, voisin);
-                        if(si != open_map.size()-1){
-                            System.out.println("ok");
-                        }
-
-
-                        open.add(voisin);
-                    }else{
-                        open.remove(voisin);
-                        open.add(voisin);
-                    }*/
                 }
-
-
             }
-
         }
 
 

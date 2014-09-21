@@ -17,7 +17,10 @@ public class Probleme {
     public Grille grille;
     public EtatSokoban etatInitial;
     public But but;
-    
+
+
+    public static double  ratio_space_wall =0;
+
     private Probleme(){
     }
     
@@ -60,8 +63,18 @@ public class Probleme {
         probleme.but = new But(les_buts);
         probleme.but.mures = obstacles;
         probleme.but.grid = grid;
+        probleme.but.ratio_space_wall = ratio_space_wall;
 
         probleme.etatInitial = new EtatSokoban(bonhomme.get(0),blocks);
+
+        for(int i=0; i<blocks.size();i++){
+            for(int j=0; j< blocks.size(); j++){
+                Case block = blocks.get(i);
+                Case goal  = les_buts.get(j);
+
+                probleme.etatInitial.matrix_distance_goal[i][j] = CheckPath.canGo(block,goal,grid);
+            }
+        }
 
 
 
@@ -84,16 +97,28 @@ public class Probleme {
 
         Case[][] grid = new Case[max_x][max_y];
 
+        int count_space =0;
+        int count_wall =0;
+
         for(int i=0; i< max_x; i++){
             for(int j=0; j< lecture.get(i).length() ; j++){
                 char current_char = lecture.get(i).charAt(j);
                 if(current_char != '#')
                     current_char = ' ';
 
+
+                count_space = (current_char == ' ')? count_space+1 : count_space;
+                count_wall = (current_char == '#')? count_wall+1 : count_wall;
+
                 Case new_case = new Case(i,j,current_char);
                 grid[i][j] = new_case;
             }
         }
+
+        ratio_space_wall = (Double.valueOf(count_space)/Double.valueOf(count_wall));
+        System.out.println("Space : "+count_space);
+        System.out.println("Wall : "+count_wall);
+        System.out.println("Ratio :"+ ratio_space_wall);
 
         return grid;
     }

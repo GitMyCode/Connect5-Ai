@@ -27,11 +27,18 @@ public class EtatSokoban extends Etat {
     protected TreeSet<Case> tree_blocks;
 
     protected boolean is_resolvable;
+    protected int[][] matrix_distance_goal;
+    protected boolean last_action_move_block;
+
 
     public EtatSokoban(Case bonhomme,List<Case> blocks){
         this.bonhomme = bonhomme;
         this.blocks = blocks;
         this.is_resolvable = true;
+
+
+        matrix_distance_goal = new int[blocks.size()][blocks.size()];
+
 
         tree_blocks = new TreeSet<Case>();
         for(Case c : blocks){
@@ -48,16 +55,26 @@ public class EtatSokoban extends Etat {
         Case temp = new Case(bonhomme.x,bonhomme.y,'$');
         temp.applyDeplacement(new_action.nom);
 
+
+        int index_test = new_action.index_moved_block;
+
         int index_ref = blocks.indexOf(temp);
+
+
         if(index_ref != -1){
             Case ref = blocks.get(index_ref);
-            blocks.remove(index_ref);
             tree_blocks.remove(ref);
 
-            temp.applyDeplacement(new_action.nom);
+            ref.applyDeplacement(new_action.nom);
 
-            blocks.add(temp);
-            tree_blocks.add(temp);
+            //update matrix distance
+            for(int i=0; i< blocks.size(); i++){
+                matrix_distance_goal[new_action.index_moved_block][i] = new_action.moves_to_goals[i];
+            }
+
+            last_action_move_block = ((ActionDeplacement) a).is_moving_block;
+
+            tree_blocks.add(ref);
 
 
         }
@@ -80,7 +97,11 @@ public class EtatSokoban extends Etat {
 
         Case cloned_bonhomme = (Case) bonhomme.clone();
         EtatSokoban cloned =  new EtatSokoban(cloned_bonhomme,cloned_blocks);
-
+        for(int i=0; i< blocks.size(); i++){
+            for(int j=0; j< blocks.size(); j++){
+                cloned.matrix_distance_goal[i][j] = matrix_distance_goal[i][j];
+            }
+        }
         // À compléter : vous devez faire une copie complète de l'objet.
         return cloned;
     }

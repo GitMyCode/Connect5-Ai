@@ -11,11 +11,13 @@ public class CheckPath {
 
     static Case[][] grid;
 
+    static int moves_to_goal = 9999;
 
 
-    public static boolean canGo(Case start, Case end, Case[][] grid2){
+    public static int canGo(Case start, Case end, Case[][] grid2){
         grid = grid2;
 
+        moves_to_goal = 9999;
         List<Case> open = new ArrayList<Case>();
         List<Case> close = new ArrayList<Case>();
 
@@ -25,10 +27,21 @@ public class CheckPath {
             Case current = best_one(open);
 
             if(end.equals(current)){
+                if(start.equals(end)){
+                    return 0;
+                }
+
                 end.parent = current.parent;
 
+                moves_to_goal=0;
+                Case path = end;
+                while(path != null){
+                    moves_to_goal++;
+                   path = path.parent;
+                }
+
                 cleanGrid();
-                return true;
+                return moves_to_goal;
             }
 
             open.remove(current);
@@ -42,7 +55,7 @@ public class CheckPath {
 
 
         cleanGrid();
-        return false;
+        return moves_to_goal;
 
     }
 

@@ -15,7 +15,11 @@ import astar.Action;
 public class ActionDeplacement extends Action {
     
     // À compléter ...
-    
+
+    protected int index_moved_block;
+    protected int[] moves_to_goals;
+    protected boolean is_moving_block;
+
     public ActionDeplacement(String nom){
         super(1);
         this.nom = nom;

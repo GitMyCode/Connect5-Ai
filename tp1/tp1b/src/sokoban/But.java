@@ -32,7 +32,8 @@ public class But implements astar.But, astar.Heuristique {
     Map<Case,Integer> h_count;
     Map<Case,Integer> f_count;
 
-
+    protected int test =0;
+    protected double ratio_space_wall;
 
     protected List<Integer> list_distances;
 
@@ -62,23 +63,50 @@ public class But implements astar.But, astar.Heuristique {
 
        EtatSokoban etat = (EtatSokoban) e;
 
+        test =0;
 
         double distance_total =0;
+        matrix_distance = etat.matrix_distance_goal;
+  /*      for(int i=0; i<etat.blocks.size(); i++){
+            for(int j=0; j< etat.blocks.size(); j++){
+                if(matrix_distance[i][j] == 9999){
+                    System.out.println(" sdf");
+                }
+            }
+        }*/
 
+
+ /*       int[][] testM = new int[etat.blocks.size()][etat.blocks.size()];
         for(int i=0; i< etat.blocks.size(); i++){
             for(int j=0; j< les_buts.size(); j++){
                 Case block = etat.blocks.get(i);
                 Case but   = les_buts.get(j);
-                matrix_distance[i][j] = can_go(block,but,etat);
+                matrix_distance[i][j] = distance(block,but); //can_go(block,but,etat);
+
+            }
+        }*/
+
+
+        int distance_player_box = Integer.MAX_VALUE;
+        for(Case c : etat.blocks){
+            int dis = distance(etat.bonhomme, c);
+            if( distance_player_box > dis ){
+                distance_player_box = dis;
 
             }
         }
-
-
         min_distance = Integer.MAX_VALUE;
         min_matrix(new ArrayList<Integer>(),0,0);
 
-       /* int block_to_choose = Integer.MAX_VALUE;
+        double h = Math.pow( (min_distance/2 )+(Math.pow(distance_player_box,0.4)),(1.1)+ratio_space_wall/10);
+
+        if(etat.last_action_move_block){
+            h = h/1.5;
+        }
+
+        return h;
+/*
+       *//* int block_to_choose = Integer.MAX_VALUE;
         int distance_choosens_block =0;
         for(int i=0; i< matrix_distance.length ; i++){
             for(Integer min : list_distances ){
@@ -91,7 +119,7 @@ public class But implements astar.But, astar.Heuristique {
                 }
             }
         }
-*/
+*//*
 
 
         int distance_player_box = Integer.MAX_VALUE;
@@ -103,7 +131,7 @@ public class But implements astar.But, astar.Heuristique {
             }
         }
 
-        return Math.pow(Double.valueOf(min_distance + (distance_player_box/1.5)),2)/7 ;//+ distance_player_box * 10; /*//* block_to_choose;
+        return Math.pow(Double.valueOf(min_distance + (distance_player_box/1.5)),2)/7 ;//+ distance_player_box * 10; *//*//**//* block_to_choose;*/
     }
 
 
@@ -117,6 +145,8 @@ public class But implements astar.But, astar.Heuristique {
                 min_distance = so_far;
                 list_distances = used;
             }
+
+            test++;
             return;
         }
 
@@ -331,7 +361,7 @@ public class But implements astar.But, astar.Heuristique {
 
         for(int i=0; i< print.size(); i++){
             for(Character c : print.get(i)){
-                System.out.print(c + " ");
+                System.out.print(c );
             }
             System.out.println();
         }
