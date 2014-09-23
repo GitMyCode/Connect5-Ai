@@ -203,8 +203,13 @@ public class Grille implements astar.Monde, astar.But {
 
         setGridWithSymbole(array_grid,blocks,'$');
         for(Case c : blocks){
+
+            if(les_buts.contains(c)){
+                continue;
+            }
             List<Case> stack = new LinkedList<Case>();
             if(!can_move(c,stack)){
+
 
                // System.out.println("FALSE");
                // StateToString(e);
@@ -228,6 +233,8 @@ public class Grille implements astar.Monde, astar.But {
 
         int i=0;
         for(Case goal : les_buts){
+
+
             int distance = CheckPath.canGo(new_block_pos,goal,array_grid);
             if(distance != 9999){
                 no_goal = true;
@@ -272,27 +279,13 @@ public class Grille implements astar.Monde, astar.But {
     private boolean can_move(Case c, List<Case> stack){
 
 
-        if(les_buts.contains(c)){
-            return true;
-        }
+
 
         Case NORTH = array_grid[c.x-1][c.y];
         Case SOUTH = array_grid[c.x+1][c.y];
         Case WEST = array_grid[c.x][c.y-1];
         Case EAST = array_grid[c.x][c.y+1];
 
-        if(NORTH.symbole =='.'){
-            System.out.println("fuck");
-        }
-        if(SOUTH.symbole =='.'){
-            System.out.println("fuck");
-        }
-        if(EAST.symbole =='.'){
-            System.out.println("fuck");
-        }
-        if(WEST.symbole =='.'){
-            System.out.println("fuck");
-        }
 
         if(WEST.symbole == ' ' && EAST.symbole == ' ') {
             return true;

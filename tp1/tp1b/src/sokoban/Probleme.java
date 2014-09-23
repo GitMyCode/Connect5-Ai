@@ -67,6 +67,17 @@ public class Probleme {
 
         probleme.etatInitial = new EtatSokoban(bonhomme.get(0),blocks);
 
+
+        /*
+        matrixdistance
+
+              gloal | goal | goal
+        block
+        block
+        block
+
+         */
+
         for(int i=0; i<blocks.size();i++){
             for(int j=0; j< blocks.size(); j++){
                 Case block = blocks.get(i);

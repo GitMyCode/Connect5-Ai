@@ -32,6 +32,7 @@ public class Case extends Noeud implements Comparable<Case>,Cloneable{
 
     @Override
     public boolean equals(Object o) {
+        if(this == o)return true;
 
         Case c = (Case) o;
         if(this.x != c.x){
@@ -47,6 +48,8 @@ public class Case extends Noeud implements Comparable<Case>,Cloneable{
 
     @Override
     public int compareTo(Case aCase) {
+
+        if(this == aCase)return 0;
 
         if(x < aCase.x ) return -1;
         if(x > aCase.x ) return 1;

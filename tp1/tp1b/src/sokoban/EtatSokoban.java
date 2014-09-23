@@ -139,6 +139,9 @@ public class EtatSokoban extends Etat {
 
 
 
+/*        if(this.compareTo(that) != 0){
+            System.out.println("probleme");
+        }*/
 
         return true;
     }
@@ -162,10 +165,13 @@ public class EtatSokoban extends Etat {
     @Override
     public int compareTo(Etat o) {
         EtatSokoban es = (EtatSokoban) o;
+/*
 
         if(this.equals(es)){
             return 0;
         }
+*/
+        if(this == es) return 0;
 
         int cmp  = bonhomme.compareTo(es.bonhomme);
         if(cmp !=0){
@@ -180,6 +186,8 @@ public class EtatSokoban extends Etat {
                 return cmp;
             }
         }
+        it = null;
+        it2 = null;
         /*for(Case c : tree_blocks){
 
         }

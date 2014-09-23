@@ -18,7 +18,8 @@ public class TP1b {
 
     public static void main(String args[]) throws IOException {
         //Reader reader = args.length==1 ? new FileReader("sokoban00.txt") : new InputStreamReader(System.in);
-        Reader reader =  new FileReader("src/tests/sokoban14.txt");
+        //Reader reader =  new FileReader("src/tests/sokoban/xsokoban/screen.1");
+        Reader reader =  new FileReader("src/tests/sokoban10.txt");
         BufferedReader br = new BufferedReader(reader);
         Probleme probleme = Probleme.charger(br);
         List<astar.Action> plan = astar.AStar.genererPlan(probleme.grille, probleme.etatInitial, probleme.but, probleme.but);

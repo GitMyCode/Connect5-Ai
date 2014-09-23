@@ -10,8 +10,10 @@ import java.util.*;
 
 public class AStar {
 
-    public static TreeSet<Etat> open, close;
-    public static TreeSet<Etat> open2;
+    public static PriorityQueue<Etat> open, close;
+    public static HashSet<Etat> hash_close;
+
+        public static TreeSet<Etat> open2;
 
 
     public static Map<Etat,Etat> open_map;
@@ -28,16 +30,18 @@ public class AStar {
 
         LinkedHashMap<Etat,Etat> test2 = new LinkedHashMap<Etat, Etat>();
 
+        hash_close = new HashSet<Etat>();
+
         open_map = new TreeMap<Etat, Etat>();
         open_map2 = new TreeMap<Etat, Etat>();
-        open = new TreeSet<Etat>(new Comparator<Etat>(){
+        open = new PriorityQueue<Etat>(300,new Comparator<Etat>(){
             public int compare(Etat a, Etat b){
 
                 if(a.f < b.f){
-                    return 1;
+                    return -1;
                 }
                 if( a.f > b.f){
-                    return -1;
+                    return 1;
                 }
 
                 if(a.equals(b)){
@@ -68,6 +72,8 @@ public class AStar {
         });
 
 
+
+
   //      open = new TreeSet<Etat>();
 /*        close = new TreeSet<Etat>(new Comparator<Etat>(){
             public int compare(Etat a, Etat b){
@@ -88,7 +94,7 @@ public class AStar {
 
 
 //        open = new TreeSet<Etat>();
-        close = new TreeSet<Etat>();
+        //close = new TreeSet<Etat>();
 
 
 
@@ -105,17 +111,17 @@ public class AStar {
         open2.add(etatInitial);
         open_map2.put(etatInitial,etatInitial);
 
-        int deep_limit = 400;
+        int deep_limit = 90000;
         boolean but_statisfait = false;
         while (  !(but_statisfait || open2.isEmpty()) ){
-            deep_limit = (int) Math.pow((deep_limit ),1.25);
+            deep_limit = deep_limit+ 10; //(int) Math.pow((deep_limit ),1.15);
 
             System.out.println("deep: "+deep_limit +" nb visite: "+nb_visite);
 
             open.addAll(open2);
             open_map.putAll(open_map2);
 
-            close.removeAll(open);
+            hash_close.removeAll(open);
            // close.clear();
             open_map2.clear();
             open2.clear();
@@ -123,8 +129,13 @@ public class AStar {
 
             while(open.size() > 0){
                 nb_visite++;
-                Etat etat_init = open.last();
+                Etat etat_init = open.poll(); // .last();
 
+
+
+                if(nb_visite == 20000){
+                    System.out.println("sad");
+                }
 
                 if(but.butSatisfait(etat_init)){
                     arrive = etat_init;
@@ -137,12 +148,13 @@ public class AStar {
 
 
                 int si_open = open.size();
-                if(!open.remove(etat_init)){
+
+             /*   if(!open.remove(etat_init)){
                     System.out.println("falsde");
                 }
                 if(si_open != open.size()+1){
                     System.out.println("problem");
-                }
+                }*/
 
                 open_map.remove(etat_init);
 
@@ -150,7 +162,9 @@ public class AStar {
                 if(open.size() != open_map.size()){
                     System.out.println("ope");
                 }
-                close.add(etat_init);
+
+                hash_close.add(etat_init);
+                //close.add(etat_init);
 
                 if(deep_limit < etat_init.g){
                     open2.add(etat_init);
@@ -205,7 +219,7 @@ public class AStar {
 
         Collections.reverse(plan);
 
-        etat_generer = open.size()+ close.size();
+        etat_generer = open.size()+ hash_close.size();
 
         long lastDuration = System.currentTimeMillis() - starttime;
         // Les lignes écrites débutant par un dièse '#' seront ignorées par le valideur de solution.
@@ -226,7 +240,7 @@ public class AStar {
 
         for( Action a : action_voisin ){
             Etat voisin = monde.executer(current,a);
-            if( !close.contains(voisin)){
+            if( !hash_close.contains(voisin)){
 
                 double newG = a.cout + current.g;
 

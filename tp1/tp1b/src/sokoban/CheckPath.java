@@ -1,8 +1,6 @@
 package sokoban;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by MB on 9/16/2014.
@@ -13,18 +11,38 @@ public class CheckPath {
 
     static int moves_to_goal = 9999;
 
+    static PriorityQueue<Case> open;
+    static Map<Case,Case> open_map;
+
+    static HashSet<Case> close;
+
 
     public static int canGo(Case start, Case end, Case[][] grid2){
         grid = grid2;
 
         moves_to_goal = 9999;
-        List<Case> open = new ArrayList<Case>();
-        List<Case> close = new ArrayList<Case>();
+
+        open = new PriorityQueue<Case>(100,new Comparator<Case>() {
+            @Override
+            public int compare(Case a, Case b) {
+                if(a.f < b.f) {
+                    return -1;
+                }
+                if(a.f > b.f){
+                    return 1;
+                }
+                return a.compareTo(b);
+            }
+        });
+        open_map = new HashMap<Case, Case>();
+        close = new HashSet<Case>();
+
+
 
 
         open.add(start);
         while (open.size() !=0){
-            Case current = best_one(open);
+            Case current = open.poll();
 
             if(end.equals(current)){
                 if(start.equals(end)){
@@ -44,12 +62,12 @@ public class CheckPath {
                 return moves_to_goal;
             }
 
-            open.remove(current);
+            open_map.remove(current);
             close.add(current);
 
           //  printCurrentPath(close);
 
-            calculate_voisinage(grid, open, close, current, end);
+            calculate_voisinage(grid, current, end);
         }
 
 
@@ -58,8 +76,15 @@ public class CheckPath {
         return moves_to_goal;
 
     }
+    public static void setGridWithSymbole(Case[][] clean_grid, List<Case> caseToSet, Character sym){
 
-    private static void calculate_voisinage(Case[][] grid,List<Case> open, List<Case> close, Case current,Case to ){
+        for(Case c : caseToSet){
+            clean_grid[c.x][c.y].symbole = sym;
+        }
+    }
+
+
+    private static void calculate_voisinage(Case[][] grid, Case current,Case to ){
 
 
         List<Case> voisins = voisin(current,grid );
@@ -68,8 +93,15 @@ public class CheckPath {
             if ( !close.contains(v)){
 
                 double newG = current.g +1;
+                Case ref_voisin = open_map.get(v);
 
-                if( newG > v.g  ){
+
+                if(ref_voisin==null || newG < v.g  ){
+
+                    if(ref_voisin !=null){
+                        open.remove(ref_voisin);
+                        v= ref_voisin;
+                    }
 
                     v.parent = current;
                     v.h = distance(v,to);
@@ -77,12 +109,11 @@ public class CheckPath {
                     v.f = v.h + v.g;
 
 
-                    if( !open.contains(v)){
-                        open.add(v);
+                    if(ref_voisin ==null){
+                        open_map.put(v,v);
                     }
-
+                    open.add(v);
                 }
-
             }
         }
     }
@@ -93,7 +124,7 @@ public class CheckPath {
             voisins.add(grid[c.x-1][c.y]);
         }
 
-        if(in_grid(c.x+1,c.y) && in_grid(c.x-1,c.y)   ){
+        if(in_grid(c.x+1,c.y)  && in_grid(c.x-1,c.y)   ){
 
             voisins.add(grid[c.x+1][c.y]);
         }
