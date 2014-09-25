@@ -6,6 +6,7 @@
 package sokoban;
 
 import astar.Etat;
+import sokoban.hungarian.Hungarian;
 
 import java.util.*;
 
@@ -17,6 +18,7 @@ public class But implements astar.But, astar.Heuristique {
     // À compléter.
     // Indice : les destinations des blocs.
     List<Case> les_buts;
+    Map<Case,Map<Case,Integer>> map_distance;
 
     List<Case> mures;
 
@@ -28,6 +30,8 @@ public class But implements astar.But, astar.Heuristique {
     Map<Case,Integer> g_count;
     Map<Case,Integer> h_count;
     Map<Case,Integer> f_count;
+
+    private EtatSokoban current_state;
 
     protected int test =0;
     protected double ratio_space_wall;
@@ -59,92 +63,60 @@ public class But implements astar.But, astar.Heuristique {
     public double estimerCoutRestant(astar.Etat e, astar.But b) {
 
        EtatSokoban etat = (EtatSokoban) e;
-
-        test =0;
-
-        double distance_total =0;
-        matrix_distance = etat.matrix_distance_goal;
+        current_state = etat;
 
 
 
 
-        int[][] cpy = new int[matrix_distance.length][matrix_distance.length];
-        for(int i=0 ; i< matrix_distance.length;i++){
-            for(int j=0; j< matrix_distance.length; j++){
-                cpy[i][j] = matrix_distance[i][j];
+
+        if(etat.last_action_move_block || etat.last_min == -1 ){
+            double[][] cpy = new double[les_buts.size()][les_buts.size()];
+            for(int i=0 ; i< cpy.length;i++){
+                for(int j=0; j< cpy.length; j++){
+                    cpy[i][j] = (double) map_distance.get(les_buts.get(i)).get(etat.blocks.get(j));
+                }
             }
+
+
+            int[][] temp = new int[cpy.length][cpy.length];
+            for(int i=0 ; i< cpy.length;i++){
+                for(int j=0; j< cpy.length; j++){
+                    temp[i][j] =  (int)cpy[i][j];
+                }
+            }
+
+            int[][] best_matrix_combinaison = HungarianAlgorithm.computeAssignments(temp);
+
+            HashMap<TreeSet<Case>,Integer> df = new HashMap<TreeSet<Case>, Integer>();
+
+            min_distance=0;
+            setGridWithSymbole(grid,etat.blocks,'$');
+            for(int i =0 ; i< les_buts.size(); i++){
+                min_distance += temp[best_matrix_combinaison[i][0]][best_matrix_combinaison[i][1]];
+                Case block = etat.blocks.get(i);
+                grid[block.x][block.y].symbole = ' ';
+                cleanGrid();
+                grid[block.x][block.y].symbole = '$';
+            }
+            setGridWithSymbole(grid,etat.blocks,' ');
+            etat.last_min = min_distance;
+
+        }else {
+            min_distance = etat.last_min;
         }
 
 
         int distance_player =0;
-        for(int i=0; i<etat.blocks.size(); i++){
-
-
-
-            for(int j=0; j< les_buts.size(); j++){
-                cpy[i][j] = matrix_distance[i][j] + distance_player;
-            }
-        }
-
-
- /*       int[][] testM = new int[etat.blocks.size()][etat.blocks.size()];
-        for(int i=0; i< etat.blocks.size(); i++){
-            for(int j=0; j< les_buts.size(); j++){
-                Case block = etat.blocks.get(i);
-                Case but   = les_buts.get(j);
-                matrix_distance[i][j] = distance(block,but); //can_go(block,but,etat);
-
-            }
-        }*/
-
-
-        int distance_player_box = Integer.MAX_VALUE;
-        for(Case c : etat.blocks){
-                int dis = distance(etat.bonhomme, c);
-                if( distance_player_box > dis ){
-                    distance_player_box = dis;
-
-                }
-
-        }
-
-
-        int[][] temp = new int[cpy.length][cpy.length];
-        for(int i=0 ; i< matrix_distance.length;i++){
-            for(int j=0; j< matrix_distance.length; j++){
-                temp[i][j] = cpy[i][j];
-            }
-        }
-        int[][] test = HungarianAlgorithm.computeAssignments(cpy);
-
-
-        int other_res=0;
         int best_distance_player = Integer.MAX_VALUE;
-        setGridWithSymbole(grid,etat.blocks,'$');
-        for(int i =0 ; i< test.length; i++){
-            other_res += temp[test[i][0]][test[i][1]];
-
-
-            Case block = etat.blocks.get(i);
-            grid[block.x][block.y].symbole = ' ';
-            distance_player = distance_player_block(etat.bonhomme,block);
+        for(Case block : etat.blocks){
+            distance_player = distance(etat.bonhomme,block);//distance_player_block(etat.bonhomme,block);
             if(distance_player < best_distance_player){
                 best_distance_player = distance_player;
             }
 
-            cleanGrid();
-            grid[block.x][block.y].symbole = '$';
-
         }
-        setGridWithSymbole(grid,etat.blocks,' ');
 
-
-        min_distance = Integer.MAX_VALUE;
-  //      min_matrix(new ArrayList<Integer>(),0,0);
-
-        min_distance = other_res;
-
-        double h =  Math.pow(min_distance + best_distance_player,(1.0)+ratio_space_wall/10);//Math.pow( (min_distance ),(1.1) +ratio_space_wall/10);
+        double h =  ((min_distance + (min_distance/les_buts.size()-1))) + best_distance_player;
 
         return h;
 /*
@@ -231,7 +203,7 @@ public class But implements astar.But, astar.Heuristique {
 
     private int distance_player_block(Case player, Case to){
 
-        PriorityQueue<Case> open = new PriorityQueue<Case>(100, new Comparator<Case>() {
+        PriorityQueue<Case> open = new PriorityQueue<Case>(350, new Comparator<Case>() {
             @Override
             public int compare(Case a, Case b) {
 
@@ -266,7 +238,11 @@ public class But implements astar.But, astar.Heuristique {
                     path = path.parent;
                     total_move = (path!=null)? total_move+1 : total_move ;
                 }
-                return total_move -1;
+                total_move -= 1;
+               /* if(total_move <= 0){
+                    System.out.println(" ");
+                }*/
+                return total_move;
             }
 
 

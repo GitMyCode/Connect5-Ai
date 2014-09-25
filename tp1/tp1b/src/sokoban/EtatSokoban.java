@@ -27,17 +27,21 @@ public class EtatSokoban extends Etat {
     protected TreeSet<Case> tree_blocks;
 
     protected boolean is_resolvable;
-    protected int[][] matrix_distance_goal;
     protected boolean last_action_move_block;
+    int last_min;
+
+    int nb_coup =0;
 
 
     public EtatSokoban(Case bonhomme,List<Case> blocks){
         this.bonhomme = bonhomme;
         this.blocks = blocks;
         this.is_resolvable = true;
+        last_action_move_block = false;
+        last_min= -1;
+        nb_coup=0;
 
-
-        matrix_distance_goal = new int[blocks.size()][blocks.size()];
+       // matrix_distance_goal = new int[blocks.size()][blocks.size()];
 
 
         tree_blocks = new TreeSet<Case>();
@@ -67,17 +71,19 @@ public class EtatSokoban extends Etat {
 
             ref.applyDeplacement(new_action.nom);
 
-            //update matrix distance
-            for(int i=0; i< blocks.size(); i++){
-                matrix_distance_goal[new_action.index_moved_block][i] = new_action.moves_to_goals[i];
-            }
 
             last_action_move_block = ((ActionDeplacement) a).is_moving_block;
+
+            if(!last_action_move_block){
+                System.out.print("df");
+            }
 
             tree_blocks.add(ref);
 
 
         }
+
+
 
 
         bonhomme.applyDeplacement(new_action.nom);
@@ -97,11 +103,15 @@ public class EtatSokoban extends Etat {
 
         Case cloned_bonhomme = (Case) bonhomme.clone();
         EtatSokoban cloned =  new EtatSokoban(cloned_bonhomme,cloned_blocks);
-        for(int i=0; i< blocks.size(); i++){
+/*        for(int i=0; i< blocks.size(); i++){
             for(int j=0; j< blocks.size(); j++){
                 cloned.matrix_distance_goal[i][j] = matrix_distance_goal[i][j];
             }
-        }
+        }*/
+
+        cloned.last_min = last_min;
+        cloned.nb_coup  = nb_coup++;
+
         // À compléter : vous devez faire une copie complète de l'objet.
         return cloned;
     }
@@ -149,13 +159,10 @@ public class EtatSokoban extends Etat {
     @Override
     public int hashCode() {
         long result = 17;
-        result = 37 * result + bonhomme.hashCode();
+        result = 17 * result + bonhomme.hashCode();
 
-        long blocks_res = 0;
-        int last_feed = blocks.size()-1;
         for(Case c : blocks){
-           result =  ((c.x*(blocks.get(last_feed).y+1))* result +   c.hashCode());
-            last_feed--;
+           result = 19*result + c.hashCode();
         }
 
         //result = 7 * result + (int) (blocks_res ^ (blocks_res >> 32));
@@ -165,12 +172,7 @@ public class EtatSokoban extends Etat {
     @Override
     public int compareTo(Etat o) {
         EtatSokoban es = (EtatSokoban) o;
-/*
 
-        if(this.equals(es)){
-            return 0;
-        }
-*/
         if(this == es) return 0;
 
         int cmp  = bonhomme.compareTo(es.bonhomme);
@@ -188,24 +190,6 @@ public class EtatSokoban extends Etat {
         }
         it = null;
         it2 = null;
-        /*for(Case c : tree_blocks){
-
-        }
-
-        for(int i =0; i< es.blocks.size(); i++){
-            Case block_ici = blocks.get(i);
-            Case block_o   = es.blocks.get(i);
-
-           cmp = block_ici.compareTo(block_o);
-
-            if(cmp !=0){
-                return cmp;
-            }
-
-        }
-*/
-        // À compléter.
-        // La comparaison est essentielle pour ajouter des EtatSokoban dans un TreeSet open ou close dans l'algorithme A*.
         return 0;
     }
     

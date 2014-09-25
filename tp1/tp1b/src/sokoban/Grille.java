@@ -38,6 +38,11 @@ public class Grille implements astar.Monde, astar.But {
     Case[][] array_grid;
     public List<List<Character>> grid ;
 
+    Map<Case,Map<Case,Integer>> map_distance;
+    HashSet<Case> death_lock_table;
+    EtatSokoban current_state;
+
+
     public Grille(List<String> lecture){
         grid = new ArrayList<List<Character>>();
         for(String s : lecture){
@@ -134,8 +139,13 @@ public class Grille implements astar.Monde, astar.But {
                 if (temp_case.symbole == '$') { // if player move on a $ case check if the block can be move
                     // temp_case.setX(new_x+dx[i]);
                     // temp_case.setY(new_y + dy[i]);
+                    Case next_block_pos = array_grid[new_x+dx[i]][new_y+dy[i]];
+                    if (next_block_pos.symbole == '.' || next_block_pos.symbole == ' ') {
 
-                    if (array_grid[new_x + dx[i]][new_y + dy[i]].symbole == '.' || array_grid[new_x + dx[i]][new_y + dy[i]].symbole == ' ') {
+
+                        if(death_lock_table.contains(next_block_pos)){
+                            continue;
+                        }
 
                         List<Case> next_block_state = new ArrayList<Case>();
                         for (Case c : e.blocks) {
@@ -161,6 +171,9 @@ public class Grille implements astar.Monde, astar.But {
                         setGridWithSymbole(array_grid,next_block_state,' ');
 
                         setGridWithSymbole(array_grid,e.blocks,' ');
+
+                        current_state = e;
+
 
                         int[] matrix_distance = new int[e.blocks.size()];
                         if (is_not_blocked(next_block_state,temp_case,matrix_distance)) {
@@ -219,10 +232,8 @@ public class Grille implements astar.Monde, astar.But {
             }
         }
         setGridWithSymbole(array_grid,blocks,' ');
-        return  cant_reach_goal(ref_block_pos, matrix_distance);
-        //System.out.println("TRUE");
-       // StateToString(e);
-     //   return true;
+        return true;// cant_reach_goal(ref_block_pos, matrix_distance);
+
     }
 
     private boolean cant_reach_goal(Case new_block_pos, int[] matrix_distance){
@@ -234,8 +245,8 @@ public class Grille implements astar.Monde, astar.But {
         int i=0;
         for(Case goal : les_buts){
 
-
-            int distance = CheckPath.canGo(new_block_pos,goal,array_grid);
+            int distance = map_distance.get(goal).get(new_block_pos);
+            //int distance = CheckPath.canGo(new_block_pos,goal,array_grid);
             if(distance != 9999){
                 no_goal = true;
             }
@@ -244,6 +255,7 @@ public class Grille implements astar.Monde, astar.But {
 
 
         }
+
         return no_goal;
         /*
 

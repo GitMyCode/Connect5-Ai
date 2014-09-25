@@ -16,12 +16,16 @@ import java.util.List;
 public class TP1a {
     public static void main(String args[]) throws Exception{
         Carte carte = null;
-        carte = ParseurCarteTxt.parseCarte(new BufferedReader(new FileReader("src/carte-uqam.txt")));
-        Noeud ni = carte.getNoeud("n1");
+        carte = ParseurCarteTxt.parseCarte(new BufferedReader(new FileReader("src/carte-montreal.txt")));
+        Noeud ni = carte.getNoeud("n467692809");
+        //Noeud ni = carte.getNoeud("n1573548273");
+
         if(ni==null) throw new Exception("Noeud " + args[1] + " inexistant dans la carte!");
         Etat etatinitial = new Etat(ni);
-        Noeud nb = carte.getNoeud("n8");
-        if(nb==null) throw new Exception("Noeud " + args[2] + " inexistant dans la carte!");        
+        Noeud nb = carte.getNoeud("n282606162");
+        //Noeud nb = carte.getNoeud("n467692650");
+
+        if(nb==null) throw new Exception("Noeud " + args[2] + " inexistant dans la carte!");
         But but = new But(nb);
         astar.Heuristique h = but;
         List<astar.Action> plan = astar.AStar.genererPlan(carte, etatinitial, but, h);

@@ -10,16 +10,19 @@ import java.util.*;
 
 public class AStar {
 
-    public static PriorityQueue<Etat> open, close;
+    public static PriorityQueue<Etat> open,open2, close;
     public static HashSet<Etat> hash_close;
 
-        public static TreeSet<Etat> open2;
 
 
     public static Map<Etat,Etat> open_map;
     public static Map<Etat,Etat> open_map2;
 
     public static Etat last_visited;
+
+    public static CompareEtat compareEtat;
+
+    private static boolean switched = false;
 
     public static List<Action> genererPlan(Monde monde, Etat etatInitial, But but, Heuristique heuristique){
         long starttime = System.currentTimeMillis();
@@ -32,27 +35,12 @@ public class AStar {
 
         hash_close = new HashSet<Etat>();
 
+        compareEtat = new CompareEtat();
+
         open_map = new TreeMap<Etat, Etat>();
         open_map2 = new TreeMap<Etat, Etat>();
-        open = new PriorityQueue<Etat>(300,new Comparator<Etat>(){
-            public int compare(Etat a, Etat b){
-
-                if(a.f < b.f){
-                    return -1;
-                }
-                if( a.f > b.f){
-                    return 1;
-                }
-
-                if(a.equals(b)){
-                    return 0;
-                }
-                return a.compareTo(b);
-
-
-            }
-        });
-        open2 = new TreeSet<Etat>(new Comparator<Etat>(){
+        open = new PriorityQueue<Etat>(6000, compareEtat);
+     /*   open2 = new TreeSet<Etat>(new Comparator<Etat>(){
             public int compare(Etat a, Etat b){
 
                 if(a.f < b.f){
@@ -67,117 +55,79 @@ public class AStar {
                 }
                 return a.compareTo(b);
 
-
-            }
-        });
-
-
-
-
-  //      open = new TreeSet<Etat>();
-/*        close = new TreeSet<Etat>(new Comparator<Etat>(){
-            public int compare(Etat a, Etat b){
-                int cmp = a.compareTo(b);
-                if(cmp != 0){
-                    if(a.f < b.f){
-                        return -1;
-                    }
-                    if( a.f > b.f){
-                        return 1;
-                    }
-
-                }
-                return cmp;
 
             }
         });*/
 
 
-//        open = new TreeSet<Etat>();
-        //close = new TreeSet<Etat>();
 
 
 
         List<Action> plan = new LinkedList<Action>();
 
-        //int key = etatInitial.hashCode();
 
 
         int etat_generer=0;
         int nb_visite = 0;
 
         Etat arrive = etatInitial;
-        last_visited = etatInitial;
-        open2.add(etatInitial);
-        open_map2.put(etatInitial,etatInitial);
 
-        int deep_limit = 90000;
-        boolean but_statisfait = false;
-        while (  !(but_statisfait || open2.isEmpty()) ){
-            deep_limit = deep_limit+ 10; //(int) Math.pow((deep_limit ),1.15);
+        open.add(etatInitial);
+        open2= open;
+        open_map.put(etatInitial,etatInitial);
 
-            System.out.println("deep: "+deep_limit +" nb visite: "+nb_visite);
-
-            open.addAll(open2);
-            open_map.putAll(open_map2);
-
-            hash_close.removeAll(open);
-           // close.clear();
-            open_map2.clear();
-            open2.clear();
+        Random rand = new Random();
+        PriorityQueue tmp_ref;
 
 
-            while(open.size() > 0){
-                nb_visite++;
-                Etat etat_init = open.poll(); // .last();
+        while((open2.size() > 0)){
+            nb_visite++;
+            Etat cur = null;
+
+            int index = -1;
 
 
+            if(nb_visite % 5000 ==0 || (open.isEmpty()) ){
+                if(open.isEmpty()){
 
-                if(nb_visite == 20000){
-                    System.out.println("sad");
+                    jump();
+                    index = rand.nextInt(open.size());
+                    cur = (Etat) open.toArray()[index];
+                }else{
+                    index = rand.nextInt(open.size());
+                    cur = (Etat) open.toArray()[index];
+                    jump();
+
                 }
 
-                if(but.butSatisfait(etat_init)){
-                    arrive = etat_init;
-                    but_statisfait = true;
-                    break;
-                }
-
-
-
-
-
-                int si_open = open.size();
-
-             /*   if(!open.remove(etat_init)){
-                    System.out.println("falsde");
-                }
-                if(si_open != open.size()+1){
-                    System.out.println("problem");
-                }*/
-
-                open_map.remove(etat_init);
-
-
-                if(open.size() != open_map.size()){
-                    System.out.println("ope");
-                }
-
-                hash_close.add(etat_init);
-                //close.add(etat_init);
-
-                if(deep_limit < etat_init.g){
-                    open2.add(etat_init);
-                    open_map2.put(etat_init,etat_init);
-                    continue;
-                }
-
-                voisins(etat_init,monde,etatInitial,but,heuristique,deep_limit);
-
-
-
-
+            }else {
+                cur = open.poll(); // .last();
             }
+
+            if(!switched && but.butSatisfait(cur)){
+                arrive = cur;
+                break;
+            }
+
+
+
+           /* if(index != -1){
+                open.remove(cur);
+            }
+*/
+            open_map.remove(cur);
+
+
+           /* if(open.size() != open_map.size()){
+                System.out.println("ope");
+            }
+*/
+            hash_close.add(cur);
+            //close.add(etat_init);
+
+
+            voisins(cur,monde,but,heuristique);
+
         }
 
 
@@ -192,7 +142,7 @@ public class AStar {
         //  --  Affichez le numéro d'itération.
         //  --  Faites une boucles qui itère tous les états e dans open pour trouver celui avec e.f minimal.
         //  --  Affichez l'état e sélectionné (les e.f affichés devraient croître);
-        //  --  Vérifiez si l'état e satisfait le but. 
+        //  --  Vérifiez si l'état e satisfait le but.
         //  ---   Si oui, sortez du while.
         //  ---   Une autre boucle remonte les pointeurs parents.
         //  --  Générez les successeurs de e.
@@ -232,8 +182,26 @@ public class AStar {
 
 
 
+    private static void jump(){
 
-    private static void voisins(Etat current, Monde monde, Etat etatInitial, But but, Heuristique heuristique,int deep_limit){
+        PriorityQueue ref;
+        if(switched){
+            ref = open2;
+            open2.addAll(open);
+            open = open2;
+        }else {
+            open2 = open;
+            open = new PriorityQueue<Etat>(100,compareEtat);
+        }
+
+        switched = !switched;
+
+
+
+
+    }
+
+    private static void voisins(Etat current, Monde monde, But but, Heuristique heuristique){
 
         List<Action> action_voisin = monde.getActions(current);
 
@@ -292,5 +260,27 @@ public class AStar {
     static final NumberFormat nf = NumberFormat.getNumberInstance(Locale.ENGLISH);
     static {
         nf.setMaximumFractionDigits(1);
+    }
+
+    public static class CompareEtat implements Comparator<Etat>{
+
+        @Override
+        public int compare(Etat a, Etat b){
+
+
+            if(a.f < b.f){
+                return -1;
+            }
+            if( a.f > b.f){
+                return 1;
+            }
+
+            if(a.equals(b)){
+                return 0;
+            }
+            return a.compareTo(b);
+
+
+        }
     }
 }
