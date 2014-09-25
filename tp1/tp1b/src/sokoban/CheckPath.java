@@ -17,6 +17,87 @@ public class CheckPath {
     static HashSet<Case> close;
 
 
+    public static Map<Case,Integer> dijkstra(Case start, Case[][] graph){
+        Map<Case,Integer> map_distances = new HashMap<Case, Integer>();
+        PriorityQueue<Case> Q = new PriorityQueue<Case>(350, new Comparator<Case>() {
+            @Override
+            public int compare(Case a, Case b) {
+
+                if(a.g < b.g){
+                    return -1;
+                }
+                if(a.g > b.g ){
+                    return 1;
+                }
+                return a.compareTo(b);
+            }
+        });
+
+
+        Case[][] cpy_graph = new Case[graph.length][graph[0].length];
+        for(int i=0; i<graph.length; i++){
+            for(int j=0; j<graph[0].length; j++){
+                if(graph[i][j] !=null){
+                    Case c = (Case) graph[i][j].clone();
+                    cpy_graph[i][j] = c;
+                }
+            }
+        }
+
+        grid = cpy_graph;
+        for(int i=0; i< cpy_graph.length; i++){
+            for(int j=0; j< cpy_graph[0].length;j++){
+                if(cpy_graph[i][j] != null && cpy_graph[i][j].symbole != '#'){
+                    Case c = cpy_graph[i][j];
+                    c.g = Integer.MAX_VALUE;
+
+                    map_distances.put(c,Integer.MAX_VALUE);
+                    Q.add(c);
+
+                }
+            }
+        }
+        Case ref_start = cpy_graph[start.x][start.y];
+        ref_start.g=0;
+        map_distances.put(ref_start,0);
+        Q.remove(ref_start);
+        Q.add(ref_start);
+
+        while (!Q.isEmpty()){
+            Case current = Q.poll();
+
+            map_distances.put(current,(canGo(current,ref_start,cpy_graph)));
+          /*  List<Case> voisinage;
+            if (current.equals(ref_start)){
+                voisinage = voisin_start_dijstra(current,cpy_graph);
+            }else{
+                voisinage = voisin(current,cpy_graph);
+            }
+
+
+            for(Case v : voisinage){
+                Double alternative = current.g + 1;
+
+
+                if(map_distances.get(v) == null){
+                    System.out.println(" dsf");
+                }
+
+                if( alternative < map_distances.get(v) ){
+                    v.g = alternative;
+                    map_distances.put(v,alternative);
+                    v.parent = current;
+                }
+            }
+*/
+        }
+        cleanGrid();
+
+        return map_distances;
+
+    }
+
+
     public static int canGo(Case start, Case end, Case[][] grid2){
         grid = grid2;
 
@@ -54,9 +135,13 @@ public class CheckPath {
                 moves_to_goal=0;
                 Case path = end;
                 while(path != null){
-                    moves_to_goal++;
+                    //moves_to_goal++;
                    path = path.parent;
+                    moves_to_goal = (path!=null)? moves_to_goal+1 : moves_to_goal;
                 }
+       /*         if(moves_to_goal <=0){
+                    System.out.println("df");
+                }*/
 
                 cleanGrid();
                 return moves_to_goal;
@@ -117,6 +202,29 @@ public class CheckPath {
             }
         }
     }
+
+
+    private static List<Case> voisin_start_dijstra(Case current, Case[][] grid){
+        Case c = (Case) current;
+        List<Case> voisins = new ArrayList<Case>();
+        if(in_grid(c.x -1,c.y)  ){
+            voisins.add(grid[c.x-1][c.y]);
+        }
+
+        if(in_grid(c.x+1,c.y)     ){
+
+            voisins.add(grid[c.x+1][c.y]);
+        }
+        if(in_grid(c.x,c.y+1)   ){
+            voisins.add(grid[c.x][c.y+1]);
+        }
+        if(in_grid(c.x,c.y-1)    ){
+            voisins.add(grid[c.x][c.y-1]);
+        }
+
+        return voisins;
+    }
+
     private static List<Case> voisin(Case current, Case[][] grid){
         Case c = (Case) current;
         List<Case> voisins = new ArrayList<Case>();
@@ -140,9 +248,14 @@ public class CheckPath {
 
     private static boolean in_grid(int x,int y){
 
-        if(!(x >=0 && x < grid.length) && (y >= 0 && y < grid[0].length)){
+        if(!((x >=0 && x < grid.length) && (y >= 0 && y < grid[0].length))){
             return false;
         }
+
+        if(grid[x][y] == null){
+            System.out.println(" sd");
+        }
+
 
         return  grid[x][y].symbole == ' ' || grid[x][y].symbole == '.';
     }
@@ -236,6 +349,18 @@ public class CheckPath {
         for(int i=0; i< print.size(); i++){
             for(Character c : print.get(i)){
                 System.out.print(c + "");
+            }
+            System.out.println();
+        }
+
+    }
+
+        private static void printGrid(Case[][] grid){
+
+        for(int i =0; i< grid.length; i++){
+            for (Case c : grid[i]){
+                if(c != null)
+                    System.out.print(c.symbole + "");
             }
             System.out.println();
         }

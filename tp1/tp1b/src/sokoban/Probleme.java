@@ -7,8 +7,7 @@ package sokoban;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  *  Représente un problème chargé d'un fichier test sokoban??.txt.
@@ -20,6 +19,7 @@ public class Probleme {
 
 
     public static double  ratio_space_wall =0;
+    private static HashSet<Case> death_lock;
 
     private Probleme(){
     }
@@ -61,6 +61,36 @@ public class Probleme {
         probleme.grille.array_grid = grid;
 
         probleme.but = new But(les_buts);
+        Map<Case, Map<Case,Integer>> goal_disjtrap_map = new HashMap<Case, Map<Case, Integer>>();
+        for(Case c :les_buts){
+            goal_disjtrap_map.put(c,CheckPath.dijkstra(c, grid));
+        }
+        death_lock = new HashSet<Case>();
+
+        for(int i=0; i<grid.length; i++){
+            for(Case c :grid[i]){
+                if(c!= null && c.symbole == ' '){
+                    boolean blocked = true;
+                    for(Case goal : les_buts){
+                        if(goal_disjtrap_map.get(goal).get(c) != 9999){
+                            blocked = false;
+                            break;
+                        }
+                    }
+                    if(blocked){
+                        death_lock.add(c);
+                    }
+                }
+            }
+        }
+
+
+
+        probleme.but.map_distance = goal_disjtrap_map;
+        probleme.grille.map_distance = goal_disjtrap_map;
+        probleme.grille.death_lock_table = death_lock;
+
+
         probleme.but.mures = obstacles;
         probleme.but.grid = grid;
         probleme.but.ratio_space_wall = ratio_space_wall;
@@ -68,25 +98,20 @@ public class Probleme {
         probleme.etatInitial = new EtatSokoban(bonhomme.get(0),blocks);
 
 
-        /*
-        matrixdistance
 
-              gloal | goal | goal
-        block
-        block
-        block
+/*
 
-         */
 
         for(int i=0; i<blocks.size();i++){
             for(int j=0; j< blocks.size(); j++){
                 Case block = blocks.get(i);
                 Case goal  = les_buts.get(j);
-
-                probleme.etatInitial.matrix_distance_goal[i][j] = CheckPath.canGo(block,goal,grid);
+                Case playe_pos = new Case(0,0,'%');
+                probleme.etatInitial.matrix_distance_goal[i][j] =  CheckPath.canGo(block,goal,grid);
             }
         }
 
+*/
 
 
 
@@ -127,12 +152,16 @@ public class Probleme {
         }
 
         ratio_space_wall = (Double.valueOf(count_space)/Double.valueOf(count_wall));
+/*
         System.out.println("Space : "+count_space);
         System.out.println("Wall : "+count_wall);
         System.out.println("Ratio :"+ ratio_space_wall);
+*/
 
         return grid;
     }
+
+
 
     private static List<Case> char_to_list(List<String> lecture, char symbole){
         List<Case> result = new ArrayList<Case>();
@@ -147,4 +176,22 @@ public class Probleme {
 
         return result;
     }
+
+       private static void printGrid(Case[][] grid){
+
+        for(int i =0; i< grid.length; i++){
+            for (Case c : grid[i]){
+                if(c != null){
+                    if(death_lock.contains(c)){
+                        System.out.print('B' + "");
+                    }else{
+                        System.out.print(c.symbole + "");
+                    }
+                }
+            }
+            System.out.println();
+        }
+
+    }
+
 }

@@ -1,0 +1,24 @@
+Rapport de correction automatique
+#################################
+Date : 20140923_220303
+Code(s) MS : 
+
+
+
+
+Compilation ...
+sokoban00.txt ===> NonOptimal
+sokoban01.txt ===> NonOptimal
+sokoban02.txt ===> NonOptimal
+sokoban03.txt ===> NonOptimal
+sokoban04.txt ===> NonOptimal
+sokoban05.txt ===> NonOptimal
+sokoban06.txt ===> NonOptimal
+sokoban07.txt ===> NonOptimal
+sokoban08.txt ===> NonOptimal
+sokoban09.txt ===> NonOptimal
+sokoban10.txt ===> NonOptimal
+sokoban11.txt ===> NonOptimal
+sokoban12.txt ===> NonOptimal
+sokoban13.txt ===> NonOptimal
+sokoban14.txt ===> NonOptimal

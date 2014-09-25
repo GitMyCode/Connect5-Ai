@@ -23,6 +23,11 @@ public class Case extends Noeud implements Comparable<Case>,Cloneable{
         this.y = y;
         this.symbole = symbole;
     }
+    public Case(int x,int y){
+        this.x = x;
+        this.y = y;
+        this.symbole = '%';
+    }
 
     public Case(Case c){
         this.x = c.x;
@@ -81,9 +86,9 @@ public class Case extends Noeud implements Comparable<Case>,Cloneable{
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 1260000  * hash + (this.x+1);
-        hash = 17 * hash + (this.y+3);
+        int hash = 31;
+        hash = 31  * hash + (this.x+1);
+        hash = 37 * hash + (this.y+1);
         return hash;
     }
 
