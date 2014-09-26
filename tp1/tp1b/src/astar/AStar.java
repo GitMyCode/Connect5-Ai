@@ -80,6 +80,10 @@ public class AStar {
         PriorityQueue tmp_ref;
 
 
+        int iteration = 10;
+
+        int max_try = 1000;
+
         while((open2.size() > 0)){
             nb_visite++;
             Etat cur = null;
@@ -87,7 +91,8 @@ public class AStar {
             int index = -1;
 
 
-            if(nb_visite % 5000 ==0 || (open.isEmpty()) ){
+            if( (nb_visite % max_try ==0) || open.isEmpty() || iteration < open.peek().g ){
+
                 if(open.isEmpty()){
 
                     jump();
@@ -99,6 +104,16 @@ public class AStar {
                     jump();
 
                 }
+                if(nb_visite % max_try !=0){
+                    iteration+= 10;
+                }
+
+                if(switched){
+                    max_try = 100;
+                }else {
+                    max_try = 1000;
+                }
+
 
             }else {
                 cur = open.poll(); // .last();
