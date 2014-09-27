@@ -31,7 +31,7 @@ public class EtatSokoban extends Etat {
     int last_min;
 
     int nb_coup =0;
-
+    int cible;
 
     public EtatSokoban(Case bonhomme,List<Case> blocks){
         this.bonhomme = bonhomme;
@@ -111,6 +111,7 @@ public class EtatSokoban extends Etat {
 
         cloned.last_min = last_min;
         cloned.nb_coup  = nb_coup++;
+        cloned.cible = cible;
 
         // À compléter : vous devez faire une copie complète de l'objet.
         return cloned;

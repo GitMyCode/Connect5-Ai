@@ -84,42 +84,11 @@ public class AStar {
 
         int max_try = 1000;
 
-        while((open2.size() > 0)){
+        while((open.size() > 0)){
             nb_visite++;
             Etat cur = null;
-
-            int index = -1;
-
-
-            if( (nb_visite % max_try ==0) || open.isEmpty() || iteration < open.peek().g ){
-
-                if(open.isEmpty()){
-
-                    jump();
-                    index = rand.nextInt(open.size());
-                    cur = (Etat) open.toArray()[index];
-                }else{
-                    index = rand.nextInt(open.size());
-                    cur = (Etat) open.toArray()[index];
-                    jump();
-
-                }
-                if(nb_visite % max_try !=0){
-                    iteration+= 10;
-                }
-
-                if(switched){
-                    max_try = 100;
-                }else {
-                    max_try = 1000;
-                }
-
-
-            }else {
-                cur = open.poll(); // .last();
-            }
-
-            if(!switched && but.butSatisfait(cur)){
+            cur = open.poll();
+            if(but.butSatisfait(cur)){
                 arrive = cur;
                 break;
             }
@@ -236,9 +205,9 @@ public class AStar {
                 if( open_voisin==null || newG < open_voisin.g ){
 
 
-                    if(open_voisin !=null){
+                    /*if(open_voisin !=null){
                         open.remove(open_voisin);
-                    }
+                    }*/
                     voisin = (open_voisin == null) ? voisin : open_voisin;
 
                     voisin.parent = current;
@@ -250,8 +219,8 @@ public class AStar {
 
                     if(open_voisin == null){
                         open_map.put(voisin,voisin);
+                        open.add(voisin);
                     }
-                    open.add(voisin);
 
 
                 }

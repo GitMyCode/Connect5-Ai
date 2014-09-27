@@ -66,10 +66,45 @@ public class But implements astar.But, astar.Heuristique {
         current_state = etat;
 
 
+        int distance_player =0;
+        int best_distance_player = Integer.MAX_VALUE;
+        int chosen_block =0;
+        boolean changed_target = false;
+
+        boolean goal_atteint = false;
+        Case cible = null;
+        for(int i=0; i< etat.blocks.size(); i++){
+            Case block = etat.blocks.get(i);
+
+            if(les_buts.contains(block)) {
+
+                goal_atteint =true;
+            }
+
+            distance_player = distance(etat.bonhomme,block);
+            // distance_player = distance_player_block(etat.bonhomme,block);
+            if(distance_player < best_distance_player){
+                chosen_block = i;
+                cible = block;
+                best_distance_player = distance_player;
+            }
 
 
 
-        if(etat.last_action_move_block || etat.last_min == -1 ){
+        }
+        if(cible == null){
+            return 0;
+        }
+        if(( etat.cible != chosen_block)){
+            etat.cible = chosen_block;
+            changed_target =true;
+        }else{
+
+        }
+        best_distance_player--;
+
+
+        if(changed_target || etat.last_action_move_block || etat.last_min == -1 ){
             double[][] cpy = new double[les_buts.size()][les_buts.size()];
             for(int i=0 ; i< cpy.length;i++){
                 for(int j=0; j< cpy.length; j++){
@@ -78,45 +113,237 @@ public class But implements astar.But, astar.Heuristique {
             }
 
 
-            int[][] temp = new int[cpy.length][cpy.length];
+            int[][] matrix_distance = new int[cpy.length][cpy.length];
             for(int i=0 ; i< cpy.length;i++){
                 for(int j=0; j< cpy.length; j++){
-                    temp[i][j] =  (int)cpy[i][j];
+                    matrix_distance[i][j] =  (int)cpy[i][j];
                 }
             }
 
-            int[][] best_matrix_combinaison = HungarianAlgorithm.computeAssignments(temp);
+            int[][] best_matrix_combinaison = HungarianAlgorithm.computeAssignments(matrix_distance);
 
-            HashMap<TreeSet<Case>,Integer> df = new HashMap<TreeSet<Case>, Integer>();
 
+            /*
+            * Minimum distance entre les blocks et les buts
+            * */
             min_distance=0;
             setGridWithSymbole(grid,etat.blocks,'$');
+            chosen_block =0;
+            best_distance_player =Integer.MAX_VALUE;
+
+            goal_atteint = false; //pas propre pas propre
             for(int i =0 ; i< les_buts.size(); i++){
-                min_distance += temp[best_matrix_combinaison[i][0]][best_matrix_combinaison[i][1]];
+
+                int no_goal =  best_matrix_combinaison[i][0];
+                int no_block = best_matrix_combinaison[i][1];
+
+                min_distance += matrix_distance[no_goal][no_block];
                 Case block = etat.blocks.get(i);
                 grid[block.x][block.y].symbole = ' ';
                 cleanGrid();
                 grid[block.x][block.y].symbole = '$';
+
+                distance_player = distance(etat.bonhomme,etat.blocks.get(no_block)) -1;
+                if(distance_player< best_distance_player){
+                    if(matrix_distance[no_goal][no_block] !=0){
+                        chosen_block = no_block;
+                        best_distance_player = distance_player;
+                    }else{
+                        //ATTENTION PAS BEAU
+                        goal_atteint = true;
+                    }
+
+                }
+
+
+            }
+
+            /*distance player for each block*/
+            int distance1 = distance_player_block(etat.bonhomme,etat.blocks.get(0)); //distance(etat.bonhomme,etat.blocks.get(0)) -1; //
+            int distance2 = distance_player_block(etat.bonhomme,etat.blocks.get(1)); // distance(etat.bonhomme,etat.blocks.get(1)) -1;
+            /* back parcour for each block after reach his goal*/
+            int goal1 = getAssociatedGoal(best_matrix_combinaison,0);
+            int goal2 = getAssociatedGoal(best_matrix_combinaison,1);
+
+            int ret_parcours1 =0;
+            int cible1= 0;
+            if(matrix_distance[goal1][0] !=0){
+                ret_parcours1 = matrix_distance[goal1][1];
+                ret_parcours1= (ret_parcours1 ==9999)? distance_player_block(les_buts.get(goal1),etat.blocks.get(1)) : ret_parcours1;
+            }else{
+                distance1 = distance2;
+                cible1 = 1;
+            }
+
+            int ret_parcours2 =0;
+            int cible2 =1;
+            if(matrix_distance[goal2][1] != 0){
+                ret_parcours2 = matrix_distance[goal2][0];
+                ret_parcours2= (ret_parcours2 ==9999)? distance_player_block(les_buts.get(goal2),etat.blocks.get(0)) : ret_parcours2;
+            }else {
+                cible2 = 0;
+                distance2 = distance1;
+            }
+
+            int choice1 = distance1 + ret_parcours1;
+            int choice2 = distance2 + ret_parcours2;
+            /* on devrait choisir le block en fonction du meilleur parcourt */
+
+
+
+            if(ret_parcours1 > 5000 || ret_parcours2 > 5000){
+                System.out.println("problem");
+            }
+            if(best_distance_player > 1000){
+                System.out.print("");
             }
             setGridWithSymbole(grid,etat.blocks,' ');
-            etat.last_min = min_distance;
 
+
+            int other_block = (chosen_block ==0) ? 1 : 0;
+            int other_goal = getAssociatedGoal(best_matrix_combinaison,other_block);
+            int chosen_goal = getAssociatedGoal(best_matrix_combinaison,chosen_block);
+
+
+            int parcout = 0;
+            if(!goal_atteint){
+             /*   parcout = matrix_distance[best_matrix_combinaison[other_goal][0]][other_block];
+                if(parcout == 9999){
+                    parcout = distance(les_buts.get(chosen_goal),etat.blocks.get(other_block));
+                }*/
+            }else{
+                int ds=23;
+            }
+
+            int stop =0;
+
+            if(choice1 < choice2){
+                parcout = ret_parcours1;
+                best_distance_player = distance1;
+                etat.cible = cible1;
+            }else {
+                parcout = ret_parcours2;
+                best_distance_player = distance2;
+                etat.cible = cible2;
+            }
+
+            if(min_distance < 30){
+                stop=2;
+            }
+
+            stop =1;
+            /*
+            * Mininum parcourt que le personnage devra faire
+            * *//*
+            int moves_length = matrix_distance.length-1;
+
+            int[][] matrix_deplacement = new int[moves_length][moves_length];
+            for(int i=0; i< matrix_distance.length; i++){
+                for(int j=0; j< matrix_distance.length; j++){
+
+
+
+                    if(j > chosen_block){
+
+                        if(best_matrix_combinaison[i][0] == i && best_matrix_combinaison[i][0] == j){
+
+                        }
+                        matrix_deplacement[i][j-1] = matrix_distance[i][j];
+
+
+
+
+                    }else if (j < chosen_block){
+                        matrix_deplacement[i][j] = matrix_distance[i][j];
+                    }
+                }
+            }
+
+            for(int i=0; i< matrix_distance.length; i++){
+                int t = best_matrix_combinaison[i][0];
+                for(int j=0; j< matrix_distance.length; j++){
+
+
+
+
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+            List<Integer> done = new ArrayList<Integer>();
+            done.add(chosen_block);
+            int parcout_distance =0;
+
+
+
+
+            for(int i=0; i< les_buts.size() && done.size() != les_buts.size(); i++){
+                int associate_goal = getAssociatedGoal(best_matrix_combinaison,chosen_block);
+
+                int smallest_here =Integer.MAX_VALUE;
+                int next_chosen_block =0;
+                for(int j=0; j< etat.blocks.size(); j++){
+                    if(!done.contains(j)) {
+                        if(les_buts.contains(etat.blocks.get(j))){
+                            smallest_here =0;
+                            done.add(j);
+                        }else{
+                            int distance_goal_block = matrix_distance[associate_goal][j];
+                            if(distance_goal_block == 9999){
+                                //distance_goal_block = distance_player_block(les_buts.get(associate_goal),etat.blocks.get(j)) ;
+                                distance_goal_block = distance(les_buts.get(associate_goal),etat.blocks.get(j));
+
+                                if(distance_goal_block == 9999){
+                                    System.out.println("");
+                                }
+                            }
+                            if (smallest_here > distance_goal_block) {
+                                smallest_here = distance_goal_block -2;
+                                next_chosen_block = j;
+                            }
+                        }
+
+                    }
+                }
+                if(smallest_here > 500){
+                    System.out.println("ouin");
+                }
+                done.add(chosen_block);
+                chosen_block = next_chosen_block;
+                parcout_distance+=  smallest_here;
+            }
+
+       *//*     if(parcout_distance > min_distance){
+                System.out.println("d");
+            }*//*
+
+
+            etat.last_min = min_distance + parcout_distance;
+            min_distance = min_distance + parcout_distance;*/
+            etat.last_min = min_distance + parcout;
+            min_distance = min_distance + parcout;
         }else {
             min_distance = etat.last_min;
         }
 
 
-        int distance_player =0;
-        int best_distance_player = Integer.MAX_VALUE;
-        for(Case block : etat.blocks){
-            distance_player = distance(etat.bonhomme,block);//distance_player_block(etat.bonhomme,block);
-            if(distance_player < best_distance_player){
-                best_distance_player = distance_player;
-            }
 
+
+        if(best_distance_player > 1000){
+            System.out.print("");
         }
 
-        double h =  ((min_distance + (min_distance/les_buts.size()-1))) + best_distance_player;
+        double h =  min_distance + best_distance_player;//((min_distance + (min_distance/les_buts.size()-1))) + best_distance_player;
 
         return h;
 /*
@@ -146,8 +373,18 @@ public class But implements astar.But, astar.Heuristique {
         }
 
         return Math.pow(Double.valueOf(min_distance + (distance_player_box/1.5)),2)/7 ;//+ distance_player_box * 10; *//*//**//* block_to_choose;*/
+
     }
 
+    private int getAssociatedGoal(int[][] matrix, int block){
+        int associated_goal =0;
+        for(int i=0; i< matrix.length; i++){
+                if(matrix[i][1] == block){
+                    return matrix[i][0];
+                }
+        }
+        return associated_goal;
+    }
 
     private void printMatrix(int[][] matrix){
 
@@ -481,8 +718,10 @@ public class But implements astar.But, astar.Heuristique {
             print.get(c.x).set(c.y,'.');
         }
 
+        char no= '0';
         for(Case c : e.blocks){
-            print.get(c.x).set(c.y,c.symbole);
+            print.get(c.x).set(c.y,no);
+            no++;
         }
 
         print.get(e.bonhomme.x).set(e.bonhomme.y,'X');
