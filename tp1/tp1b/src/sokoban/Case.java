@@ -12,7 +12,7 @@ public class Case extends Noeud implements Comparable<Case>,Cloneable{
     protected int y;
     protected char symbole;
 
-
+    protected char last_move;
 
     public Case(){
 

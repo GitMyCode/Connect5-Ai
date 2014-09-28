@@ -21,15 +21,17 @@ public class AStar {
     public static Etat last_visited;
 
     public static CompareEtat compareEtat;
-
     private static boolean switched = false;
 
     public static List<Action> genererPlan(Monde monde, Etat etatInitial, But but, Heuristique heuristique){
         long starttime = System.currentTimeMillis();
 
+
         // À Compléter.
         // Implémentez l'algorithme A* ici.
 
+
+        ListPriorityQueue test = new ListPriorityQueue();
 
         LinkedHashMap<Etat,Etat> test2 = new LinkedHashMap<Etat, Etat>();
 
@@ -205,9 +207,9 @@ public class AStar {
                 if( open_voisin==null || newG < open_voisin.g ){
 
 
-                    /*if(open_voisin !=null){
+                    if(open_voisin !=null){
                         open.remove(open_voisin);
-                    }*/
+                    }
                     voisin = (open_voisin == null) ? voisin : open_voisin;
 
                     voisin.parent = current;
@@ -218,10 +220,10 @@ public class AStar {
 
 
                     if(open_voisin == null){
-                        open_map.put(voisin,voisin);
-                        open.add(voisin);
+                        open_map.put(voisin, voisin);
                     }
 
+                    open.add(voisin);
 
                 }
             }
@@ -245,6 +247,7 @@ public class AStar {
     static {
         nf.setMaximumFractionDigits(1);
     }
+
 
     public static class CompareEtat implements Comparator<Etat>{
 

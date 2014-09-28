@@ -177,7 +177,7 @@ public class Probleme {
         return result;
     }
 
-       private static void printGrid(Case[][] grid){
+    private static void printGrid(Case[][] grid){
 
         for(int i =0; i< grid.length; i++){
             for (Case c : grid[i]){

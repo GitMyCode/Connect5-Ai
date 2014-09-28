@@ -38,9 +38,22 @@ public class But implements astar.But, astar.Heuristique {
 
     protected List<Integer> list_distances;
 
+    protected Map<Integer,Map<Integer,Integer>> map_of_prority ;
+
+    boolean passe = true;
+
     public But(List<Case> les_buts){
         this.les_buts = les_buts;
         matrix_distance = new int[les_buts.size()][les_buts.size()];
+
+
+        map_of_prority = new HashMap<Integer, Map<Integer, Integer>>();
+        for(int i=0; i< les_buts.size(); i++){
+            map_of_prority.put(i,new HashMap<Integer, Integer>());
+            for(int j=0; j< les_buts.size(); j++){
+                map_of_prority.get(i).put(j,0);
+            }
+        }
     }
 
     @Override
@@ -58,6 +71,11 @@ public class But implements astar.But, astar.Heuristique {
 
         return true;
     }
+
+
+
+
+
 
     @Override
     public double estimerCoutRestant(astar.Etat e, astar.But b) {
@@ -108,10 +126,11 @@ public class But implements astar.But, astar.Heuristique {
             double[][] cpy = new double[les_buts.size()][les_buts.size()];
             for(int i=0 ; i< cpy.length;i++){
                 for(int j=0; j< cpy.length; j++){
-                    cpy[i][j] = (double) map_distance.get(les_buts.get(i)).get(etat.blocks.get(j));
+                    cpy[i][j] = (double) map_distance.get(les_buts.get(i)).get(etat.blocks.get(j)) +
+                                map_of_prority.get(i).get(j);
                 }
             }
-
+            cpy[0][0] += 9999;
 
             int[][] matrix_distance = new int[cpy.length][cpy.length];
             for(int i=0 ; i< cpy.length;i++){
@@ -150,6 +169,15 @@ public class But implements astar.But, astar.Heuristique {
                         best_distance_player = distance_player;
                     }else{
                         //ATTENTION PAS BEAU
+                        /*if(passe){
+                            if(!puzzle_still_solvable(no_block,no_goal)){
+                                int test = 9999;
+                                map_of_prority.get(no_goal).put(no_block,test);
+                            }
+
+                        }
+*/
+
                         goal_atteint = true;
                     }
 
@@ -158,46 +186,60 @@ public class But implements astar.But, astar.Heuristique {
 
             }
 
-            /*distance player for each block*/
+            setGridWithSymbole(grid,etat.blocks,' ');
+
+
+/*
+distance player for each block
+*/
             int distance1 = distance_player_block(etat.bonhomme,etat.blocks.get(0)); //distance(etat.bonhomme,etat.blocks.get(0)) -1; //
             int distance2 = distance_player_block(etat.bonhomme,etat.blocks.get(1)); // distance(etat.bonhomme,etat.blocks.get(1)) -1;
-            /* back parcour for each block after reach his goal*/
+
+/*
+ back parcour for each block after reach his goal
+*/
             int goal1 = getAssociatedGoal(best_matrix_combinaison,0);
             int goal2 = getAssociatedGoal(best_matrix_combinaison,1);
 
             int ret_parcours1 =0;
             int cible1= 0;
-            if(matrix_distance[goal1][0] !=0){
-                ret_parcours1 = matrix_distance[goal1][1];
-                ret_parcours1= (ret_parcours1 ==9999)? distance_player_block(les_buts.get(goal1),etat.blocks.get(1)) : ret_parcours1;
-            }else{
+            if(matrix_distance[goal1][0] ==0 ){
                 distance1 = distance2;
                 cible1 = 1;
+
+
+            }else{
+
+                ret_parcours1 = matrix_distance[goal1][1];
+                ret_parcours1= (ret_parcours1 ==9999)? distance_player_block(les_buts.get(goal1),etat.blocks.get(1)) : ret_parcours1;
             }
 
             int ret_parcours2 =0;
             int cible2 =1;
-            if(matrix_distance[goal2][1] != 0){
-                ret_parcours2 = matrix_distance[goal2][0];
-                ret_parcours2= (ret_parcours2 ==9999)? distance_player_block(les_buts.get(goal2),etat.blocks.get(0)) : ret_parcours2;
-            }else {
+            if(matrix_distance[goal2][1] == 0  ){
                 cible2 = 0;
                 distance2 = distance1;
+            }else {
+
+                ret_parcours2 = matrix_distance[goal2][0];
+                ret_parcours2= (ret_parcours2 ==9999)? distance_player_block(les_buts.get(goal2),etat.blocks.get(0)) : ret_parcours2;
             }
 
             int choice1 = distance1 + ret_parcours1;
             int choice2 = distance2 + ret_parcours2;
-            /* on devrait choisir le block en fonction du meilleur parcourt */
+
+/*
+ on devrait choisir le block en fonction du meilleur parcourt
+*/
 
 
 
-            if(ret_parcours1 > 5000 || ret_parcours2 > 5000){
+        /*    if(ret_parcours1 > 5000 || ret_parcours2 > 5000){
                 System.out.println("problem");
-            }
+            }*/
             if(best_distance_player > 1000){
                 System.out.print("");
             }
-            setGridWithSymbole(grid,etat.blocks,' ');
 
 
             int other_block = (chosen_block ==0) ? 1 : 0;
@@ -207,10 +249,13 @@ public class But implements astar.But, astar.Heuristique {
 
             int parcout = 0;
             if(!goal_atteint){
-             /*   parcout = matrix_distance[best_matrix_combinaison[other_goal][0]][other_block];
+
+
+          parcout = matrix_distance[best_matrix_combinaison[other_goal][0]][other_block];
                 if(parcout == 9999){
                     parcout = distance(les_buts.get(chosen_goal),etat.blocks.get(other_block));
-                }*/
+                }
+
             }else{
                 int ds=23;
             }
@@ -231,11 +276,13 @@ public class But implements astar.But, astar.Heuristique {
                 stop=2;
             }
 
-            stop =1;
-            /*
+
+
+/*
             * Mininum parcourt que le personnage devra faire
-            * *//*
-            int moves_length = matrix_distance.length-1;
+            *
+  */
+         /*   int moves_length = matrix_distance.length-1;
 
             int[][] matrix_deplacement = new int[moves_length][moves_length];
             for(int i=0; i< matrix_distance.length; i++){
@@ -257,9 +304,9 @@ public class But implements astar.But, astar.Heuristique {
                         matrix_deplacement[i][j] = matrix_distance[i][j];
                     }
                 }
-            }
+            }*/
 
-            for(int i=0; i< matrix_distance.length; i++){
+     /*       for(int i=0; i< matrix_distance.length; i++){
                 int t = best_matrix_combinaison[i][0];
                 for(int j=0; j< matrix_distance.length; j++){
 
@@ -268,6 +315,7 @@ public class But implements astar.But, astar.Heuristique {
 
                 }
             }
+*/
 
 
 
@@ -277,7 +325,7 @@ public class But implements astar.But, astar.Heuristique {
 
 
 
-
+/*
 
 
             List<Integer> done = new ArrayList<Integer>();
@@ -323,15 +371,20 @@ public class But implements astar.But, astar.Heuristique {
                 parcout_distance+=  smallest_here;
             }
 
-       *//*     if(parcout_distance > min_distance){
+
+     if(parcout_distance > min_distance){
                 System.out.println("d");
-            }*//*
+            }
+*/
+
+            if(parcout > 5000){
+                System.out.println("prob");
+            }
 
 
-            etat.last_min = min_distance + parcout_distance;
-            min_distance = min_distance + parcout_distance;*/
             etat.last_min = min_distance + parcout;
             min_distance = min_distance + parcout;
+            etat.last_min = min_distance ;
         }else {
             min_distance = etat.last_min;
         }
@@ -375,6 +428,41 @@ public class But implements astar.But, astar.Heuristique {
         return Math.pow(Double.valueOf(min_distance + (distance_player_box/1.5)),2)/7 ;//+ distance_player_box * 10; *//*//**//* block_to_choose;*/
 
     }
+
+    private boolean puzzle_still_solvable(int index_block,int index_last_goal_reached){
+        Case block = current_state.blocks.get(index_block);
+        Case goal = les_buts.get(index_last_goal_reached);
+
+
+        setGridWithSymbole(grid,current_state.blocks,'$');
+        cleanGrid();
+        for(int i=0; i< les_buts.size();i++){
+            if(i != index_last_goal_reached){
+                boolean blocked = true;
+                for(int j=0; j< current_state.blocks.size(); j++){
+                    if( j != index_block){
+                        int res = AstarOutils.distance_moves_for_a_block(current_state.blocks.get(j),les_buts.get(i),grid);
+                        cleanGrid();
+
+                        if(res != 9999){
+                            blocked = false;
+                        }
+                    }
+                }
+
+                if(blocked){
+                    return false;
+                }
+
+
+            }
+
+        }
+        return true;
+
+    }
+
+
 
     private int getAssociatedGoal(int[][] matrix, int block){
         int associated_goal =0;
@@ -475,8 +563,8 @@ public class But implements astar.But, astar.Heuristique {
                     path = path.parent;
                     total_move = (path!=null)? total_move+1 : total_move ;
                 }
-                total_move -= 1;
-               /* if(total_move <= 0){
+
+                               /* if(total_move <= 0){
                     System.out.println(" ");
                 }*/
                 return total_move;
@@ -532,86 +620,6 @@ public class But implements astar.But, astar.Heuristique {
 
 
 
-    private int can_go(Case start, Case to, EtatSokoban etat){
-
-        int moves_to_goal =999;
-
-        Noeud s = (Noeud)  start;
-        Case end = to;
-
-        List<Case> open = new ArrayList<Case>();
-        List<Case> close = new ArrayList<Case>();
-
-
-        open.add(start);
-        prepareGrid(grid, etat, start);
-
-        while (open.size() !=0){
-
-
-            Case current = best_one(open);
-
-            if(end.equals(current)){
-                end.parent = current.parent;
-
-                moves_to_goal=0;
-                Case path = end;
-                while(path != null){
-                    moves_to_goal++;
-                   path = path.parent;
-                }
-                cleanGrid(etat);
-                return moves_to_goal;
-            }
-
-            open.remove(current);
-            close.add(current);
-
-            calculate_voisinage(open, close, current, start, to , etat.bonhomme);
-        }
-
-        cleanGrid(etat);
-
-        return moves_to_goal;
-    }
-
-
-
-
-    private void calculate_voisinage(List<Case> open, List<Case> close, Case current,Case start, Case to, Case player ){
-
-
-        List<Case> voisins = getVoisin(current);
-        for(Case v : voisins){
-
-            if ( !close.contains(v)){
-
-                double newG = current.g +1;
-
-                if(v ==null){
-                    System.out.println("sdaf");
-                }
-
-                if( newG > v.g  ){
-
-                    v.parent = current;
-                    v.h = distance(v,to);
-                    v.g = newG;
-                    v.f = v.h + v.g;
-
-
-                    if( !open.contains(v)){
-                        open.add(v);
-                    }
-
-                }
-
-            }
-        }
-    }
-
-
-
     private List<Case> getVoisin(Case current){
         Case c =  current;
 
@@ -642,7 +650,7 @@ public class But implements astar.But, astar.Heuristique {
             return false;
         }
 
-        return  grid[x][y].symbole == ' ' || grid[x][y].symbole == '.' || grid[x][y].symbole == '$';
+        return  grid[x][y].symbole == ' ' || grid[x][y].symbole == '.' || grid[x][y].symbole == '$' ;
     }
 
 
