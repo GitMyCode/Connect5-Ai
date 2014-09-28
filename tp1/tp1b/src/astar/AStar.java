@@ -5,12 +5,14 @@
  */
 package astar;
 
+import astar.data_structure.ArrayPriorityQueue;
+
 import java.text.NumberFormat;
 import java.util.*;
 
 public class AStar {
 
-    public static PriorityQueue<Etat> open,open2, close;
+    public static ListPriorityQueue<Etat> open,open2, close;
     public static HashSet<Etat> hash_close;
 
 
@@ -31,7 +33,6 @@ public class AStar {
         // Implémentez l'algorithme A* ici.
 
 
-        ListPriorityQueue test = new ListPriorityQueue();
 
         LinkedHashMap<Etat,Etat> test2 = new LinkedHashMap<Etat, Etat>();
 
@@ -41,7 +42,12 @@ public class AStar {
 
         open_map = new TreeMap<Etat, Etat>();
         open_map2 = new TreeMap<Etat, Etat>();
-        open = new PriorityQueue<Etat>(6000, compareEtat);
+       // open = new PriorityQueue<Etat>(6000, compareEtat);
+        //open = new ListPriorityQueue<Etat>();
+        open = new ListPriorityQueue<Etat>();
+
+
+
      /*   open2 = new TreeSet<Etat>(new Comparator<Etat>(){
             public int compare(Etat a, Etat b){
 
@@ -74,7 +80,7 @@ public class AStar {
 
         Etat arrive = etatInitial;
 
-        open.add(etatInitial);
+        open.insert(etatInitial);
         open2= open;
         open_map.put(etatInitial,etatInitial);
 
@@ -89,7 +95,7 @@ public class AStar {
         while((open.size() > 0)){
             nb_visite++;
             Etat cur = null;
-            cur = open.poll();
+            cur = open.remove();
             if(but.butSatisfait(cur)){
                 arrive = cur;
                 break;
@@ -172,12 +178,12 @@ public class AStar {
 
         PriorityQueue ref;
         if(switched){
-            ref = open2;
+            //ref = open2;
             open2.addAll(open);
             open = open2;
         }else {
             open2 = open;
-            open = new PriorityQueue<Etat>(100,compareEtat);
+         //   open = new PriorityQueue<Etat>(100,compareEtat);
         }
 
         switched = !switched;
@@ -221,9 +227,10 @@ public class AStar {
 
                     if(open_voisin == null){
                         open_map.put(voisin, voisin);
+
                     }
 
-                    open.add(voisin);
+                    open.insert(voisin);
 
                 }
             }

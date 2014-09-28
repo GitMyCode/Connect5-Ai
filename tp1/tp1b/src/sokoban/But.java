@@ -130,7 +130,7 @@ public class But implements astar.But, astar.Heuristique {
                                 map_of_prority.get(i).get(j);
                 }
             }
-            cpy[0][0] += 9999;
+            //cpy[0][0] += 9999;
 
             int[][] matrix_distance = new int[cpy.length][cpy.length];
             for(int i=0 ; i< cpy.length;i++){

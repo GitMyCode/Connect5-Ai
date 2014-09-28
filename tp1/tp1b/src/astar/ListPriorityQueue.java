@@ -1,10 +1,7 @@
 package astar;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.PriorityQueue;
+import java.util.*;
 
-public class ListPriorityQueue<E> extends PriorityQueue<E> {
+public class ListPriorityQueue<E> extends LinkedHashSet<E> {
 
     private Node head;
     private int size;
@@ -104,6 +101,11 @@ public class ListPriorityQueue<E> extends PriorityQueue<E> {
 
     public int size() {
         return size;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return super.remove(o);
     }
 
     @Override
