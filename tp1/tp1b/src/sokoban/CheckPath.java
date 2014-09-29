@@ -67,35 +67,83 @@ public class CheckPath {
             Case current = Q.poll();
 
             map_distances.put(current,(canGo(current,ref_start,cpy_graph)));
-          /*  List<Case> voisinage;
-            if (current.equals(ref_start)){
-                voisinage = voisin_start_dijstra(current,cpy_graph);
-            }else{
-                voisinage = voisin(current,cpy_graph);
-            }
-
-
-            for(Case v : voisinage){
-                Double alternative = current.g + 1;
-
-
-                if(map_distances.get(v) == null){
-                    System.out.println(" dsf");
-                }
-
-                if( alternative < map_distances.get(v) ){
-                    v.g = alternative;
-                    map_distances.put(v,alternative);
-                    v.parent = current;
-                }
-            }
-*/
         }
         cleanGrid();
 
         return map_distances;
-
     }
+
+
+    public static Map<Case,Integer> mapDistanceGoal(Case start, Case[][] graph){
+        Map<Case,Integer> map_distances = new HashMap<Case, Integer>();
+        PriorityQueue<Case> Q = new PriorityQueue<Case>(350, new Comparator<Case>() {
+            @Override
+            public int compare(Case a, Case b) {
+
+                if(a.g < b.g){
+                    return -1;
+                }
+                if(a.g > b.g ){
+                    return 1;
+                }
+                return a.compareTo(b);
+            }
+        });
+
+
+        Case[][] cpy_graph = new Case[graph.length][graph[0].length];
+        for(int i=0; i<graph.length; i++){
+            for(int j=0; j<graph[0].length; j++){
+                if(graph[i][j] !=null){
+                    Case c = (Case) graph[i][j].clone();
+                    cpy_graph[i][j] = c;
+                }
+            }
+        }
+
+        grid = cpy_graph;
+        for(int i=0; i< cpy_graph.length; i++){
+            for(int j=0; j< cpy_graph[0].length;j++){
+                if(cpy_graph[i][j] != null && cpy_graph[i][j].symbole != '#'){
+                    Case c = cpy_graph[i][j];
+                    c.g = Integer.MAX_VALUE;
+
+                    map_distances.put(c,Integer.MAX_VALUE);
+                    Q.add(c);
+
+                }
+            }
+        }
+        Case ref_start = cpy_graph[start.x][start.y];
+        ref_start.g=0;
+        map_distances.put(ref_start,0);
+        Q.remove(ref_start);
+        Q.add(ref_start);
+
+        while (!Q.isEmpty()){
+            Case current = Q.poll();
+
+            map_distances.put(current,(AstarHangar.distance_player_block(current,ref_start,cpy_graph)));
+        }
+        cleanGrid();
+
+        return map_distances;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public static int canGo(Case start, Case end, Case[][] grid2){

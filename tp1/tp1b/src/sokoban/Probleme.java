@@ -62,9 +62,15 @@ public class Probleme {
 
         probleme.but = new But(les_buts);
         Map<Case, Map<Case,Integer>> goal_disjtrap_map = new HashMap<Case, Map<Case, Integer>>();
+        Map<Case, Map<Case,Integer>> goal_distance_player = new HashMap<Case, Map<Case, Integer>>();
         for(Case c :les_buts){
             goal_disjtrap_map.put(c,CheckPath.dijkstra(c, grid));
+            goal_distance_player.put(c,CheckPath.mapDistanceGoal(c,grid));
         }
+
+
+
+
         death_lock = new HashSet<Case>();
 
         for(int i=0; i<grid.length; i++){
@@ -87,6 +93,7 @@ public class Probleme {
 
 
         probleme.but.map_distance = goal_disjtrap_map;
+        probleme.but.map_distance_no_block = goal_distance_player;
         probleme.grille.map_distance = goal_disjtrap_map;
         probleme.grille.death_lock_table = death_lock;
 

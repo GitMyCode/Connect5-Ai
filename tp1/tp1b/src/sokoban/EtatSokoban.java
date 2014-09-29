@@ -28,9 +28,12 @@ public class EtatSokoban extends Etat {
 
     protected boolean is_resolvable;
     protected boolean last_action_move_block;
-    int last_min;
+    int last_min_blocks_distance;
+    int last_min_parcourt;
+
 
     int nb_coup =0;
+    int cible;
 
 
     public EtatSokoban(Case bonhomme,List<Case> blocks){
@@ -38,7 +41,7 @@ public class EtatSokoban extends Etat {
         this.blocks = blocks;
         this.is_resolvable = true;
         last_action_move_block = false;
-        last_min= -1;
+        last_min_blocks_distance= -1;
         nb_coup=0;
 
        // matrix_distance_goal = new int[blocks.size()][blocks.size()];
@@ -109,8 +112,10 @@ public class EtatSokoban extends Etat {
             }
         }*/
 
-        cloned.last_min = last_min;
+        cloned.last_min_blocks_distance = last_min_blocks_distance;
+        cloned.last_min_parcourt = last_min_parcourt;
         cloned.nb_coup  = nb_coup++;
+        cloned.cible = cible;
 
         // À compléter : vous devez faire une copie complète de l'objet.
         return cloned;

@@ -73,63 +73,20 @@ public class AStar {
         Etat arrive = etatInitial;
 
         open.add(etatInitial);
-        open2= open;
         open_map.put(etatInitial,etatInitial);
 
-        Random rand = new Random();
-        PriorityQueue tmp_ref;
 
-
-        int iteration = 10;
-
-        int max_try = 1000;
-
-        while((open2.size() > 0)){
+        while((open.size() > 0)){
             nb_visite++;
             Etat cur = null;
-
-            int index = -1;
-
-
-            if( (nb_visite % max_try ==0) || open.isEmpty() || iteration < open.peek().g ){
-
-                if(open.isEmpty()){
-
-                    jump();
-                    index = rand.nextInt(open.size());
-                    cur = (Etat) open.toArray()[index];
-                }else{
-                    index = rand.nextInt(open.size());
-                    cur = (Etat) open.toArray()[index];
-                    jump();
-
-                }
-                if(nb_visite % max_try !=0){
-                    iteration+= 10;
-                }
-
-                if(switched){
-                    max_try = 100;
-                }else {
-                    max_try = 1000;
-                }
+            cur = open.poll(); // .last();
 
 
-            }else {
-                cur = open.poll(); // .last();
-            }
-
-            if(!switched && but.butSatisfait(cur)){
+            if(but.butSatisfait(cur)){
                 arrive = cur;
                 break;
             }
 
-
-
-           /* if(index != -1){
-                open.remove(cur);
-            }
-*/
             open_map.remove(cur);
 
 
@@ -138,7 +95,6 @@ public class AStar {
             }
 */
             hash_close.add(cur);
-            //close.add(etat_init);
 
 
             voisins(cur,monde,but,heuristique);
