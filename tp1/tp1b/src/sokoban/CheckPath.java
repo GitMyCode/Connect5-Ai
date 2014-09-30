@@ -301,7 +301,7 @@ public class CheckPath {
         }
 
         if(grid[x][y] == null){
-            System.out.println(" sd");
+           return false;
         }
 
 

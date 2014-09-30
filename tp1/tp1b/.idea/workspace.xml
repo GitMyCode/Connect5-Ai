@@ -62,13 +62,13 @@
     <favorites_list name="tp1b" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.44936034">
+    <splitter split-orientation="horizontal" split-proportion="0.4914712">
       <split-first>
         <leaf>
           <file leaf-file-name="EtatSokoban.java" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/sokoban/EtatSokoban.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="880" max-vertical-offset="3400">
+                <state vertical-scroll-proportion="0.0" vertical-offset="2716" max-vertical-offset="3400">
                   <caret line="62" column="13" selection-start-line="62" selection-start-column="13" selection-end-line="62" selection-end-column="13" />
                   <folding>
                     <element signature="e#2098#2104#0" expanded="true" />
@@ -114,7 +114,7 @@
             <entry file="file://$PROJECT_DIR$/src/sokoban/CheckPath.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0" vertical-offset="4640" max-vertical-offset="7106">
-                  <caret line="301" column="0" selection-start-line="301" selection-start-column="0" selection-end-line="301" selection-end-column="0" />
+                  <caret line="303" column="23" selection-start-line="303" selection-start-column="23" selection-end-line="303" selection-end-column="23" />
                   <folding>
                     <element signature="e#2106#2121#0" expanded="true" />
                     <element signature="e#2174#2180#0" expanded="true" />
@@ -137,13 +137,13 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="But.java" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="But.java" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/sokoban/But.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.578626" vertical-offset="3361" max-vertical-offset="10863">
-                  <caret line="220" column="0" selection-start-line="220" selection-start-column="0" selection-end-line="220" selection-end-column="0" />
+                <state vertical-scroll-proportion="0.7526718" vertical-offset="3128" max-vertical-offset="10846">
+                  <caret line="213" column="74" selection-start-line="213" selection-start-column="74" selection-end-line="213" selection-end-column="74" />
                   <folding>
-                    <element signature="e#0#16555#0" expanded="true" />
+                    <element signature="e#0#16558#0" expanded="true" />
                     <element signature="imports" expanded="true" />
                   </folding>
                 </state>
@@ -157,7 +157,7 @@
           <file leaf-file-name="AStar.java" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/astar/AStar.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="3489" max-vertical-offset="4420">
+                <state vertical-scroll-proportion="0.0" vertical-offset="2928" max-vertical-offset="4420">
                   <caret line="224" column="29" selection-start-line="224" selection-start-column="29" selection-end-line="224" selection-end-column="29" />
                   <folding />
                 </state>
@@ -167,25 +167,25 @@
           <file leaf-file-name="AstarHangar.java" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/sokoban/AstarHangar.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1012" max-vertical-offset="5202">
-                  <caret line="129" column="0" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="1930" max-vertical-offset="5236">
+                  <caret line="128" column="37" selection-start-line="128" selection-start-column="37" selection-end-line="128" selection-end-column="37" />
                   <folding>
                     <element signature="e#690#696#0" expanded="true" />
                     <element signature="e#762#774#0" expanded="true" />
                     <element signature="e#819#825#0" expanded="true" />
                     <element signature="e#2657#2663#0" expanded="true" />
-                    <element signature="e#5690#5707#0" expanded="true" />
-                    <element signature="e#6615#6632#0" expanded="true" />
+                    <element signature="e#5764#5781#0" expanded="true" />
+                    <element signature="e#6689#6706#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="TP1b.java" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="TP1b.java" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/TP1b.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.4071856" vertical-offset="0" max-vertical-offset="668">
-                  <caret line="22" column="35" selection-start-line="22" selection-start-column="35" selection-end-line="22" selection-end-column="35" />
+                <state vertical-scroll-proportion="0.38931298" vertical-offset="0" max-vertical-offset="655">
+                  <caret line="21" column="60" selection-start-line="21" selection-start-column="60" selection-end-line="21" selection-end-column="60" />
                   <folding />
                 </state>
               </provider>
@@ -218,14 +218,14 @@
         <option value="$PROJECT_DIR$/src/sokoban/hungarian/Hungarian.java" />
         <option value="$PROJECT_DIR$/src/sokoban/HungarianAlgorithm.java" />
         <option value="$PROJECT_DIR$/src/astar/Queue.java" />
-        <option value="$PROJECT_DIR$/src/sokoban/CheckPath.java" />
         <option value="$PROJECT_DIR$/src/sokoban/EtatSokoban.java" />
         <option value="$PROJECT_DIR$/src/astar/AStar.java" />
-        <option value="$PROJECT_DIR$/src/sokoban/AstarHangar.java" />
         <option value="$PROJECT_DIR$/src/sokoban/Grille.java" />
         <option value="$PROJECT_DIR$/src/sokoban/Probleme.java" />
-        <option value="$PROJECT_DIR$/src/TP1b.java" />
+        <option value="$PROJECT_DIR$/src/sokoban/CheckPath.java" />
+        <option value="$PROJECT_DIR$/src/sokoban/AstarHangar.java" />
         <option value="$PROJECT_DIR$/src/sokoban/But.java" />
+        <option value="$PROJECT_DIR$/src/TP1b.java" />
       </list>
     </option>
   </component>
@@ -723,12 +723,12 @@
       <workItem from="1411608460541" duration="190000" />
       <workItem from="1411608760822" duration="23581000" />
       <workItem from="1411687568464" duration="2328000" />
-      <workItem from="1411944226879" duration="31089000" />
+      <workItem from="1411944226879" duration="35345000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="339313000" />
+    <option name="totallyTimeSpent" value="343569000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -837,9 +837,15 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/sokoban/But.java</url>
-          <line>625</line>
+          <line>624</line>
           <properties />
           <option name="timeStamp" value="1049" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/sokoban/EtatSokoban.java</url>
+          <line>128</line>
+          <properties />
+          <option name="timeStamp" value="1051" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -849,7 +855,7 @@
           </selected-grouping-rules>
         </breakpoints-dialog>
       </breakpoints-dialog>
-      <option name="time" value="1050" />
+      <option name="time" value="1052" />
     </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
@@ -910,7 +916,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="629" max-vertical-offset="1275">
           <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
           <folding>
-            <element signature="e#0#16555#0" expanded="true" />
+            <element signature="e#0#16558#0" expanded="true" />
             <element signature="imports" expanded="true" />
           </folding>
         </state>
@@ -1175,47 +1181,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sokoban/AstarHangar.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1012" max-vertical-offset="5202">
-          <caret line="129" column="0" selection-start-line="129" selection-start-column="0" selection-end-line="129" selection-end-column="0" />
-          <folding>
-            <element signature="e#690#696#0" expanded="true" />
-            <element signature="e#762#774#0" expanded="true" />
-            <element signature="e#819#825#0" expanded="true" />
-            <element signature="e#2657#2663#0" expanded="true" />
-            <element signature="e#5690#5707#0" expanded="true" />
-            <element signature="e#6615#6632#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/astar/Queue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sokoban/Case.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="850" max-vertical-offset="2040">
-          <caret line="70" column="28" selection-start-line="70" selection-start-column="28" selection-end-line="70" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sokoban/EtatSokoban.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="880" max-vertical-offset="3400">
-          <caret line="62" column="13" selection-start-line="62" selection-start-column="13" selection-end-line="62" selection-end-column="13" />
-          <folding>
-            <element signature="e#2098#2104#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/sokoban/Probleme.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="531" max-vertical-offset="3740">
@@ -1240,7 +1205,7 @@
     <entry file="file://$PROJECT_DIR$/src/sokoban/CheckPath.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="4640" max-vertical-offset="7106">
-          <caret line="301" column="0" selection-start-line="301" selection-start-column="0" selection-end-line="301" selection-end-column="0" />
+          <caret line="303" column="23" selection-start-line="303" selection-start-column="23" selection-end-line="303" selection-end-column="23" />
           <folding>
             <element signature="e#2106#2121#0" expanded="true" />
             <element signature="e#2174#2180#0" expanded="true" />
@@ -1250,30 +1215,71 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/sokoban/EtatSokoban.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2716" max-vertical-offset="3400">
+          <caret line="62" column="13" selection-start-line="62" selection-start-column="13" selection-end-line="62" selection-end-column="13" />
+          <folding>
+            <element signature="e#2098#2104#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/astar/Queue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="323">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sokoban/Case.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="850" max-vertical-offset="2040">
+          <caret line="70" column="28" selection-start-line="70" selection-start-column="28" selection-end-line="70" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/astar/AStar.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3489" max-vertical-offset="4420">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2928" max-vertical-offset="4420">
           <caret line="224" column="29" selection-start-line="224" selection-start-column="29" selection-end-line="224" selection-end-column="29" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sokoban/But.java">
+    <entry file="file://$PROJECT_DIR$/src/sokoban/AstarHangar.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.578626" vertical-offset="3361" max-vertical-offset="10863">
-          <caret line="220" column="0" selection-start-line="220" selection-start-column="0" selection-end-line="220" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1930" max-vertical-offset="5236">
+          <caret line="128" column="37" selection-start-line="128" selection-start-column="37" selection-end-line="128" selection-end-column="37" />
           <folding>
-            <element signature="e#0#16555#0" expanded="true" />
-            <element signature="imports" expanded="true" />
+            <element signature="e#690#696#0" expanded="true" />
+            <element signature="e#762#774#0" expanded="true" />
+            <element signature="e#819#825#0" expanded="true" />
+            <element signature="e#2657#2663#0" expanded="true" />
+            <element signature="e#5764#5781#0" expanded="true" />
+            <element signature="e#6689#6706#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TP1b.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4071856" vertical-offset="0" max-vertical-offset="668">
-          <caret line="22" column="35" selection-start-line="22" selection-start-column="35" selection-end-line="22" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.38931298" vertical-offset="0" max-vertical-offset="655">
+          <caret line="21" column="60" selection-start-line="21" selection-start-column="60" selection-end-line="21" selection-end-column="60" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sokoban/But.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7526718" vertical-offset="3128" max-vertical-offset="10846">
+          <caret line="213" column="74" selection-start-line="213" selection-start-column="74" selection-end-line="213" selection-end-column="74" />
+          <folding>
+            <element signature="e#0#16558#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
