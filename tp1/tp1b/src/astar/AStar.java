@@ -192,9 +192,9 @@ public class AStar {
                 if( open_voisin==null || newG < open_voisin.g ){
 
 
-                    if(open_voisin !=null){
+                  /*  if(open_voisin !=null){
                         open.remove(open_voisin);
-                    }
+                    }*/
                     voisin = (open_voisin == null) ? voisin : open_voisin;
 
                     voisin.parent = current;
@@ -217,6 +217,8 @@ public class AStar {
 
 
     }
+
+
 
     static Etat getEtat(TreeSet<Etat> treeSet, Etat equivalent){
 

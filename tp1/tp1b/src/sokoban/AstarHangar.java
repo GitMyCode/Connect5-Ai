@@ -19,8 +19,13 @@ public class AstarHangar {
     * libre pour la pousser
 
     * */
+    static Case ref_player;
+    static Case ref_to;
+    static Case ref_current;
 
     public static int distance_player_block(Case player, Case to, Case[][] graph){
+        ref_player = player;
+        ref_to = to;
         grid_player = graph;
 
         PriorityQueue<Case> open = new PriorityQueue<Case>(350,compareCase );
@@ -37,6 +42,7 @@ public class AstarHangar {
 
         while (!open.isEmpty()){
             Case current = open.poll();
+            ref_current= current;
             if(current.equals(to)){
                 total_move =0;
                 Case path = current;
@@ -71,7 +77,6 @@ public class AstarHangar {
                 if(ref_voisin == null || new_g < ref_voisin.g){
 
                     if(ref_voisin != null){
-                        open.remove(ref_voisin);
                         v = ref_voisin;
                     }
 
@@ -115,14 +120,18 @@ public class AstarHangar {
 
     private static boolean in_grid_skip_block(int x, int y){
 
+
+
         if(!((x >=0 && x < grid_player.length) && (y >= 0 && y < grid_player[0].length))){
             return false;
         }
-        if(grid_player[x][y] == null){
-            return false;
-        }
 
-        return  grid_player[x][y].symbole == ' ' || grid_player[x][y].symbole == '.' ;//|| grid[x][y].symbole == '$' ;
+
+
+        if(grid_player[x][y].symbole == ' ' || grid_player[x][y].symbole == '.' || grid_player[x][y].symbole == '$'){
+            return true;
+        }
+        return grid_player[x][y].equals(ref_to);
     }
 
 
@@ -132,6 +141,9 @@ public class AstarHangar {
         int D =0;
         D = Math.abs(start.x - to.x) + Math.abs(start.y - to.y);
 
+        if(D==0){
+            int j=0;
+        }
         return D;
     }
     public static class CompareCase implements Comparator<Case>{
@@ -218,6 +230,26 @@ public class AstarHangar {
 
     private static void printGrid(Case[][] grid){
 
+        List<List<Character>> print = new ArrayList<List<Character>>();
+        for(int i=0 ; i < grid_player.length; i++){
+            print.add(new ArrayList<Character>());
+            for(Case c: grid_player[i]){
+                if( c!= null)
+                    print.get(i).add(c.symbole);
+            }
+        }
+
+        print.get(ref_player.x).set(ref_player.y,'P');
+        print.get(ref_to.x).set(ref_to.y,ref_to.symbole);
+
+          for(int i=0; i< print.size(); i++){
+            for(Character c : print.get(i)){
+                System.out.print(c);
+            }
+            System.out.println();
+        }
+
+       /*
         for(int i =0; i< grid.length; i++){
             for (Case c : grid[i]){
                 if(c != null){
@@ -226,7 +258,7 @@ public class AstarHangar {
                 }
             }
             System.out.println();
-        }
+        }*/
 
     }
 

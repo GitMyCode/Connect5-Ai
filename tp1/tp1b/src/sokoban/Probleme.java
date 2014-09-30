@@ -58,9 +58,15 @@ public class Probleme {
         probleme.grille = new Grille(lignes);
         probleme.grille.setLes_buts(les_buts);
         probleme.grille.setObstacles(obstacles);
-        probleme.grille.array_grid = grid;
+        probleme.grille.array_grid = cpyGrid(grid);
+
+
+
 
         probleme.but = new But(les_buts);
+        probleme.but.grid = cpyGrid(grid);
+
+
         Map<Case, Map<Case,Integer>> goal_disjtrap_map = new HashMap<Case, Map<Case, Integer>>();
         Map<Case, Map<Case,Integer>> goal_distance_player = new HashMap<Case, Map<Case, Integer>>();
         for(Case c :les_buts){
@@ -99,7 +105,6 @@ public class Probleme {
 
 
         probleme.but.mures = obstacles;
-        probleme.but.grid = grid;
         probleme.but.ratio_space_wall = ratio_space_wall;
 
         probleme.etatInitial = new EtatSokoban(bonhomme.get(0),blocks);
@@ -136,6 +141,18 @@ public class Probleme {
         return probleme;
     }
 
+    private static Case[][] cpyGrid(Case[][] grid){
+        Case[][] new_grid = new Case[grid.length][grid[0].length];
+        for(int i=0; i< grid.length; i++){
+            for(Case c: grid[i]){
+                if(c!=null){
+                    new_grid[c.x][c.y] = new Case(c);
+                }
+            }
+        }
+        return new_grid;
+    }
+
     private static Case[][] make_grid(List<String> lecture, int max_x, int max_y){
 
         Case[][] grid = new Case[max_x][max_y];
@@ -153,8 +170,7 @@ public class Probleme {
                 count_space = (current_char == ' ')? count_space+1 : count_space;
                 count_wall = (current_char == '#')? count_wall+1 : count_wall;
 
-                Case new_case = new Case(i,j,current_char);
-                grid[i][j] = new_case;
+                grid[i][j]= new Case(i,j,current_char);
             }
         }
 

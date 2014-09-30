@@ -151,7 +151,6 @@ public class Grille implements astar.Monde, astar.But {
                         for (Case c : e.blocks) {
                             next_block_state.add((Case) c.clone());
                             if (c.equals(temp_case)) {
-
                                 temp_case = next_block_state.get(next_block_state.size()-1);
                             }
 
@@ -220,8 +219,8 @@ public class Grille implements astar.Monde, astar.But {
             if(les_buts.contains(c)){
                 continue;
             }
-            List<Case> stack = new LinkedList<Case>();
-            if(!can_move(c,stack)){
+            List<Case> visited = new LinkedList<Case>();
+            if(!can_move(c,visited)){
 
 
                // System.out.println("FALSE");
@@ -288,7 +287,7 @@ public class Grille implements astar.Monde, astar.But {
     }
 
 
-    private boolean can_move(Case c, List<Case> stack){
+    private boolean can_move(Case c, List<Case> visited){
 
 
 
@@ -308,22 +307,22 @@ public class Grille implements astar.Monde, astar.But {
         }
 
 
-        stack.add(c);
+        visited.add(c);
 
-        if( check(NORTH,stack) && check(SOUTH,stack) ){
+        if( check(NORTH,visited) && check(SOUTH,visited) ){
             return true;
         }
 
-        if( check(EAST,stack) && check(WEST,stack) ){
+        if( check(EAST,visited) && check(WEST,visited) ){
             return true;
         }
 
         return false;
 
     }
-    private boolean check(Case c,List<Case> stack){
+    private boolean check(Case c,List<Case> visited){
 
-        if(stack.contains(c)){
+        if(visited.contains(c)){
             return false;
         }
         if(c.symbole == '#'){
@@ -335,7 +334,7 @@ public class Grille implements astar.Monde, astar.But {
         }
 
         if(c.symbole == '$'){
-            return can_move(c,stack);
+            return can_move(c,visited);
         }
 
         return false;
