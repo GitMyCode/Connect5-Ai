@@ -126,7 +126,9 @@ public class AstarHangar {
             return false;
         }
 
-
+        if(grid_player[x][y] == null){
+            return false;
+        }
 
         if(grid_player[x][y].symbole == ' ' || grid_player[x][y].symbole == '.' || grid_player[x][y].symbole == '$'){
             return true;
