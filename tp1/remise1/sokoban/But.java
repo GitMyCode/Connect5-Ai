@@ -108,8 +108,6 @@ public class But implements astar.But, astar.Heuristique {
             }
         }*/
 
-        cleanGrid();
-        setGridWithSymbole(grid,etat.blocks,' ');
         if( etat.cible != chosen_block || etat.last_action_move_block || etat.last_min_blocks_distance == -1 ){
 
             /*Get distances froms map*/
@@ -142,7 +140,6 @@ public class But implements astar.But, astar.Heuristique {
                 min_distance += temp[best_matrix_combinaison[i][0]][best_matrix_combinaison[i][1]];
                 Case block = etat.blocks.get(i);
             }
-            setGridWithSymbole(grid,etat.blocks,' ');
 
 
 
@@ -201,18 +198,23 @@ public class But implements astar.But, astar.Heuristique {
 
 
             etat.cible = chosen_block;
-            cleanGrid();
-            setGridWithSymbole(grid,etat.blocks,'$');
             Case chosen = etat.blocks.get(chosen_block);
-            grid[chosen.x][chosen.y].symbole = ' ';
-            best_distance_player =  AstarHangar.distance_player_block(etat.bonhomme,chosen,grid);
-            //best_distance_player =  distance(etat.bonhomme,chosen);
-            if(best_distance_player > 1000){
-
-                //paranoid check
-               best_distance_player =  distance(etat.bonhomme,chosen);
+            if(etat.last_action_move_block){
+                best_distance_player =  distance(etat.bonhomme,chosen);
+            }else{
+                cleanGrid();
+                setGridWithSymbole(grid,etat.blocks,'$');
+                grid[chosen.x][chosen.y] = chosen;
+                grid[chosen.x][chosen.y].symbole = ' ';
+                best_distance_player =  AstarHangar.distance_player_block(etat.bonhomme,chosen,grid);
+                //best_distance_player =  distance(etat.bonhomme,chosen);
+                if(best_distance_player > 1000){
+                    // System.out.println("dfdf");
+                    //paranoid check
+                    best_distance_player =  distance(etat.bonhomme,chosen);
+                }
             }
-            cleanGrid();
+
 
 
 
@@ -597,7 +599,6 @@ public class But implements astar.But, astar.Heuristique {
 
     private  void cleanGrid(){
 
-        Case[][] new_grid = new Case[grid.length][grid[0].length];
         for(int i=0; i< grid.length; i++){
             for(Case c : grid[i]){
                 if( c != null){
@@ -606,12 +607,10 @@ public class But implements astar.But, astar.Heuristique {
                     c.h = 0.0;
                     c.parent = null;
 
-                    new_grid[c.x][c.y] = c;
                 }
 
             }
         }
-        grid = new_grid;
 
         /*for(Case c : etat.blocks){
             grid[c.x][c.y].symbole = ' ';

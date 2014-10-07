@@ -1,0 +1,24 @@
+Rapport de correction automatique
+#################################
+Date : 20140930_005122
+Code(s) MS : 
+
+
+
+
+Compilation ...
+sokoban00.txt Optimal
+sokoban01.txt Optimal
+sokoban02.txt Optimal
+sokoban03.txt Optimal
+sokoban04.txt Optimal
+sokoban05.txt Optimal
+sokoban06.txt Optimal
+sokoban07.txt Optimal
+sokoban08.txt Optimal
+sokoban09.txt Optimal
+sokoban10.txt Optimal
+sokoban11.txt Optimal
+sokoban12.txt Optimal
+sokoban13.txt Optimal
+sokoban14.txt Echec
