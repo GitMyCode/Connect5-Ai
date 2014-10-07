@@ -52,6 +52,7 @@ public class AstarHangar {
                 }
 
                 cleanGrid();
+
                 return total_move;
             }
             voisinage(current,to,hash_open,open,close);

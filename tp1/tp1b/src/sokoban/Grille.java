@@ -146,7 +146,6 @@ public class Grille implements astar.Monde, astar.But {
                         if(death_lock_table.contains(next_block_pos)){
                             continue;
                         }
-
                         List<Case> next_block_state = new ArrayList<Case>();
                         for (Case c : e.blocks) {
                             next_block_state.add((Case) c.clone());
@@ -202,6 +201,7 @@ public class Grille implements astar.Monde, astar.But {
                 }
             }
         }
+
         setGridWithSymbole(array_grid,e.blocks,' ' );
 
         return list;
@@ -395,6 +395,23 @@ public class Grille implements astar.Monde, astar.But {
 
 
 
+    }
+
+    private void checkGrid(Case[][] grid){
+        for(int i=0; i< grid.length; i++){
+
+            for(int j=0; j < grid[0].length; j++){
+                if(grid[i][j] !=null){
+                    if(grid[i][j].x != i){
+                        System.out.println("problem x");
+                    }
+                    if(grid[i][j].y != j){
+                        System.out.println("problem y");
+                    }
+                }
+
+            }
+        }
     }
 
 

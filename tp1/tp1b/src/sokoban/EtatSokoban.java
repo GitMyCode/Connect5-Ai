@@ -185,6 +185,7 @@ public class EtatSokoban extends Etat {
             return cmp;
         }
 
+
         Iterator<Case> it = tree_blocks.iterator();
         Iterator<Case> it2 = es.tree_blocks.iterator();
         while (it.hasNext()){

@@ -119,4 +119,6 @@ public class Case extends Noeud implements Comparable<Case>,Cloneable{
 
         return result;
     }
+
+
 }
