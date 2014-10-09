@@ -7,7 +7,10 @@ import connect5.Grille;
 import connect5.GrilleVerificateur;
 import connect5.Joueur;
 import connect5.Position;
+import connect5.ia.models.Direction;
 import connect5.ia.models.Etat;
+import connect5.ia.models.GLOBAL;
+import connect5.ia.models.Move;
 import connect5.ia.strategy.MinMax;
 
 import java.io.BufferedReader;
@@ -29,6 +32,7 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
     private int nbcol=0;
     private int nbligne=0;
+    int WIN = 10000;
 
     public JoueurArtificiel(){
 
@@ -59,14 +63,43 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
         nbligne = grille.getData().length;
 
-        Etat init = new Etat(grille);
+
         byte[] test = oneDimentionalArray(grille.getData());
 
+        if(casesvides.size() == (nbcol*nbligne)){
+            System.out.println("first hit");
+            return new Position(nbcol/2,nbligne/2);
+        }
 
 
-        int player = (casesvides.size() % 2  == 0)? 1:2;
+        int player = ( ((nbligne*nbcol) - casesvides.size()) % 2  == 0)? 1:2;
+        int opponent = (player==1)? 2:1;
+
+
+        /*INIT ETAT*/
+        Etat init = new Etat(grille,player,opponent);
         init.setChecker(checker);
-        int choix =  MinMax.getMove(init,player); //random.nextInt(casesvides.size());
+        Direction.init_map(nbcol);
+
+
+        Move MAXcheckWinMove = init.getNextMoves(player).poll();
+        if(MAXcheckWinMove.score == GLOBAL.WIN){
+            return new Position(MAXcheckWinMove.move/nbcol,MAXcheckWinMove.move%nbcol);
+        }
+        Move MINcheckWinMove = init.getNextMoves(opponent).poll();
+        if(MINcheckWinMove.score == (0-GLOBAL.WIN)){
+            return new Position(MINcheckWinMove.move/nbcol,MINcheckWinMove.move%nbcol);
+        }
+
+
+
+
+
+
+        System.out.println("AI : JOUEUR "+player);
+
+
+        int choix =  MinMax.getMove(init,player,MINcheckWinMove.score,MAXcheckWinMove.score); //random.nextInt(casesvides.size());
         //choix = casesvides.get(choix);
         return new Position(choix / nbcol, choix % nbcol);
     }
@@ -110,7 +143,7 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
     @Override
     public String getAuteurs() {
-        return "Prénom1 Nom1 (CODE00000001)  et  Prénom2 Nom2 (CODE00000002)";
+        return "Martin Bouchard (BOUM15078700)";
     }
 
     PrintStream out;

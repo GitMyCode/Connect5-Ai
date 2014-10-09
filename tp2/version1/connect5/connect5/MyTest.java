@@ -17,7 +17,7 @@ public class MyTest {
 
         String to_convert = "BBBNNNN00000" +
                 "0B00N0000000" +
-                "00B0N0000000" +
+                "00N0N0000000" +
                 "000BN0000000" +
                 "0000B0000000" +
                 "000000000000" +

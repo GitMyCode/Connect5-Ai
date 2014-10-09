@@ -1,5 +1,6 @@
 package connect5.ia.models;
 
+import com.sun.org.apache.xerces.internal.util.DOMEntityResolverWrapper;
 import connect5.Grille;
 import connect5.GrilleVerificateur;
 import connect5.Position;
@@ -15,34 +16,97 @@ public class Etat {
     public int nbcol;
     public int nbligne;
 
+    int MAX_player;
+    int MIN_player;
 
-              //   sud   est  sud/est    nord/est
+
+    //   sud   est  sud/est    nord/est
     int dx[] = {1,    0,    1,       -1};
     int dy[] = {0,    1,    1,        1};
     final int AXES = 4;
     final int SEQ  = 5;
 
-    byte[] one_dim;
+    final int DOWN = nbcol;
+    final int TOP  = 0-nbcol;
+    final int LEFT = -1;
+    final int RIGHT = 1;
 
-    private final int  WIN = 100;
+    final int DOWNLEFT = DOWN + LEFT;
+    final int TOPLEFT   = TOP + LEFT;
+    final int DOWNRIGHT = DOWN + RIGHT;
+    final int TOPRIGHT = TOP + RIGHT;
+
+    final int HORIZONTAL = 0;
+    final int VERTICAL = 1;
+    final int DIAGL    = 2;
+    final int DIAGR    = 3;
+
+
+
+
+    final int[] direction4 = new int[]{DOWN,LEFT,DOWNLEFT,TOPLEFT};
+    final int[] direction8 = new int[]{DOWN,LEFT,TOP,RIGHT,DOWNLEFT,TOPLEFT,TOPRIGHT, DOWNRIGHT};
+
+
+
+
+    public byte[] one_dim;
+    public int score;
+
+
+    public final int  WIN = 10000;
 
     public static GrilleVerificateur checker;
 
-    public Etat(Grille grille){
+    public Etat(Grille grille,int max,int min){
         this.grille = grille;
         nbcol = grille.getData()[0].length;
         nbligne = grille.getData().length;
 
-if(nbligne == 5 && nbcol ==7){
-    int stop=0;
-}
+        MAX_player = max;
+        MIN_player = min;
+
+
 
         one_dim= oneDimentionalArray(grille.getData());
     }
 
 
+    @Override
+    public Etat clone() {
 
-    public int evaluate(int player_color){
+        Grille new_grille = grille.clone();
+
+        Etat cloned = new Etat(new_grille,MAX_player,MIN_player);
+        cloned.setChecker(checker);
+
+        return cloned;
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result =3;
+        for(int i=0;i<one_dim.length;i++){
+            result = result * 7 + one_dim[i];
+        }
+
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Etat etat_b = (Etat) obj;
+        for(int i=0;i< one_dim.length; i++){
+            if(one_dim[i] != etat_b.one_dim[i]){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public int evaluate23(int player_color){
 
         byte[][] data = grille.getData();
 
@@ -146,53 +210,125 @@ if(nbligne == 5 && nbcol ==7){
         grille.set(new Position(move / nbcol, move % nbcol), player);
 
         one_dim[move] = (byte)player;
+    }
+    public void unplay(int move){
 
+        grille.set(new Position(move / nbcol, move % nbcol), 0);
+
+        one_dim[move] = 0;
     }
 
-    public List<Integer> getNextMoves(){
+
+
+
+    public PriorityQueue<Move> getNextMoves(int player_to_max){
         List<Integer> moves = new ArrayList<Integer>();
+/*
 
         for(int l=0;l<grille.getData().length;l++)
             for(int c=0;c<nbcol;c++)
                 if(grille.getData()[l][c]==0)
                     moves.add(l*nbcol+c);
 
-        return moves;
+*/
+
+        PriorityQueue<Move> ordered_move;
+        if(player_to_max == MIN_player) {
+            ordered_move = new PriorityQueue<Move>(grille.nbLibre(),new CompareMIN());
+        }else{
+            ordered_move = new PriorityQueue<Move>(grille.nbLibre(),new CompareMAX() );
+        }
+
+        for(int i =0; i< one_dim.length; i++){
+            if(one_dim[i] ==0){
+                play(i,player_to_max);
+                Move a_move =  new Move(i,evaluate());
+                ordered_move.add(a_move);
+                unplay(i);
+
+
+            }
+
+        }
+
+
+        return ordered_move;
     }
+
+    public class CompareMAX implements Comparator<Move>{
+        @Override
+        public int compare(Move o1, Move o2) {
+
+            if(o1.score > o2.score){
+                return -1;
+            }
+            if(o1.score < o2.score){
+                return 1;
+            }
+            return 0;
+        }
+    }
+
+    public class CompareMIN implements Comparator<Move>{
+        @Override
+        public int compare(Move o1, Move o2) {
+
+            if(o1.score < o2.score){
+                return -1;
+            }
+            if(o1.score > o2.score){
+                return 1;
+            }
+            return 0;
+        }
+    }
+
+
+
 
     public Grille getGrille(){
         return grille;
     }
 
-    public int checkWinner(){
+    public int evaluate(){
 
-        int r = checker.determineGagnant(grille);
-        int test = winner();
 
-        if(r != test){
-            System.out.println("nope pas pret   anwawer: "+r+"  mine: "+test);
+        int max_res = evaluate3(MAX_player);
+        int min_res = evaluate3(MIN_player);
+        if(max_res == GLOBAL.WIN){
+            return GLOBAL.WIN;
+        }else if(min_res == GLOBAL.WIN){
+            return 0-GLOBAL.WIN;
+        }
+
+        return max_res- min_res;
+/*        //int r = checker.determineGagnant(grille);
+        result = checker.determineGagnant(grille); // winner();
+*//*
+        if(r != result){
+            System.out.println("nope pas pret   anwawer: "+r+"  mine: "+result);
             System.out.println(toStringOneDim(one_dim));
             System.out.println("--------------------");
             System.out.println(grille.toString());
-        }
+        }*//*
 
-        return test;
+        if(result ==0){
+            result = evaluate2(player);
+        }else{
+            result = WIN;
+        }
+        return result;*/
+    }
+
+    public int checkWinner(){
+        return checker.determineGagnant(grille);
     }
 
     public boolean isTerminal(){
         return grille.nbLibre() == 0;
     }
 
-    @Override
-    public Etat clone() {
 
-        Grille new_grille = grille.clone();
-
-        Etat cloned = new Etat(new_grille);
-        cloned.setChecker(checker);
-
-        return cloned;
-    }
 
 
 
@@ -249,36 +385,294 @@ if(nbligne == 5 && nbcol ==7){
         return result;
     }
 
-    public byte[] testByte(){
-
-        String to_convert = "BBBNNNN00000" +
-                "0B00N0000000" +
-                "00B0N0000000" +
-                "000BN0000000" +
-                "0000B0000000" +
-                "000000000000" +
-                "000000000000" +
-                "000000000000" +
-                "000000000000" +
-                "000000000000" +
-                "000000000000" +
-                "000000000000";
 
 
-        Map<Character,Byte> convert = new HashMap<Character,Byte>();
-        convert.put('0',(byte)0);
-        convert.put('N',(byte)1);
-        convert.put('B',(byte)2);
+    public int evaluate3(int player){
+
+        int opponent = (player == 1)? 2:1;
+        int evaluation =0;
+        int last = 0;
 
 
-        char[] table = {'0', 'N', 'B' };
 
-        byte[] to_test = new byte[nbcol * nbligne];
+        SeqValue[][] memo = new SeqValue[AXES][one_dim.length];
 
-        for(int i=0; i< to_test.length; i++){
-            to_test[i] = convert.get(to_convert.charAt(i));
+
+        ArrayList<SeqValue> all_vector = new ArrayList<SeqValue>();
+        for(int i =0; i< one_dim.length; i++){
+            for(Integer D : Direction.direction4){
+                boolean sequence = true;
+                last = one_dim[i];
+
+
+                boolean check = true;
+                if(Direction.side_map.get(D) !=null && Direction.side_map.get(D) == Direction.OUEST){
+                   if(!(((i%nbcol)+1)  >=5)){
+                       continue;
+                   }
+                }else
+                if(Direction.side_map.get(D) != null && Direction.side_map.get(D) == Direction.EST){
+                    if(!((nbcol - (i%nbcol))  >=5)){
+                        continue;
+                    }
+                }
+
+                if (!check){
+                    break;
+                }
+
+
+
+                //START loop
+                int ref_last_axes =-1;
+                if(last == player){ //
+
+                    int nb_seq = 0;
+
+                    int axe = Direction.axes_map.get(D);
+                    //loop to find suite
+                    SeqValue vector = new SeqValue();
+
+                    int nb_overlap =0;
+                    SeqValue ref = null;
+                    for(int s = 0 ; s < SEQ; s++){
+
+                        int next = i + D*s;
+
+
+                        /*TODO
+                        * Ce check va empecher de compter un cas come  *0****
+                        * */
+                        /*Check if time to leave this for*/
+                        if(next >= one_dim.length || next < 0 ){
+                            sequence = false;
+                            break;
+                        }
+                        if(one_dim[next] == opponent){
+
+                            sequence = false;
+                            break;
+                        }
+
+
+                        /*Okey we got one valid token */
+                        if(one_dim[next] == player ){
+
+                            vector.value++;
+                            ref_last_axes = next;
+                            if(memo[axe][next] == null) {
+                                memo[axe][next] = vector;
+                            }else {
+                                ref = memo[axe][next];
+                                nb_overlap++;
+
+                            }
+                        }
+
+                    }
+                    //END VECTOR
+
+                    //there is space for a 5 sequence
+                    if(!sequence){
+                        vector.value = 0;
+                    }else{
+
+                        /*
+                        * TODO
+                        * CHECK si un
+                        * */
+
+
+                        if(ref != null){
+                            if(ref.value <= vector.value){ // we already passed here but from another direction
+                                ref.value -= nb_overlap;
+                                all_vector.add(vector);
+
+
+
+                                int other_dir = D *-1;
+                                int r_next = i+other_dir;
+                                if(check_space(other_dir,i) &&  one_dim[r_next] ==0){
+                                    vector.bidirectionnel = true;
+                                }
+
+
+                            }
+
+
+                        }else {
+                            all_vector.add(vector);
+                        }
+                    }
+
+
+
+                }
+            }
         }
-        return to_test;
+
+        for(SeqValue s: all_vector){
+            if(s.value == 5){ // special case for win
+                return GLOBAL.WIN;
+                //evaluation += WIN;
+            }else {
+                if(s.bidirectionnel){
+                    evaluation += Math.pow(s.value+1,4);
+                }else {
+                    evaluation += Math.pow(s.value,4);
+                }
+
+            }
+        }
+
+        return evaluation;
+
+    }
+
+    public boolean check_space(int D, int index){
+
+        int next = index + D;
+        if(next >= one_dim.length || next < 0 ){
+
+          return false;
+        }
+
+        if(Direction.side_map.get(D) !=null && Direction.side_map.get(D) == Direction.OUEST){
+            if(!(((index%nbcol)+1)  >=5)){
+                return false;
+            }
+        }else
+        if(Direction.side_map.get(D) != null && Direction.side_map.get(D) == Direction.EST){
+            if(!((nbcol - (index%nbcol))  >=5)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int evaluate2(int player){
+
+        int opponent = (player == 1)? 2:1;
+        int evaluation =0;
+        int last = 0;
+
+
+
+        SeqValue[][] memo = new SeqValue[AXES][one_dim.length];
+
+
+        ArrayList<SeqValue> all_vector = new ArrayList<SeqValue>();
+        for(int i =0; i< one_dim.length; i++){
+            for(Integer D : Direction.direction8){
+                boolean sequence = true;
+                last = one_dim[i];
+
+
+                boolean check = true;
+                if(Direction.side_map.get(D) !=null && Direction.side_map.get(D) == Direction.EST){
+                   if(!(((i%nbcol)+1)  >=5)){
+                       continue;
+                   }
+                }else
+                if(Direction.side_map.get(D) != null && Direction.side_map.get(D) == Direction.OUEST){
+                    if(!((nbcol - (i%nbcol))  >=5)){
+                        continue;
+                    }
+                }
+
+                if (!check){
+                    break;
+                }
+
+                if(true){ // last == player
+
+                    int nb_seq = 0;
+
+                    int axe = Direction.axes_map.get(D);
+                    //loop to find suite
+                    SeqValue vector = new SeqValue();
+
+                    int nb_overlap =0;
+                    SeqValue ref = null;
+                    for(int s = 0 ; s < SEQ; s++){
+
+                        int next = i + D*s;
+
+
+                        /*Check if time to leave this for*/
+                        if(next >= one_dim.length || next < 0 ){
+                            sequence = false;
+                            break;
+                        }
+                        if(one_dim[next] == opponent){
+
+                            sequence = false;
+                            break;
+                        }
+
+
+                        /*Okey we got one valid token */
+                        if(one_dim[next] == player ){
+
+                            vector.value++;
+                            if(memo[axe][next] == null) {
+                                memo[axe][next] = vector;
+                            }else {
+                                ref = memo[axe][next];
+                                nb_overlap++;
+
+                            }
+                        }
+
+                    }
+
+                    //there is space for a 5 sequence
+                    if(!sequence){
+                        vector.value = 0;
+                    }else{
+                        if(vector.value == 2){
+                            int test2=0;
+                        }
+
+                       if(ref != null){
+                            if(ref.value <= vector.value){
+                                ref.value -= nb_overlap;
+                                all_vector.add(vector);
+                            }
+                        }else {
+                            all_vector.add(vector);
+                        }
+                    }
+
+
+
+                }
+            }
+        }
+
+        for(SeqValue s: all_vector){
+            evaluation += Math.pow(s.value,3);
+        }
+
+        return evaluation;
+
+    }
+
+
+
+
+    public boolean enought_space(int D,int index){
+
+        if(D == LEFT || D == DOWNLEFT || D == TOPLEFT){
+            return ((index%nbcol)+1)  >=5 ;
+        }else
+        if(D == RIGHT || D == DOWNRIGHT || D == TOPRIGHT){
+            return (nbcol - (index%nbcol))  >=5 ;
+        }
+
+
+        return false;
+
     }
 
 
@@ -319,6 +713,62 @@ if(nbligne == 5 && nbcol ==7){
 
                     }
                     if(win){
+                        return WIN;
+                    }
+
+                }
+
+
+
+            }
+
+        }
+
+
+
+        return 0;
+    }
+
+    public  int winner2(){
+
+        int winner =0;
+        int last = 0;
+
+
+        for(int i =0; i< one_dim.length; i++){
+
+            for(int s =0; s < SEQ ; s++){
+
+
+
+
+            }
+
+
+            for(int d=0; d< AXES; d++ ){
+                boolean win = true;
+                last = one_dim[i];
+                if(d >1){
+                    if(!(i%nbcol  <= SEQ-1 )){
+                        break;
+                    }
+                }
+                if(last !=0 ){
+                    for(int seq = 0 ; seq < SEQ; seq++){
+                        int next = i + direction4[d]*seq;
+
+                        if(next >= one_dim.length || next < 0 ){
+                            win = false;
+                            break;
+                        }
+
+                        if(one_dim[next] != last ){
+                            win = false;
+                            break;
+                        }
+
+                    }
+                    if(win){
                         return last;
                     }
 
@@ -333,6 +783,44 @@ if(nbligne == 5 && nbcol ==7){
 
 
         return 0;
+    }
+
+    public byte[] testByte(){
+
+        String to_convert = "BBBNNNN00000" +
+                "0B00N0000000" +
+                "00B0N0000000" +
+                "000BN0000000" +
+                "0000B0000000" +
+                "000000000000" +
+                "000000000000" +
+                "000000000000" +
+                "000000000000" +
+                "000000000000" +
+                "000000000000" +
+                "000000000000";
+
+
+        Map<Character,Byte> convert = new HashMap<Character,Byte>();
+        convert.put('0',(byte)0);
+        convert.put('N',(byte)1);
+        convert.put('B',(byte)2);
+
+
+        char[] table = {'0', 'N', 'B' };
+
+        byte[] to_test = new byte[nbcol * nbligne];
+
+        for(int i=0; i< to_test.length; i++){
+            to_test[i] = convert.get(to_convert.charAt(i));
+        }
+        return to_test;
+    }
+
+
+    class SeqValue {
+        public int value;
+        public boolean bidirectionnel = false;
     }
 
 
