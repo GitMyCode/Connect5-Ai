@@ -1,6 +1,5 @@
 package connect5.ia.models;
 
-import com.sun.org.apache.xerces.internal.util.DOMEntityResolverWrapper;
 import connect5.Grille;
 import connect5.GrilleVerificateur;
 import connect5.Position;
@@ -293,8 +292,8 @@ public class Etat {
     public int evaluate(){
 
 
-        int max_res = evaluate3(MAX_player);
-        int min_res = evaluate3(MIN_player);
+        int max_res = evaluate4(MAX_player);
+        int min_res = evaluate4(MIN_player);
         if(max_res == GLOBAL.WIN){
             return GLOBAL.WIN;
         }else if(min_res == GLOBAL.WIN){
@@ -362,7 +361,7 @@ public class Etat {
     }
 
     public String toStringOneDim(byte[] data){
-        char[] table = {'0', 'N', 'B' };
+        char[] table = {'_', 'N', 'B' };
         String result = "" + nbligne + " " + nbcol+ "\n";
 
         int i=1;
@@ -387,10 +386,12 @@ public class Etat {
 
     public String toStringVector(byte[] data_original, int[] vector){
 
+
+
         byte[] data = new byte[nbcol *nbligne];
         System.arraycopy(data_original,0,data,0,data_original.length);
 
-        char[] table = {'0', 'N', 'B','X' };
+        char[] table = {'_', 'N', 'B','X' };
         String result = "" + nbligne + " " + nbcol+ "\n";
         for(int j=0; j< vector.length; j++){
             data[vector[j]] = 3;
@@ -419,17 +420,20 @@ public class Etat {
 
 
 
-        SeqValue[][] memo = new SeqValue[AXES][one_dim.length];
+        Vector5[][] memo = new Vector5[AXES][one_dim.length];
 
 
-        ArrayList<SeqValue> all_vector = new ArrayList<SeqValue>();
+        ArrayList<Vector5> all_vector = new ArrayList<Vector5>();
         for(int i =0; i< one_dim.length; i++){
-            for(Integer D : Direction.direction4){
+            for(Dir D : Dir.direction4){
                 boolean sequence = true;
                 last = one_dim[i];
 
+                if(!D.boundaries5(i)){
+                    continue;
+                }
 
-                if(Direction.side_map.get(D) !=null && Direction.side_map.get(D) == Direction.OUEST){
+                /*if(Direction.side_map.get(D) !=null && Direction.side_map.get(D) == Direction.OUEST){
                    if(!(((i%nbcol)+1)  >=5)){
                        continue;
                    }
@@ -440,31 +444,103 @@ public class Etat {
                     }
                 }
 
-
+*/
 
 
                 //START loop
                 int ref_last_axes =-1;
-                if(last == player){ //
-
-                    int nb_seq = 0;
+                if(D.checkPossibleConnect(one_dim,i,player)){ //
 
 
-                    int axe = Direction.axes_map.get(D);
+                    Dir.Axes axe = Dir.Axes.getA(D);
+
+                    int nb_seqt=0;
+                    if(one_dim[i + D.v()*0] == player){
+                        nb_seqt += 1<<0;
+                    }
+                    if(one_dim[i + D.v()*1] == player){
+                        nb_seqt += 1<<1;
+                    }
+                    if(one_dim[i + D.v()*2] == player){
+                        nb_seqt += 1<<2;
+                    }
+                    if(one_dim[i + D.v()*3] == player){
+                        nb_seqt += 1<<3;
+                    }
+                    if(one_dim[i + D.v()*4] == player){
+                        nb_seqt += 1<<4;
+                    }
+
+
+                    int tesdt = Integer.bitCount(nb_seqt);
+                    if(tesdt == 5){
+                        return GLOBAL.WIN;
+                    }
+
+
+                    if(isBidirectionnel(i,i+D.v()*4,D)){
+                        tesdt++;
+                    }
+                    Vector5 old_ref;
+                    Vector5 new_vector = new Vector5();
+                    new_vector.value = tesdt;
+                    if( (nb_seqt&1) != 0){
+                        old_ref = memo[axe.i][i];
+                        if(old_ref!=null && old_ref.value <= tesdt ){
+                            old_ref.value--;
+                        }
+                        memo[axe.i][i] = new_vector;
+                    }
+                    if( (nb_seqt&2) != 0){
+                        old_ref = memo[axe.i][i + D.v(1)];
+                        if(old_ref!=null && old_ref.value <= tesdt ){
+                            old_ref.value--;
+                        }
+                        memo[axe.i][i + D.v(1)] = new_vector;
+                    }if( (nb_seqt&4) != 0){
+                        old_ref = memo[axe.i][i + D.v(2)];
+                        if(old_ref!=null && old_ref.value <= tesdt ){
+                            old_ref.value--;
+                        }
+                        memo[axe.i][i + D.v(2)] = new_vector;
+                    }if( (nb_seqt&8) != 0){
+                        old_ref = memo[axe.i][i + D.v(3)];
+                        if(old_ref!=null && old_ref.value <= tesdt ){
+                            old_ref.value--;
+                        }
+                        memo[axe.i][i+ D.v(3)] = new_vector;
+                    }if( (nb_seqt&16) != 0){
+                        old_ref = memo[axe.i][i + D.v(4)];
+                        if(old_ref!=null && old_ref.value <= tesdt ){
+                            old_ref.value--;
+                        }
+                        memo[axe.i][i + D.v(4)] = new_vector;
+                    }
+
+                    all_vector.add(new_vector);
+
+
+
+
+
+                    /*int nb_seq = 0;
+
+
                     //loop to find suite
-                    SeqValue vector = new SeqValue();
+                    Vector5 vector = new Vector5();
 
                     int nb_overlap =0;
-                    SeqValue ref = null;
+                    int last_index =0;
+                    Vector5 ref = null;
                     for(int s = 0 ; s < SEQ; s++){
 
-                        int next = i + D*s;
+                        int next = i + D.v()*s;
 
 
-                        /*TODO
+                        *//*TODO
                         * Ce check va empecher de compter un cas come  *0****
-                        * */
-                        /*Check if time to leave this for*/
+                        * *//*
+                        *//*Check if time to leave this for*//*
                         if(next >= one_dim.length || next < 0 ){
                             sequence = false;
                             break;
@@ -478,63 +554,61 @@ public class Etat {
 
                         vector.tab_seq[s] = next;
 
-                        /*Okey we got one valid token */
+                        *//*Okey we got one valid token *//*
                         if(one_dim[next] == player ){
 
                             vector.value++;
                             ref_last_axes = next;
 
-                            int[][] test = new int[5][5];
-                            for(Dir d : Dir.values()){
 
-                            }
-
-
-                            if(memo[axe][next] == null) {
-                                memo[axe][next] = vector;
+                            if(memo[axe.i][next] == null) {
+                                memo[axe.i][next] = vector;
                             }else {
-                                ref = memo[axe][next];
+                                ref = memo[axe.i][next];
                                 nb_overlap++;
 
                             }
                         }
+                        *//*************************************//*
+
+
+                        last_index = next;
 
                     }
-                    //END VECTOR
+                    //END VECTOR*/
 
                     //there is space for a 5 sequence
-                    if(!sequence){
+                    /*if(!sequence || vector.value ==0){
                         vector.value = 0;
                     }else{
 
-
+                        vector.Direction = D;
                         if(ref != null){
-                            if(ref.value <= vector.value){ // we already passed here but from another direction
-                                ref.value -= nb_overlap;
-                                all_vector.add(vector);
 
 
+                                if(ref.value <= vector.value){ // we already passed here
+                                    ref.value -= nb_overlap;
+                                    if(ref.value < 0)
+                                        ref.value =0;
 
-                                int other_dir = D *-1;
-                                int r_next = i+other_dir;
-
-                                //Check if left side ok
-                                if(check_space(other_dir,i) &&  one_dim[r_next] ==0){
-                                    //Check if left side ok
-                                    r_next = ref_last_axes + D;
-                                    if(check_space(D,ref_last_axes) &&  one_dim[r_next] ==0){
-                                        vector.bidirectionnel = true;
-                                    }
+                                    for(Integer a : ref.tab_seq)
+                                        if(one_dim[a] == player)
+                                            memo[axe.i][a] = vector;
                                 }
 
-
-                            }
-
-
-                        }else {
-                            all_vector.add(vector);
                         }
+
+                        all_vector.add(vector);
+
+
+
+                        //Check step back
+                        if(isBidirectionnel(i,last_index,D)){
+                            vector.bidirectionnel = true;
+                        }
+
                     }
+                    */
 
 
 
@@ -542,12 +616,12 @@ public class Etat {
             }
         }
 
-        for(SeqValue s: all_vector){
-            if(s.value == 5){ // special case for win
+        for(Vector5 s: all_vector){
+            if(false){ // special case for win
                 return GLOBAL.WIN;
                 //evaluation += WIN;
             }else {
-                if(s.bidirectionnel){
+                if(false){
                     evaluation += Math.pow(s.value+1,4);
                 }else {
                     evaluation += Math.pow(s.value,4);
@@ -560,6 +634,33 @@ public class Etat {
 
     }
 
+    public boolean isBidirectionnel(int index,int last_index, Dir D) {
+        int step;
+        if (one_dim[index] != 0) {
+
+            step = index + D.opp().v();
+            if ( !D.opp().boundaries5(step) || one_dim[step] != 0) {
+                return false;
+            }
+        }
+
+
+        //Check step foward
+        if (one_dim[last_index] != 0){
+
+            /*To check if there is space for one more*/
+            if(!D.boundaries5(index+D.v()))
+                return false;
+
+            step = last_index + D.v();
+
+            if (one_dim[step] != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public int evaluate3(int player){
 
@@ -569,10 +670,10 @@ public class Etat {
 
 
 
-        SeqValue[][] memo = new SeqValue[AXES][one_dim.length];
+        Vector5[][] memo = new Vector5[AXES][one_dim.length];
 
 
-        ArrayList<SeqValue> all_vector = new ArrayList<SeqValue>();
+        ArrayList<Vector5> all_vector = new ArrayList<Vector5>();
         for(int i =0; i< one_dim.length; i++){
             for(Integer D : Direction.direction4){
                 boolean sequence = true;
@@ -602,10 +703,10 @@ public class Etat {
 
                     int axe = Direction.axes_map.get(D);
                     //loop to find suite
-                    SeqValue vector = new SeqValue();
+                    Vector5 vector = new Vector5();
 
                     int nb_overlap =0;
-                    SeqValue ref = null;
+                    Vector5 ref = null;
                     for(int s = 0 ; s < SEQ; s++){
 
                         int next = i + D*s;
@@ -692,7 +793,7 @@ public class Etat {
             }
         }
 
-        for(SeqValue s: all_vector){
+        for(Vector5 s: all_vector){
             if(s.value == 5){ // special case for win
                 return GLOBAL.WIN;
                 //evaluation += WIN;
@@ -738,10 +839,10 @@ public class Etat {
 
 
 
-        SeqValue[][] memo = new SeqValue[AXES][one_dim.length];
+        Vector5[][] memo = new Vector5[AXES][one_dim.length];
 
 
-        ArrayList<SeqValue> all_vector = new ArrayList<SeqValue>();
+        ArrayList<Vector5> all_vector = new ArrayList<Vector5>();
         for(int i =0; i< one_dim.length; i++){
             for(Integer D : Direction.direction8){
                 boolean sequence = true;
@@ -770,10 +871,10 @@ public class Etat {
 
                     int axe = Direction.axes_map.get(D);
                     //loop to find suite
-                    SeqValue vector = new SeqValue();
+                    Vector5 vector = new Vector5();
 
                     int nb_overlap =0;
-                    SeqValue ref = null;
+                    Vector5 ref = null;
                     for(int s = 0 ; s < SEQ; s++){
 
                         int next = i + D*s;
@@ -831,7 +932,7 @@ public class Etat {
             }
         }
 
-        for(SeqValue s: all_vector){
+        for(Vector5 s: all_vector){
             evaluation += Math.pow(s.value,3);
         }
 
@@ -999,10 +1100,10 @@ public class Etat {
     }
 
 
-    class SeqValue {
+    class Vector5 {
         public int value;
         public boolean bidirectionnel = false;
-        public int Direction;
+        public Dir Direction;
         public int[] tab_seq = new int[5];
 
     }

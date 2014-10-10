@@ -22,7 +22,7 @@ public class MinMax {
     static boolean pruned = false;
     static int current_player;
     static int opponent;
-    static int MAX_DEPTH = 2;
+    static int MAX_DEPTH = 3;
 
 
     static int nbcol;

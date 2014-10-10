@@ -29,18 +29,34 @@ public class MyTest {
         "000000000000" +
         "000000000000";
 
+        String test2 =
+                "000000000000" +
+                "000000000000" +
+                "000000000000" +
+                "000000000000" +
+                "000000N00000" +
+                "00000B0N0000" +
+                "00000BN00000" +
+                "00000B000000" +
+                "000000000000" +
+                "000000000000" +
+                "000000000000" +
+                "000000000000";
+
+
+
         Map<Character,Byte> convert = new HashMap<Character,Byte>();
         convert.put('0',(byte)0);
         convert.put('N',(byte)1);
         convert.put('B',(byte)2);
 
 
-        char[] table = {'0', 'N', 'B' };
+        char[] table = {'_', 'N', 'B' };
 
         int[] to_test = new int[nbcol * nbligne];
 
         for(int i=0; i< to_test.length; i++){
-            to_test[i] = convert.get(to_convert.charAt(i)) -1;
+            to_test[i] = convert.get(test2.charAt(i)) -1;
         }
         return to_test;
     }
