@@ -72,7 +72,7 @@
     <favorites_list name="connect5" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.43443498">
+    <splitter split-orientation="horizontal" split-proportion="0.3576759">
       <split-first>
         <leaf>
           <file leaf-file-name="JoueurClientCmd.java" pinned="false" current="false" current-in-tab="false">
@@ -138,11 +138,11 @@
           <file leaf-file-name="MyTest.java" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/connect5/MyTest.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-0.27767694" vertical-offset="731" max-vertical-offset="1615">
-                  <caret line="34" column="40" selection-start-line="34" selection-start-column="40" selection-end-line="34" selection-end-column="40" />
+                <state vertical-scroll-proportion="0.6407035" vertical-offset="357" max-vertical-offset="1598">
+                  <caret line="36" column="30" selection-start-line="36" selection-start-column="30" selection-end-line="36" selection-end-column="30" />
                   <folding>
                     <element signature="imports" expanded="true" />
-                    <element signature="e#1158#1174#0" expanded="true" />
+                    <element signature="e#1149#1165#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -151,8 +151,8 @@
           <file leaf-file-name="Dir.java" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/connect5/ia/models/Dir.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1213" max-vertical-offset="3468">
-                  <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="2152" max-vertical-offset="3468">
+                  <caret line="150" column="31" selection-start-line="150" selection-start-column="31" selection-end-line="150" selection-end-column="31" />
                   <folding>
                     <element signature="e#2622#2623#0" expanded="true" />
                     <element signature="e#2658#2659#0" expanded="true" />
@@ -187,11 +187,11 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="Etat.java" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="Etat.java" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/connect5/ia/models/Etat.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="10509" max-vertical-offset="19312">
-                  <caret line="639" column="9" selection-start-line="639" selection-start-column="9" selection-end-line="639" selection-end-column="9" />
+                <state vertical-scroll-proportion="0.80184335" vertical-offset="9393" max-vertical-offset="17952">
+                  <caret line="573" column="8" selection-start-line="573" selection-start-column="8" selection-end-line="573" selection-end-column="8" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="e#3316#3325#0" expanded="true" />
@@ -207,9 +207,9 @@
                     <element signature="e#7418#7419#0" expanded="true" />
                     <element signature="e#7452#7453#0" expanded="true" />
                     <element signature="e#9468#9477#0" expanded="true" />
-                    <element signature="e#17565#17574#0" expanded="true" />
-                    <element signature="e#22517#22526#0" expanded="true" />
-                    <element signature="e#28564#28580#0" expanded="true" />
+                    <element signature="e#15421#15430#0" expanded="true" />
+                    <element signature="e#20373#20382#0" expanded="true" />
+                    <element signature="e#26420#26436#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -234,11 +234,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="MinMax.java" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="MinMax.java" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/connect5/ia/strategy/MinMax.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.9795539" vertical-offset="0" max-vertical-offset="3978">
-                  <caret line="31" column="21" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3978">
+                  <caret line="24" column="28" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -269,8 +269,8 @@
           <file leaf-file-name="JoueurClientSocket.java" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/connect5/JoueurClientSocket.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="458" max-vertical-offset="1292">
-                  <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="98" max-vertical-offset="1292">
+                  <caret line="31" column="14" selection-start-line="31" selection-start-column="14" selection-end-line="31" selection-end-column="14" />
                   <folding />
                 </state>
               </provider>
@@ -322,9 +322,9 @@
         <option value="$PROJECT_DIR$/connect5/ia/models/GLOBAL.java" />
         <option value="$PROJECT_DIR$/connect5/ia/JoueurArtificiel.java" />
         <option value="$PROJECT_DIR$/connect5/ia/models/Dir.java" />
-        <option value="$PROJECT_DIR$/connect5/ia/strategy/MinMax.java" />
         <option value="$PROJECT_DIR$/connect5/MyTest.java" />
         <option value="$PROJECT_DIR$/connect5/ia/models/Etat.java" />
+        <option value="$PROJECT_DIR$/connect5/ia/strategy/MinMax.java" />
       </list>
     </option>
   </component>
@@ -913,8 +913,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.FenetreConnect5" />
-        <item index="1" class="java.lang.String" itemvalue="Application.MyTest" />
+        <item index="0" class="java.lang.String" itemvalue="Application.MyTest" />
+        <item index="1" class="java.lang.String" itemvalue="Application.FenetreConnect5" />
         <item index="2" class="java.lang.String" itemvalue="Application.DemoCorrecteurB" />
         <item index="3" class="java.lang.String" itemvalue="Application.JoueurArtificiel" />
         <item index="4" class="java.lang.String" itemvalue="Application.JoueurStreamService" />
@@ -935,12 +935,12 @@
       <created>1412555726203</created>
       <updated>1412555726203</updated>
       <workItem from="1412555730194" duration="1547000" />
-      <workItem from="1412557741322" duration="166743000" />
+      <workItem from="1412557741322" duration="171324000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="168290000" />
+    <option name="totallyTimeSpent" value="172871000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -964,25 +964,25 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995737" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5058824" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40320855" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18283582" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35614973" sideWeight="0.50159913" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.35614973" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995737" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40320855" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.5058824" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Run with VisualVM" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
@@ -1051,7 +1051,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/connect5/ia/models/Etat.java</url>
-          <line>819</line>
+          <line>739</line>
           <properties />
           <option name="timeStamp" value="183" />
         </line-breakpoint>
@@ -1069,33 +1069,21 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/connect5/MyTest.java</url>
-          <line>83</line>
+          <line>82</line>
           <properties />
           <option name="timeStamp" value="202" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/connect5/MyTest.java</url>
-          <line>74</line>
+          <line>73</line>
           <properties />
           <option name="timeStamp" value="203" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/connect5/MyTest.java</url>
-          <line>84</line>
+          <line>83</line>
           <properties />
           <option name="timeStamp" value="209" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/connect5/ia/models/Etat.java</url>
-          <line>614</line>
-          <properties />
-          <option name="timeStamp" value="216" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/connect5/ia/models/Etat.java</url>
-          <line>615</line>
-          <properties />
-          <option name="timeStamp" value="217" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/connect5/ia/JoueurArtificiel.java</url>
@@ -1117,33 +1105,15 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/connect5/ia/models/Etat.java</url>
-          <line>294</line>
+          <line>561</line>
           <properties />
-          <option name="timeStamp" value="222" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/connect5/ia/models/Etat.java</url>
-          <line>295</line>
-          <properties />
-          <option name="timeStamp" value="223" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/connect5/ia/models/Etat.java</url>
-          <line>302</line>
-          <properties />
-          <option name="timeStamp" value="224" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/connect5/ia/models/Etat.java</url>
-          <line>641</line>
-          <properties />
-          <option name="timeStamp" value="225" />
+          <option name="timeStamp" value="232" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="226" />
+      <option name="time" value="233" />
     </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
@@ -1327,14 +1297,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/JoueurClientSocket.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="458" max-vertical-offset="1292">
-          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/connect5/JoueurStreamService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="579" max-vertical-offset="1326">
@@ -1348,17 +1310,6 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="557" max-vertical-offset="1428">
           <caret line="74" column="0" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/ia/models/Move.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="476">
-          <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
-          <folding>
-            <element signature="e#160#161#0" expanded="true" />
-            <element signature="e#193#194#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1428,8 +1379,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/connect5/ia/models/Dir.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1213" max-vertical-offset="3468">
-          <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2152" max-vertical-offset="3468">
+          <caret line="150" column="31" selection-start-line="150" selection-start-column="31" selection-end-line="150" selection-end-column="31" />
           <folding>
             <element signature="e#2622#2623#0" expanded="true" />
             <element signature="e#2658#2659#0" expanded="true" />
@@ -1446,20 +1397,49 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/connect5/ia/models/Move.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="476">
+          <caret line="17" column="26" selection-start-line="17" selection-start-column="26" selection-end-line="17" selection-end-column="26" />
+          <folding>
+            <element signature="e#160#161#0" expanded="true" />
+            <element signature="e#193#194#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/connect5/MyTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.27767694" vertical-offset="731" max-vertical-offset="1615">
-          <caret line="34" column="40" selection-start-line="34" selection-start-column="40" selection-end-line="34" selection-end-column="40" />
+        <state vertical-scroll-proportion="0.6407035" vertical-offset="357" max-vertical-offset="1598">
+          <caret line="36" column="30" selection-start-line="36" selection-start-column="30" selection-end-line="36" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1158#1174#0" expanded="true" />
+            <element signature="e#1149#1165#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/connect5/ia/strategy/MinMax.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3978">
+          <caret line="24" column="28" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/connect5/JoueurClientSocket.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="98" max-vertical-offset="1292">
+          <caret line="31" column="14" selection-start-line="31" selection-start-column="14" selection-end-line="31" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/connect5/ia/JoueurArtificiel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="952" max-vertical-offset="6154">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1173" max-vertical-offset="6154">
           <caret line="81" column="0" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1472,8 +1452,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/connect5/ia/models/Etat.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="10509" max-vertical-offset="19312">
-          <caret line="639" column="9" selection-start-line="639" selection-start-column="9" selection-end-line="639" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.80184335" vertical-offset="9393" max-vertical-offset="17952">
+          <caret line="573" column="8" selection-start-line="573" selection-start-column="8" selection-end-line="573" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3316#3325#0" expanded="true" />
@@ -1489,19 +1469,9 @@
             <element signature="e#7418#7419#0" expanded="true" />
             <element signature="e#7452#7453#0" expanded="true" />
             <element signature="e#9468#9477#0" expanded="true" />
-            <element signature="e#17565#17574#0" expanded="true" />
-            <element signature="e#22517#22526#0" expanded="true" />
-            <element signature="e#28564#28580#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/ia/strategy/MinMax.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9795539" vertical-offset="0" max-vertical-offset="3978">
-          <caret line="31" column="21" selection-start-line="31" selection-start-column="21" selection-end-line="31" selection-end-column="21" />
-          <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#15421#15430#0" expanded="true" />
+            <element signature="e#20373#20382#0" expanded="true" />
+            <element signature="e#26420#26436#0" expanded="true" />
           </folding>
         </state>
       </provider>

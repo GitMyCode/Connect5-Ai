@@ -426,49 +426,34 @@ public class Etat {
         ArrayList<Vector5> all_vector = new ArrayList<Vector5>();
         for(int i =0; i< one_dim.length; i++){
             for(Dir D : Dir.direction4){
-                boolean sequence = true;
-                last = one_dim[i];
 
                 if(!D.boundaries5(i)){
                     continue;
                 }
 
-                /*if(Direction.side_map.get(D) !=null && Direction.side_map.get(D) == Direction.OUEST){
-                   if(!(((i%nbcol)+1)  >=5)){
-                       continue;
-                   }
-                }else
-                if(Direction.side_map.get(D) != null && Direction.side_map.get(D) == Direction.EST){
-                    if(!((nbcol - (i%nbcol))  >=5)){
-                        continue;
-                    }
-                }
-
-*/
-
-
                 //START loop
-                int ref_last_axes =-1;
                 if(D.checkPossibleConnect(one_dim,i,player)){ //
 
 
                     Dir.Axes axe = Dir.Axes.getA(D);
 
                     Vector5 new_vector = new Vector5();
+                    new_vector.Direction = D;
+
                     int nb_seqt=0;
-                    if(one_dim[i + D.v()*0] == player){
+                    if(one_dim[i + D.v(0)] == player){
                         nb_seqt += 1<<0;
                     }
-                    if(one_dim[i + D.v()*1] == player){
+                    if(one_dim[i + D.v(1)] == player){
                         nb_seqt += 1<<1;
                     }
-                    if(one_dim[i + D.v()*2] == player){
+                    if(one_dim[i + D.v(2)] == player){
                         nb_seqt += 1<<2;
                     }
-                    if(one_dim[i + D.v()*3] == player){
+                    if(one_dim[i + D.v(3)] == player){
                         nb_seqt += 1<<3;
                     }
-                    if(one_dim[i + D.v()*4] == player){
+                    if(one_dim[i + D.v(4)] == player){
                         nb_seqt += 1<<4;
                     }
 
@@ -482,41 +467,68 @@ public class Etat {
                     if(isBidirectionnel(i,i+D.v(4),D)){
                         new_vector.bidirectionnel = true;
                         new_vector.valueBirdirection = tesdt+1;
+                    }else {
+                        new_vector.valueBirdirection = tesdt;
                     }
                     Vector5 old_ref;
                     new_vector.value = tesdt;
                     if( (nb_seqt&1) != 0){
                         old_ref = memo[axe.i][i];
-                        if(old_ref!=null && old_ref.valueBirdirection <= tesdt ){
-                            old_ref.value--;
-                        }
+                        if(old_ref ==null || old_ref.valueBirdirection <= new_vector.valueBirdirection ) {
 
-                        memo[axe.i][i] = new_vector;
+                           if (old_ref != null) old_ref.value--;
+                            memo[axe.i][i] = new_vector;
+                        }else {
+                            new_vector.valueBirdirection--;
+                            new_vector.value--;
+                        }
                     }
+
                     if( (nb_seqt&2) != 0){
                         old_ref = memo[axe.i][i + D.v(1)];
-                        if(old_ref!=null && old_ref.valueBirdirection <= tesdt ){
-                            old_ref.value--;
+                        if(old_ref ==null || old_ref.valueBirdirection <= new_vector.valueBirdirection ) {
+
+                           if (old_ref != null) old_ref.value--;
+                            memo[axe.i][i + D.v(1)] = new_vector;
+                        }else {
+                            new_vector.valueBirdirection--;
+                            new_vector.value--;
                         }
-                        memo[axe.i][i + D.v(1)] = new_vector;
+
                     }if( (nb_seqt&4) != 0){
                         old_ref = memo[axe.i][i + D.v(2)];
-                        if(old_ref!=null && old_ref.valueBirdirection <= tesdt ){
-                            old_ref.value--;
+                        if(old_ref ==null || old_ref.valueBirdirection <= new_vector.valueBirdirection ) {
+
+                            if (old_ref != null) old_ref.value--;
+                            memo[axe.i][i + D.v(2)] = new_vector;
+                        }else {
+                            new_vector.valueBirdirection--;
+                            new_vector.value--;
                         }
-                        memo[axe.i][i + D.v(2)] = new_vector;
+
                     }if( (nb_seqt&8) != 0){
                         old_ref = memo[axe.i][i + D.v(3)];
-                        if(old_ref!=null && old_ref.valueBirdirection <= tesdt ){
-                            old_ref.value--;
+                        if(old_ref ==null || old_ref.valueBirdirection <= new_vector.valueBirdirection ) {
+
+                            if (old_ref != null) old_ref.value--;
+                            memo[axe.i][i + D.v(3)] = new_vector;
+                        }else {
+                            new_vector.valueBirdirection--;
+                            new_vector.value--;
                         }
-                        memo[axe.i][i+ D.v(3)] = new_vector;
+
                     }if( (nb_seqt&16) != 0){
                         old_ref = memo[axe.i][i + D.v(4)];
-                        if(old_ref!=null && old_ref.valueBirdirection <= tesdt ){
-                            old_ref.value--;
+                        if(old_ref ==null || old_ref.valueBirdirection <= new_vector.valueBirdirection ) {
+
+                            if (old_ref != null) old_ref.value--;
+                            memo[axe.i][i + D.v(4)] = new_vector;
+                        }else {
+                            new_vector.valueBirdirection--;
+                            new_vector.value--;
                         }
-                        memo[axe.i][i + D.v(4)] = new_vector;
+
+
                     }
 
                     new_vector.tab_seq[0] = i + D.v(0);
@@ -526,101 +538,9 @@ public class Etat {
                     new_vector.tab_seq[4] = i + D.v(4);
 
 
-                    all_vector.add(new_vector);
-
-
-
-
-
-                    /*int nb_seq = 0;
-
-
-                    //loop to find suite
-                    Vector5 vector = new Vector5();
-
-                    int nb_overlap =0;
-                    int last_index =0;
-                    Vector5 ref = null;
-                    for(int s = 0 ; s < SEQ; s++){
-
-                        int next = i + D.v()*s;
-
-
-                        *//*TODO
-                        * Ce check va empecher de compter un cas come  *0****
-                        * *//*
-                        *//*Check if time to leave this for*//*
-                        if(next >= one_dim.length || next < 0 ){
-                            sequence = false;
-                            break;
-                        }
-                        if(one_dim[next] == opponent){
-
-                            sequence = false;
-                            break;
-                        }
-
-
-                        vector.tab_seq[s] = next;
-
-                        *//*Okey we got one valid token *//*
-                        if(one_dim[next] == player ){
-
-                            vector.value++;
-                            ref_last_axes = next;
-
-
-                            if(memo[axe.i][next] == null) {
-                                memo[axe.i][next] = vector;
-                            }else {
-                                ref = memo[axe.i][next];
-                                nb_overlap++;
-
-                            }
-                        }
-                        *//*************************************//*
-
-
-                        last_index = next;
-
+                    if(new_vector.value >0){
+                        all_vector.add(new_vector);
                     }
-                    //END VECTOR*/
-
-                    //there is space for a 5 sequence
-                    /*if(!sequence || vector.value ==0){
-                        vector.value = 0;
-                    }else{
-
-                        vector.Direction = D;
-                        if(ref != null){
-
-
-                                if(ref.value <= vector.value){ // we already passed here
-                                    ref.value -= nb_overlap;
-                                    if(ref.value < 0)
-                                        ref.value =0;
-
-                                    for(Integer a : ref.tab_seq)
-                                        if(one_dim[a] == player)
-                                            memo[axe.i][a] = vector;
-                                }
-
-                        }
-
-                        all_vector.add(vector);
-
-
-
-                        //Check step back
-                        if(isBidirectionnel(i,last_index,D)){
-                            vector.bidirectionnel = true;
-                        }
-
-                    }
-                    */
-
-
-
                 }
             }
         }
