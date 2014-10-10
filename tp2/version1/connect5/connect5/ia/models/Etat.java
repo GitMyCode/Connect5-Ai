@@ -361,7 +361,7 @@ public class Etat {
     }
 
     public String toStringOneDim(byte[] data){
-        char[] table = {'_', 'N', 'B' };
+        char[] table = {'0', 'N', 'B' };
         String result = "" + nbligne + " " + nbcol+ "\n";
 
         int i=1;
@@ -454,6 +454,7 @@ public class Etat {
 
                     Dir.Axes axe = Dir.Axes.getA(D);
 
+                    Vector5 new_vector = new Vector5();
                     int nb_seqt=0;
                     if(one_dim[i + D.v()*0] == player){
                         nb_seqt += 1<<0;
@@ -478,44 +479,52 @@ public class Etat {
                     }
 
 
-                    if(isBidirectionnel(i,i+D.v()*4,D)){
-                        tesdt++;
+                    if(isBidirectionnel(i,i+D.v(4),D)){
+                        new_vector.bidirectionnel = true;
+                        new_vector.valueBirdirection = tesdt+1;
                     }
                     Vector5 old_ref;
-                    Vector5 new_vector = new Vector5();
                     new_vector.value = tesdt;
                     if( (nb_seqt&1) != 0){
                         old_ref = memo[axe.i][i];
-                        if(old_ref!=null && old_ref.value <= tesdt ){
+                        if(old_ref!=null && old_ref.valueBirdirection <= tesdt ){
                             old_ref.value--;
                         }
+
                         memo[axe.i][i] = new_vector;
                     }
                     if( (nb_seqt&2) != 0){
                         old_ref = memo[axe.i][i + D.v(1)];
-                        if(old_ref!=null && old_ref.value <= tesdt ){
+                        if(old_ref!=null && old_ref.valueBirdirection <= tesdt ){
                             old_ref.value--;
                         }
                         memo[axe.i][i + D.v(1)] = new_vector;
                     }if( (nb_seqt&4) != 0){
                         old_ref = memo[axe.i][i + D.v(2)];
-                        if(old_ref!=null && old_ref.value <= tesdt ){
+                        if(old_ref!=null && old_ref.valueBirdirection <= tesdt ){
                             old_ref.value--;
                         }
                         memo[axe.i][i + D.v(2)] = new_vector;
                     }if( (nb_seqt&8) != 0){
                         old_ref = memo[axe.i][i + D.v(3)];
-                        if(old_ref!=null && old_ref.value <= tesdt ){
+                        if(old_ref!=null && old_ref.valueBirdirection <= tesdt ){
                             old_ref.value--;
                         }
                         memo[axe.i][i+ D.v(3)] = new_vector;
                     }if( (nb_seqt&16) != 0){
                         old_ref = memo[axe.i][i + D.v(4)];
-                        if(old_ref!=null && old_ref.value <= tesdt ){
+                        if(old_ref!=null && old_ref.valueBirdirection <= tesdt ){
                             old_ref.value--;
                         }
                         memo[axe.i][i + D.v(4)] = new_vector;
                     }
+
+                    new_vector.tab_seq[0] = i + D.v(0);
+                    new_vector.tab_seq[1] = i + D.v(1);
+                    new_vector.tab_seq[2] = i + D.v(2);
+                    new_vector.tab_seq[3] = i + D.v(3);
+                    new_vector.tab_seq[4] = i + D.v(4);
+
 
                     all_vector.add(new_vector);
 
@@ -621,7 +630,7 @@ public class Etat {
                 return GLOBAL.WIN;
                 //evaluation += WIN;
             }else {
-                if(false){
+                if(s.bidirectionnel){
                     evaluation += Math.pow(s.value+1,4);
                 }else {
                     evaluation += Math.pow(s.value,4);
@@ -1102,6 +1111,7 @@ public class Etat {
 
     class Vector5 {
         public int value;
+        public int valueBirdirection;
         public boolean bidirectionnel = false;
         public Dir Direction;
         public int[] tab_seq = new int[5];

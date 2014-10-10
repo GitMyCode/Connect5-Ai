@@ -78,6 +78,10 @@ public class JoueurArtificiel implements Joueur, Runnable {
         Direction.init_map(nbcol);
 
 
+        /*TODO pour test*/
+        int testeval = init.evaluate();
+
+
         Move MAXcheckWinMove = init.getNextMoves(player).poll();
         if(MAXcheckWinMove.score == GLOBAL.WIN){
             return new Position(MAXcheckWinMove.move/nbcol,MAXcheckWinMove.move%nbcol);
@@ -136,6 +140,35 @@ public class JoueurArtificiel implements Joueur, Runnable {
         return result;
     }
 
+    public int evaluateThis(Grille grille){
+        ArrayList<Integer> casesvides = new ArrayList<Integer>();
+        nbcol = grille.getData()[0].length;
+        for(int l=0;l<grille.getData().length;l++)
+            for(int c=0;c<nbcol;c++)
+                if(grille.getData()[l][c]==0)
+                    casesvides.add(l*nbcol+c);
+
+        GLOBAL.NBCOL = nbcol;
+        GLOBAL.NBLIGNE = grille.getData().length;
+
+        nbligne = grille.getData().length;
+
+
+        byte[] test = oneDimentionalArray(grille.getData());
+
+
+
+        int player = ( ((nbligne*nbcol) - casesvides.size()) % 2  == 0)? 1:2;
+        int opponent = (player==1)? 2:1;
+
+        /*INIT ETAT*/
+        Etat init = new Etat(grille,player,opponent);
+        init.setChecker(checker);
+        Direction.init_map(nbcol);
+
+        return init.evaluate();
+
+    }
 
     @Override
     public String getAuteurs() {

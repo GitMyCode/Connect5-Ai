@@ -86,11 +86,13 @@ public enum Dir {
         return this.v() * step;
     }
     public boolean checkPossibleConnect(byte[] array,int i,int player){
-        int res = array[i+ this.v()*0]|array[i+ this.v()*1]|array[i+ this.v()*2]|array[i+ this.v()*3]|array[i+ this.v()]*4;
-        if(res > 2)
+        int res = array[i]|array[i+ this.v(1)]|array[i+ this.v(2)]|array[i+ this.v(3)]|array[i+ this.v(4)];
+        if(res > 2){
             return false;
-        if(res != player)
+        }
+        if(res != player){
             return false;
+        }
 
         int test = Integer.bitCount(res);
 

@@ -22,7 +22,7 @@ public class MinMax {
     static boolean pruned = false;
     static int current_player;
     static int opponent;
-    static int MAX_DEPTH = 3;
+    static int MAX_DEPTH = 2;
 
 
     static int nbcol;
@@ -99,7 +99,7 @@ public class MinMax {
 
 /*
 
-            if(test == 30){
+            if(test == 40){
                 break;
             }
             test++;
