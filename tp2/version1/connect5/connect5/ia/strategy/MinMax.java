@@ -1,6 +1,7 @@
 package connect5.ia.strategy;
 
 import connect5.Grille;
+import connect5.ia.models.Dir;
 import connect5.ia.models.Etat;
 import connect5.ia.models.GLOBAL;
 import connect5.ia.models.Move;
@@ -21,7 +22,7 @@ public class MinMax {
     static boolean pruned = false;
     static int current_player;
     static int opponent;
-    static int MAX_DEPTH = 3;
+    static int MAX_DEPTH = 2;
 
 
     static int nbcol;
@@ -46,6 +47,8 @@ public class MinMax {
         System.out.println("score :"+ play[1] + " play :("+play[0]/nbcol+","+play[0]%nbcol+") ---- nbMAX: "+ nbMAX+" - nbMIN: " + nbMIN );
         System.out.println("TIME: "+(System.currentTimeMillis() - time)+" ms");
         System.out.println("Closelist size: "+closelist.size());
+        System.out.println(etatInitial.toStringOneDim(etatInitial.one_dim));
+
         return play[0];
     }
 

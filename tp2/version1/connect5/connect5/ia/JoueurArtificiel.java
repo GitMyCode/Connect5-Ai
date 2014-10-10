@@ -7,10 +7,7 @@ import connect5.Grille;
 import connect5.GrilleVerificateur;
 import connect5.Joueur;
 import connect5.Position;
-import connect5.ia.models.Direction;
-import connect5.ia.models.Etat;
-import connect5.ia.models.GLOBAL;
-import connect5.ia.models.Move;
+import connect5.ia.models.*;
 import connect5.ia.strategy.MinMax;
 
 import java.io.BufferedReader;
@@ -32,7 +29,6 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
     private int nbcol=0;
     private int nbligne=0;
-    int WIN = 10000;
 
     public JoueurArtificiel(){
 
@@ -59,7 +55,8 @@ public class JoueurArtificiel implements Joueur, Runnable {
                 if(grille.getData()[l][c]==0)
                     casesvides.add(l*nbcol+c);
 
-
+        GLOBAL.NBCOL = nbcol;
+        GLOBAL.NBLIGNE = grille.getData().length;
 
         nbligne = grille.getData().length;
 
@@ -74,7 +71,6 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
         int player = ( ((nbligne*nbcol) - casesvides.size()) % 2  == 0)? 1:2;
         int opponent = (player==1)? 2:1;
-
 
         /*INIT ETAT*/
         Etat init = new Etat(grille,player,opponent);

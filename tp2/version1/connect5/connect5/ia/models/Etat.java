@@ -385,9 +385,33 @@ public class Etat {
         return result;
     }
 
+    public String toStringVector(byte[] data_original, int[] vector){
+
+        byte[] data = new byte[nbcol *nbligne];
+        System.arraycopy(data_original,0,data,0,data_original.length);
+
+        char[] table = {'0', 'N', 'B','X' };
+        String result = "" + nbligne + " " + nbcol+ "\n";
+        for(int j=0; j< vector.length; j++){
+            data[vector[j]] = 3;
+        }
 
 
-    public int evaluate3(int player){
+        int i=1;
+        for(byte b : data){
+            char c = (char)b;
+            result += table[b];
+            if(i % nbcol ==0){
+                result += '\n';
+            }
+            i++;
+        }
+
+        return result;
+
+    }
+
+        public int evaluate4(int player){
 
         int opponent = (player == 1)? 2:1;
         int evaluation =0;
@@ -405,7 +429,6 @@ public class Etat {
                 last = one_dim[i];
 
 
-                boolean check = true;
                 if(Direction.side_map.get(D) !=null && Direction.side_map.get(D) == Direction.OUEST){
                    if(!(((i%nbcol)+1)  >=5)){
                        continue;
@@ -417,9 +440,6 @@ public class Etat {
                     }
                 }
 
-                if (!check){
-                    break;
-                }
 
 
 
@@ -428,6 +448,7 @@ public class Etat {
                 if(last == player){ //
 
                     int nb_seq = 0;
+
 
                     int axe = Direction.axes_map.get(D);
                     //loop to find suite
@@ -455,11 +476,20 @@ public class Etat {
                         }
 
 
+                        vector.tab_seq[s] = next;
+
                         /*Okey we got one valid token */
                         if(one_dim[next] == player ){
 
                             vector.value++;
                             ref_last_axes = next;
+
+                            int[][] test = new int[5][5];
+                            for(Dir d : Dir.values()){
+
+                            }
+
+
                             if(memo[axe][next] == null) {
                                 memo[axe][next] = vector;
                             }else {
@@ -477,10 +507,155 @@ public class Etat {
                         vector.value = 0;
                     }else{
 
-                        /*
-                        * TODO
-                        * CHECK si un
+
+                        if(ref != null){
+                            if(ref.value <= vector.value){ // we already passed here but from another direction
+                                ref.value -= nb_overlap;
+                                all_vector.add(vector);
+
+
+
+                                int other_dir = D *-1;
+                                int r_next = i+other_dir;
+
+                                //Check if left side ok
+                                if(check_space(other_dir,i) &&  one_dim[r_next] ==0){
+                                    //Check if left side ok
+                                    r_next = ref_last_axes + D;
+                                    if(check_space(D,ref_last_axes) &&  one_dim[r_next] ==0){
+                                        vector.bidirectionnel = true;
+                                    }
+                                }
+
+
+                            }
+
+
+                        }else {
+                            all_vector.add(vector);
+                        }
+                    }
+
+
+
+                }
+            }
+        }
+
+        for(SeqValue s: all_vector){
+            if(s.value == 5){ // special case for win
+                return GLOBAL.WIN;
+                //evaluation += WIN;
+            }else {
+                if(s.bidirectionnel){
+                    evaluation += Math.pow(s.value+1,4);
+                }else {
+                    evaluation += Math.pow(s.value,4);
+                }
+
+            }
+        }
+
+        return evaluation;
+
+    }
+
+
+    public int evaluate3(int player){
+
+        int opponent = (player == 1)? 2:1;
+        int evaluation =0;
+        int last = 0;
+
+
+
+        SeqValue[][] memo = new SeqValue[AXES][one_dim.length];
+
+
+        ArrayList<SeqValue> all_vector = new ArrayList<SeqValue>();
+        for(int i =0; i< one_dim.length; i++){
+            for(Integer D : Direction.direction4){
+                boolean sequence = true;
+                last = one_dim[i];
+
+
+                if(Direction.side_map.get(D) !=null && Direction.side_map.get(D) == Direction.OUEST){
+                   if(!(((i%nbcol)+1)  >=5)){
+                       continue;
+                   }
+                }else
+                if(Direction.side_map.get(D) != null && Direction.side_map.get(D) == Direction.EST){
+                    if(!((nbcol - (i%nbcol))  >=5)){
+                        continue;
+                    }
+                }
+
+
+
+
+                //START loop
+                int ref_last_axes =-1;
+                if(last == player){ //
+
+                    int nb_seq = 0;
+
+
+                    int axe = Direction.axes_map.get(D);
+                    //loop to find suite
+                    SeqValue vector = new SeqValue();
+
+                    int nb_overlap =0;
+                    SeqValue ref = null;
+                    for(int s = 0 ; s < SEQ; s++){
+
+                        int next = i + D*s;
+
+
+                        /*TODO
+                        * Ce check va empecher de compter un cas come  *0****
                         * */
+                        /*Check if time to leave this for*/
+                        if(next >= one_dim.length || next < 0 ){
+                            sequence = false;
+                            break;
+                        }
+                        if(one_dim[next] == opponent){
+
+                            sequence = false;
+                            break;
+                        }
+
+
+                        vector.tab_seq[s] = next;
+
+                        /*Okey we got one valid token */
+                        if(one_dim[next] == player ){
+
+                            vector.value++;
+                            ref_last_axes = next;
+
+                            int[][] test = new int[5][5];
+                            for(Dir d : Dir.values()){
+
+                            }
+
+
+                            if(memo[axe][next] == null) {
+                                memo[axe][next] = vector;
+                            }else {
+                                ref = memo[axe][next];
+                                nb_overlap++;
+
+                            }
+                        }
+
+                    }
+                    //END VECTOR
+
+                    //there is space for a 5 sequence
+                    if(!sequence){
+                        vector.value = 0;
+                    }else{
 
 
                         if(ref != null){
@@ -492,8 +667,14 @@ public class Etat {
 
                                 int other_dir = D *-1;
                                 int r_next = i+other_dir;
+
+                                //Check if left side ok
                                 if(check_space(other_dir,i) &&  one_dim[r_next] ==0){
-                                    vector.bidirectionnel = true;
+                                    //Check if left side ok
+                                    r_next = ref_last_axes + D;
+                                    if(check_space(D,ref_last_axes) &&  one_dim[r_next] ==0){
+                                        vector.bidirectionnel = true;
+                                    }
                                 }
 
 
@@ -533,7 +714,6 @@ public class Etat {
 
         int next = index + D;
         if(next >= one_dim.length || next < 0 ){
-
           return false;
         }
 
@@ -610,6 +790,7 @@ public class Etat {
                             break;
                         }
 
+                        vector.tab_seq[s] = next;
 
                         /*Okey we got one valid token */
                         if(one_dim[next] == player ){
@@ -821,6 +1002,9 @@ public class Etat {
     class SeqValue {
         public int value;
         public boolean bidirectionnel = false;
+        public int Direction;
+        public int[] tab_seq = new int[5];
+
     }
 
 

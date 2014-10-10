@@ -5,6 +5,7 @@ package connect5.ia.models;
  */
 public abstract class GLOBAL {
 
-
+    public static int NBCOL;
+    public static int NBLIGNE;
     public static final int WIN = Integer.MAX_VALUE- 200;
 }
