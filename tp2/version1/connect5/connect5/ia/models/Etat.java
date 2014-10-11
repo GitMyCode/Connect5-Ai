@@ -384,6 +384,18 @@ public class Etat {
         return result;
     }
 
+    public void print_all_vector(List<Vector5> all){
+
+        for(Vector5 v : all){
+            if(v.value > 0){
+                System.out.println("---- value: "+v.value+ "   bi: "+v.bidirectionnel+"         ----");
+                System.out.println(toStringVector(one_dim,v.tab_seq));
+            }
+
+        }
+
+    }
+
     public String toStringVector(byte[] data_original, int[] vector){
 
 
@@ -458,20 +470,20 @@ public class Etat {
                     }
 
 
-                    int tesdt = Integer.bitCount(nb_seqt);
-                    if(tesdt == 5){
+                    int vecteur_value = Integer.bitCount(nb_seqt);
+                    if(vecteur_value == 5){
                         return GLOBAL.WIN;
                     }
 
 
                     if(isBidirectionnel(i,i+D.v(4),D)){
                         new_vector.bidirectionnel = true;
-                        new_vector.valueBirdirection = tesdt+1;
+                        new_vector.valueBirdirection = vecteur_value+1;
                     }else {
-                        new_vector.valueBirdirection = tesdt;
+                        new_vector.valueBirdirection = vecteur_value;
                     }
                     Vector5 old_ref;
-                    new_vector.value = tesdt;
+                    new_vector.value = vecteur_value;
                     if( (nb_seqt&1) != 0){
                         old_ref = memo[axe.i][i];
                         if(old_ref ==null || old_ref.valueBirdirection <= new_vector.valueBirdirection ) {

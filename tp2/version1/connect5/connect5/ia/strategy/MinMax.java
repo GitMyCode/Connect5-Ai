@@ -22,7 +22,7 @@ public class MinMax {
     static boolean pruned = false;
     static int current_player;
     static int opponent;
-    static int MAX_DEPTH = 3;
+    static int MAX_DEPTH = 4;
 
 
     static int nbcol;
@@ -47,8 +47,9 @@ public class MinMax {
         System.out.println("score :"+ play[1] + " play :("+play[0]/nbcol+","+play[0]%nbcol+") ---- nbMAX: "+ nbMAX+" - nbMIN: " + nbMIN );
         System.out.println("TIME: "+(System.currentTimeMillis() - time)+" ms");
         System.out.println("Closelist size: "+closelist.size());
+        etatInitial.play(play[0],current_player);
         System.out.println(etatInitial.toStringOneDim(etatInitial.one_dim));
-
+        etatInitial.unplay(play[0]);
         return play[0];
     }
 
@@ -97,13 +98,15 @@ public class MinMax {
 
             Move move = nextMoves.poll();
 
-/*
 
-            if(test == 40){
+
+
+            if(test == 20){
                 break;
             }
             test++;
-*/
+
+
 
 
             Etat next_step = etat.clone();
