@@ -30,6 +30,14 @@ public class JoueurArtificiel implements Joueur, Runnable {
     private int nbcol=0;
     private int nbligne=0;
 
+
+    private int buffer_x;
+    private int buffer_y;
+    private int lowest_x;
+    private int lowest_y;
+
+
+
     public JoueurArtificiel(){
 
     }
@@ -57,7 +65,6 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
         GLOBAL.NBCOL = nbcol;
         GLOBAL.NBLIGNE = grille.getData().length;
-
         nbligne = grille.getData().length;
 
 
@@ -72,25 +79,42 @@ public class JoueurArtificiel implements Joueur, Runnable {
         int player = ( ((nbligne*nbcol) - casesvides.size()) % 2  == 0)? 1:2;
         int opponent = (player==1)? 2:1;
 
+
+
+
+
+        byte[][] t_cut = cutGrid(grille);
+        byte[] t_cut1 = oneDimentionalArray(t_cut);
+        System.out.println(toStringOneDimWithCol(t_cut1,t_cut[0].length,t_cut.length));
+        GLOBAL.NBCOL = t_cut[0].length;
+        GLOBAL.NBLIGNE = t_cut.length;
+
+
+
         /*INIT ETAT*/
-        Etat init = new Etat(grille,player,opponent);
+        Etat init = new Etat(t_cut1,player,opponent);
         init.setChecker(checker);
         Direction.init_map(nbcol);
 
 
         /*TODO pour test*/
-        int testeval = init.evaluate();
+        //int testeval = init.evaluate();
 
 
         Move MAXcheckWinMove = init.getNextMoves(player).poll();
         if(MAXcheckWinMove.score == GLOBAL.WIN){
-            return new Position(MAXcheckWinMove.move/nbcol,MAXcheckWinMove.move%nbcol);
+            int pos_x = ((MAXcheckWinMove.move/GLOBAL.NBCOL) ) + Math.abs(buffer_x - lowest_x);
+            int pos_y =  ((MAXcheckWinMove.move%GLOBAL.NBCOL) ) + Math.abs(buffer_y - lowest_y);
+
+            return new Position(pos_x,pos_y);
         }
         Move MINcheckWinMove = init.getNextMoves(opponent).poll();
         if(MINcheckWinMove.score == (0-GLOBAL.WIN)){
-            return new Position(MINcheckWinMove.move/nbcol,MINcheckWinMove.move%nbcol);
-        }
+            int pos_x = ((MINcheckWinMove.move/GLOBAL.NBCOL) ) + Math.abs(buffer_x - lowest_x);
+            int pos_y =  ((MINcheckWinMove.move%GLOBAL.NBCOL) ) + Math.abs(buffer_y - lowest_y);
 
+            return new Position(pos_x,pos_y);
+        }
 
 
 
@@ -101,12 +125,17 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
         int choix =  MinMax.getMove(init,player,MINcheckWinMove.score,MAXcheckWinMove.score); //random.nextInt(casesvides.size());
         //choix = casesvides.get(choix);
-        return new Position(choix / nbcol, choix % nbcol);
+        int pos_x =  ((choix/GLOBAL.NBCOL) ) + Math.abs(buffer_x - lowest_x);
+        int pos_y = ((choix%GLOBAL.NBCOL) ) + Math.abs(buffer_y - lowest_y);
+        return new Position(pos_x,pos_y);
     }
 
 
     private byte[] oneDimentionalArray(byte[][] grille){
-        byte[] one_dim = new byte[nbcol * nbligne];
+        int nbligne = grille.length;
+        int nbcol = grille[0].length;
+
+        byte[] one_dim = new byte[grille.length * grille[0].length];
         //System.out.println("nb col:" +nbcol + "  nbligne: "+ nbligne);
         for(int l=0 ; l < nbligne ; l++){
             System.arraycopy(grille[l],0,one_dim,l*(nbcol),nbcol);
@@ -116,8 +145,114 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
     }
 
+
+    public byte[][] cutGrid(Grille grille){
+        int lenght_x = grille.getData().length;
+        int length_y = nbcol;
+
+        int[] hx = new int[2];
+        int[] lx = new int[2];
+        int[] hy = new int[2];
+        int[] ly = new int[2];
+
+        boolean bhx = false;
+        boolean blx = false;
+        boolean bhy = false;
+        boolean bly = false;
+
+        byte [][] data = grille.getData();
+        for(int i=0; i< lenght_x && !blx  ; i++){
+            for(int j=0 ; j< length_y; j++ ){
+               if(data[i][j] != 0){
+                    lx[0] = i; lx[1]= j;
+                   blx = true;
+                   break;
+               }
+            }
+        }
+
+        for(int i=0 ; i< lenght_x  ; i++){
+            for(int j = length_y-1; j >= 0 ; j--){
+               if(data[i][j] != 0 && j > hy[1]){
+                    hy[0] = i; hy[1]= j;
+                   break;
+               }
+            }
+        }
+
+        for(int i=lenght_x-1; i >= 0 && !bhx; i--){
+            for(int j=0 ; j< length_y; j++ ){
+               if(data[i][j] != 0){
+                    hx[0] = i; hx[1]= j;
+                   bhx =true;
+                   break;
+               }
+            }
+        }
+
+        ly[1] = Integer.MAX_VALUE;
+        for(int i=0 ; i < lenght_x; i++){
+            for(int j =0; j < length_y; j++){
+               if(data[i][j] != 0 && j < ly[1]){
+                    ly[0] = i; ly[1]= j;
+                   break;
+               }
+            }
+        }
+
+
+
+
+        int extend_bufferx= 3;
+        int extend_buffery= 3;
+
+        buffer_x = extend_bufferx;
+        buffer_y = extend_buffery;
+        lowest_x = lx[0];
+        lowest_y = ly[1];
+
+        int smallx = (hx[0] - lx[0] +1) + (extend_bufferx*2);
+        int smally = (hy[1] - ly[1] +1) + (extend_buffery*2);
+
+        if(smallx >= nbligne){
+            smallx = nbligne;
+            extend_bufferx = 0;
+            lx[0] = 0;
+            buffer_x= 0;
+            lowest_x =0;
+        }
+        if(smally >= nbcol){
+            smally=  nbcol;
+            extend_buffery=0;
+            ly[1] = 0;
+            buffer_y =0;
+            lowest_y = 0;
+        }
+
+
+
+
+        byte[][] cpy = new byte[smallx][smally];
+        for(int i=0; i < smallx-extend_bufferx; i++){
+            for(int j= 0 ; j < smally-extend_buffery; j++ ){
+               cpy[i+extend_bufferx][j+extend_buffery] = data[lx[0] +i][ly[1] + j];
+            }
+        }
+
+
+       /*
+        cpy[hx[0]][hx[1]] = 3;
+        cpy[lx[0]][lx[1]] = 4;
+        cpy[hy[0]][hy[1]] = 5;
+        cpy[ly[0]][ly[1]] = 6;
+*/
+
+        return cpy;
+
+    }
+
     public String toStringOneDim(byte[] data){
-        char[] table = {'0', 'N', 'B' };
+        char[] table = {'-', 'N', 'B','n','s','e','o' };
         String result = "" + nbligne + " " + nbcol+ "\n";
 
         int i=1;
@@ -139,6 +274,31 @@ public class JoueurArtificiel implements Joueur, Runnable {
         }*/
         return result;
     }
+
+    public String toStringOneDimWithCol(byte[] data,int nbcol,int nbligne){
+        char[] table = {'-', 'N', 'B','n','s','e','o' };
+        String result = "" + nbligne + " " + nbcol+ "\n";
+
+        int i=1;
+        for(byte b : data){
+            char c = (char)b;
+            result += table[b];
+            if(i % nbcol ==0){
+                result += '\n';
+            }
+            i++;
+        }
+
+        /*for(byte[] b : data){
+            char[] c = new char[b.length];
+            for(int i=0;i<b.length;i++)
+                c[i] = table[b[i]];
+            result += new String(c);
+            result += '\n';
+        }*/
+        return result;
+    }
+
 
     public int evaluateThis(Grille grille){
         ArrayList<Integer> casesvides = new ArrayList<Integer>();

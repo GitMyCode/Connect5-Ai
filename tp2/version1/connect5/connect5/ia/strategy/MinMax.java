@@ -57,7 +57,11 @@ public class MinMax {
 
         int last_player = (player ==1)? 2:1;
 
-        int winner = etat.checkWinner();
+        int winner =0;
+        if(Math.abs(last_score+ 10000) > 50000){
+            winner = (last_score <0)? opponent : current_player;
+        }
+
         if( winner!= 0 || etat.isTerminal() || depth == MAX_DEPTH){
 
             int deep_penality = (player != current_player) ? depth : 0-depth;
@@ -101,7 +105,7 @@ public class MinMax {
 
 
 
-            if(test == 20){
+            if(test == 25){
                 break;
             }
             test++;

@@ -40,7 +40,7 @@ public class Etat {
     final int DIAGL    = 2;
     final int DIAGR    = 3;
 
-
+    public int nb_libre;
 
 
     final int[] direction4 = new int[]{DOWN,LEFT,DOWNLEFT,TOPLEFT};
@@ -57,13 +57,25 @@ public class Etat {
 
     public static GrilleVerificateur checker;
 
-    public Etat(Grille grille,int max,int min){
+    public Etat(byte[] one_dim, int max,int min){
         this.grille = grille;
-        nbcol = grille.getData()[0].length;
-        nbligne = grille.getData().length;
+        nbcol = GLOBAL.NBCOL;
+        nbligne = GLOBAL.NBLIGNE;
 
         MAX_player = max;
         MIN_player = min;
+
+        this.one_dim = one_dim;
+    }
+    public Etat(Grille grille, int max,int min){
+        this.grille = grille;
+        nbcol = GLOBAL.NBCOL;
+        nbligne = GLOBAL.NBLIGNE;
+
+        MAX_player = max;
+        MIN_player = min;
+
+        this.one_dim = one_dim;
 
 
 
@@ -71,16 +83,26 @@ public class Etat {
     }
 
 
+
+
     @Override
     public Etat clone() {
 
-        Grille new_grille = grille.clone();
-
-        Etat cloned = new Etat(new_grille,MAX_player,MIN_player);
+        //Grille new_grille = grille.clone();
+        byte[] cloned_array = cloneByteArray(this.one_dim);
+        Etat cloned = new Etat(cloned_array,MAX_player,MIN_player);
         cloned.setChecker(checker);
 
         return cloned;
     }
+
+    private byte[] cloneByteArray(byte[] array){
+        byte[] one_dim = new byte[array.length];
+        //System.out.println("nb col:" +nbcol + "  nbligne: "+ nbligne);
+            System.arraycopy(array,0,one_dim,0,array.length);
+        return one_dim;
+    }
+
 
     @Override
     public int hashCode() {
@@ -206,13 +228,13 @@ public class Etat {
 
     public void play(int move,int player){
 
-        grille.set(new Position(move / nbcol, move % nbcol), player);
+//        grille.set(new Position(move / nbcol, move % nbcol), player);
 
         one_dim[move] = (byte)player;
     }
     public void unplay(int move){
 
-        grille.set(new Position(move / nbcol, move % nbcol), 0);
+      //  grille.set(new Position(move / nbcol, move % nbcol), 0);
 
         one_dim[move] = 0;
     }
@@ -231,11 +253,20 @@ public class Etat {
 
 */
 
+        int nblibre =0;
+        for(byte b : one_dim){
+            if(b == 0){
+                nblibre++;
+            }
+        }
+
+
+
         PriorityQueue<Move> ordered_move;
         if(player_to_max == MIN_player) {
-            ordered_move = new PriorityQueue<Move>(grille.nbLibre(),new CompareMIN());
+            ordered_move = new PriorityQueue<Move>(nblibre,new CompareMIN());
         }else{
-            ordered_move = new PriorityQueue<Move>(grille.nbLibre(),new CompareMAX() );
+            ordered_move = new PriorityQueue<Move>(nblibre,new CompareMAX() );
         }
 
         for(int i =0; i< one_dim.length; i++){
@@ -324,7 +355,10 @@ public class Etat {
     }
 
     public boolean isTerminal(){
-        return grille.nbLibre() == 0;
+
+
+
+        return getNblibre() == 0;
     }
 
 
@@ -1040,6 +1074,15 @@ public class Etat {
         return to_test;
     }
 
+    public int getNblibre(){
+        int nblibre=0;
+        for(byte b: one_dim){
+            if(b ==0){
+                nblibre++;
+            }
+        }
+        return nblibre;
+    }
 
     class Vector5 {
         public int value;
