@@ -24,9 +24,11 @@ public class MinMax {
 
     static int nbMAX;
     static int nbMIN;
+    static int nbSaveInCloseList;
 
 
-    static Map<Etat, int[]> closelist = new HashMap<Etat, int[]>();
+    //static Map<Etat, int[]> closelist = new HashMap<Etat, int[]>();
+    static HashSet<Etat> closelist = new HashSet<Etat>();
 
     public static Integer getMove (Etat etatInitial, int playerColor, int deep) throws Exception {
         MAX_DEPTH = deep;
@@ -35,6 +37,8 @@ public class MinMax {
         currentPlayer = playerColor;
         nbMAX = 0;
         nbMIN = 0;
+        nbSaveInCloseList =0;
+        closelist.clear();
 
 
         long time = System.currentTimeMillis();
@@ -47,7 +51,7 @@ public class MinMax {
 
         System.out.println("score :" + play[1] + " play :(" + play[0] / nbcol + "," + play[0] % nbcol + ") ---- nbMAX: " + nbMAX + " - nbMIN: " + nbMIN);
         System.out.println("TIME: " + (System.currentTimeMillis() - time) + " ms");
-        System.out.println("Closelist size: " + closelist.size());
+        System.out.println("Closelist size: " + closelist.size() + "  nbSave: "+nbSaveInCloseList);
         etatInitial.play(play[0], currentPlayer);
         System.out.println(etatInitial.toStringOneDim(etatInitial.one_dim));
         etatInitial.unplay(play[0]);
@@ -94,22 +98,23 @@ public class MinMax {
 
 
 
-/*
-            if(test == 40){
-                break;
-            }
-            test++;
-*/
-
-
             Etat next_step = etat.clone();
             next_step.play(move.move, player);
 
-            /*if(closelist.containsKey(next_step)){
-                System.out.println("ici");
-                return closelist.get(next_step);
-            }*/
+
             next_step.score = move.score;
+
+            if(closelist.contains(next_step)){
+                nbSaveInCloseList++;
+                continue;
+            }
+            closelist.add(next_step);
+
+
+            if(test == 32){
+                break;
+            }
+            test++;
 
 
             if (player == currentPlayer) {
@@ -127,7 +132,7 @@ public class MinMax {
                     bestMove = move.move;
                 }
                 if (alpha >= beta) {
-                    closelist.put(next_step, new int[]{bestMove, alpha});
+                    //closelist.put(next_step, new int[]{bestMove, alpha});
                     return new int[]{bestMove, alpha};
                 }
 
@@ -148,7 +153,7 @@ public class MinMax {
                 }
                 if (beta <= alpha) {
 
-                    closelist.put(next_step, new int[]{bestMove, beta});
+                    //closelist.put(next_step, new int[]{bestMove, beta});
                     return new int[]{bestMove, beta};
                 }
 

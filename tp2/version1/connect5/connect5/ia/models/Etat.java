@@ -99,7 +99,7 @@ public class Etat {
     private byte[] cloneByteArray(byte[] array){
         byte[] one_dim = new byte[array.length];
         //System.out.println("nb col:" +nbcol + "  nbligne: "+ nbligne);
-            System.arraycopy(array,0,one_dim,0,array.length);
+        System.arraycopy(array,0,one_dim,0,array.length);
         return one_dim;
     }
 
@@ -167,7 +167,7 @@ public class Etat {
         HashMap vector_map = new HashMap<Integer, HashSet<Integer>>();
         int opponent = (player_color == 1)? 2 : 1;
         boolean valid_vector = false;
-         for(int i=0; i<nbligne; i++){
+        for(int i=0; i<nbligne; i++){
             for(int j=0; j< nbcol; j++){
 
                 for(int d=0; d< AXES ; d++){
@@ -234,7 +234,7 @@ public class Etat {
     }
     public void unplay(int move){
 
-      //  grille.set(new Position(move / nbcol, move % nbcol), 0);
+        //  grille.set(new Position(move / nbcol, move % nbcol), 0);
 
         one_dim[move] = 0;
     }
@@ -323,6 +323,7 @@ public class Etat {
     public int evaluate(){
 
 
+/*
         int max_res = evaluate4(MAX_player);
         int min_res = evaluate4(MIN_player);
         if(max_res == GLOBAL.WIN){
@@ -330,8 +331,9 @@ public class Etat {
         }else if(min_res == GLOBAL.WIN){
             return 0-GLOBAL.WIN;
         }
+*/
 
-        return max_res- min_res;
+        return evaluate5();
 /*        //int r = checker.determineGagnant(grille);
         result = checker.determineGagnant(grille); // winner();
 *//*
@@ -458,7 +460,183 @@ public class Etat {
 
     }
 
-        public int evaluate4(int player){
+    public int evaluate5(){
+
+        int evaluation =0;
+        int last = 0;
+
+
+
+        Vector5[][] memo = new Vector5[AXES][one_dim.length];
+
+
+        ArrayList<Vector5> allVectorMax = new ArrayList<Vector5>();
+        ArrayList<Vector5> allVectorOpponent = new ArrayList<Vector5>();
+        for(int i =0; i< one_dim.length; i++){
+            for(Dir D : Dir.direction4){
+
+                if(!D.boundaries5(i)){
+                    continue;
+                }
+
+                //START loop
+                int res = one_dim[i]|one_dim[i+ D.v(1)]|one_dim[i+ D.v(2)]|one_dim[i+ D.v(3)]|one_dim[i+ D.v(4)];
+
+
+
+                int test = Integer.bitCount(res);
+
+
+
+                if(res== 1 || res == 2){ //
+
+
+                    Dir.Axes axe = Dir.Axes.getA(D);
+
+                    Vector5 new_vector = new Vector5();
+                    new_vector.Direction = D;
+
+                    int nb_seqt=0;
+                    if(one_dim[i + D.v(0)] == res){
+                        nb_seqt += 1<<0;
+                    }
+                    if(one_dim[i + D.v(1)] == res){
+                        nb_seqt += 1<<1;
+                    }
+                    if(one_dim[i + D.v(2)] == res){
+                        nb_seqt += 1<<2;
+                    }
+                    if(one_dim[i + D.v(3)] == res){
+                        nb_seqt += 1<<3;
+                    }
+                    if(one_dim[i + D.v(4)] == res){
+                        nb_seqt += 1<<4;
+                    }
+
+
+                    int vecteur_value = Integer.bitCount(nb_seqt);
+                    if(vecteur_value == 5){
+                        return (res == MAX_player)? GLOBAL.WIN : 0- GLOBAL.WIN;
+                    }
+
+
+                    if(isBidirectionnel(i,i+D.v(4),D)){
+                        new_vector.bidirectionnel = true;
+                        new_vector.valueBirdirection = vecteur_value+1;
+                    }else {
+                        new_vector.valueBirdirection = vecteur_value;
+                    }
+                    Vector5 old_ref;
+                    new_vector.value = vecteur_value;
+                    if( (nb_seqt&1) != 0){
+                        old_ref = memo[axe.i][i];
+                        if(old_ref ==null || old_ref.valueBirdirection <= new_vector.valueBirdirection ) {
+
+                            if (old_ref != null) old_ref.value--;
+                            memo[axe.i][i] = new_vector;
+                        }else {
+                            new_vector.valueBirdirection--;
+                            new_vector.value--;
+                        }
+                    }
+
+                    if( (nb_seqt&2) != 0){
+                        old_ref = memo[axe.i][i + D.v(1)];
+                        if(old_ref ==null || old_ref.valueBirdirection <= new_vector.valueBirdirection ) {
+
+                            if (old_ref != null) old_ref.value--;
+                            memo[axe.i][i + D.v(1)] = new_vector;
+                        }else {
+                            new_vector.valueBirdirection--;
+                            new_vector.value--;
+                        }
+
+                    }if( (nb_seqt&4) != 0){
+                        old_ref = memo[axe.i][i + D.v(2)];
+                        if(old_ref ==null || old_ref.valueBirdirection <= new_vector.valueBirdirection ) {
+
+                            if (old_ref != null) old_ref.value--;
+                            memo[axe.i][i + D.v(2)] = new_vector;
+                        }else {
+                            new_vector.valueBirdirection--;
+                            new_vector.value--;
+                        }
+
+                    }if( (nb_seqt&8) != 0){
+                        old_ref = memo[axe.i][i + D.v(3)];
+                        if(old_ref ==null || old_ref.valueBirdirection <= new_vector.valueBirdirection ) {
+
+                            if (old_ref != null) old_ref.value--;
+                            memo[axe.i][i + D.v(3)] = new_vector;
+                        }else {
+                            new_vector.valueBirdirection--;
+                            new_vector.value--;
+                        }
+
+                    }if( (nb_seqt&16) != 0){
+                        old_ref = memo[axe.i][i + D.v(4)];
+                        if(old_ref ==null || old_ref.valueBirdirection <= new_vector.valueBirdirection ) {
+
+                            if (old_ref != null) old_ref.value--;
+                            memo[axe.i][i + D.v(4)] = new_vector;
+                        }else {
+                            new_vector.valueBirdirection--;
+                            new_vector.value--;
+                        }
+
+
+                    }
+
+                    new_vector.tab_seq[0] = i + D.v(0);
+                    new_vector.tab_seq[1] = i + D.v(1);
+                    new_vector.tab_seq[2] = i + D.v(2);
+                    new_vector.tab_seq[3] = i + D.v(3);
+                    new_vector.tab_seq[4] = i + D.v(4);
+
+
+                    if(new_vector.value >0){
+                        if(res == MAX_player){
+                            allVectorMax.add(new_vector);
+                        }else{
+                            allVectorOpponent.add(new_vector);
+                        }
+                    }
+                }
+            }
+        }
+
+        for(Vector5 s: allVectorMax){
+            if(false){ // special case for win
+                return GLOBAL.WIN;
+                //evaluation += WIN;
+            }else {
+                if(s.bidirectionnel){
+                    evaluation += Math.pow(s.value+1,5);
+                }else {
+                    evaluation += Math.pow(s.value,5);
+                }
+
+            }
+        }
+
+        for(Vector5 s: allVectorOpponent){
+            if(false){ // special case for win
+                return GLOBAL.WIN;
+                //evaluation += WIN;
+            }else {
+                if(s.bidirectionnel){
+                    evaluation -= Math.pow(s.value+1,5);
+                }else {
+                    evaluation -= Math.pow(s.value,5);
+                }
+
+            }
+        }
+
+        return evaluation;
+
+    }
+    public int evaluate4(int player){
 
         int opponent = (player == 1)? 2:1;
         int evaluation =0;
@@ -522,7 +700,7 @@ public class Etat {
                         old_ref = memo[axe.i][i];
                         if(old_ref ==null || old_ref.valueBirdirection <= new_vector.valueBirdirection ) {
 
-                           if (old_ref != null) old_ref.value--;
+                            if (old_ref != null) old_ref.value--;
                             memo[axe.i][i] = new_vector;
                         }else {
                             new_vector.valueBirdirection--;
@@ -534,7 +712,7 @@ public class Etat {
                         old_ref = memo[axe.i][i + D.v(1)];
                         if(old_ref ==null || old_ref.valueBirdirection <= new_vector.valueBirdirection ) {
 
-                           if (old_ref != null) old_ref.value--;
+                            if (old_ref != null) old_ref.value--;
                             memo[axe.i][i + D.v(1)] = new_vector;
                         }else {
                             new_vector.valueBirdirection--;
@@ -656,9 +834,9 @@ public class Etat {
 
 
                 if(Direction.side_map.get(D) !=null && Direction.side_map.get(D) == Direction.OUEST){
-                   if(!(((i%nbcol)+1)  >=5)){
-                       continue;
-                   }
+                    if(!(((i%nbcol)+1)  >=5)){
+                        continue;
+                    }
                 }else
                 if(Direction.side_map.get(D) != null && Direction.side_map.get(D) == Direction.EST){
                     if(!((nbcol - (i%nbcol))  >=5)){
@@ -790,7 +968,7 @@ public class Etat {
 
         int next = index + D;
         if(next >= one_dim.length || next < 0 ){
-          return false;
+            return false;
         }
 
         if(Direction.side_map.get(D) !=null && Direction.side_map.get(D) == Direction.OUEST){
@@ -826,9 +1004,9 @@ public class Etat {
 
                 boolean check = true;
                 if(Direction.side_map.get(D) !=null && Direction.side_map.get(D) == Direction.EST){
-                   if(!(((i%nbcol)+1)  >=5)){
-                       continue;
-                   }
+                    if(!(((i%nbcol)+1)  >=5)){
+                        continue;
+                    }
                 }else
                 if(Direction.side_map.get(D) != null && Direction.side_map.get(D) == Direction.OUEST){
                     if(!((nbcol - (i%nbcol))  >=5)){
@@ -891,7 +1069,7 @@ public class Etat {
                             int test2=0;
                         }
 
-                       if(ref != null){
+                        if(ref != null){
                             if(ref.value <= vector.value){
                                 ref.value -= nb_overlap;
                                 all_vector.add(vector);

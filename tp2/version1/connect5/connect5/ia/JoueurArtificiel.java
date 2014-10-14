@@ -241,9 +241,17 @@ public class JoueurArtificiel implements Joueur, Runnable {
         lowestX = lx[0];
         lowestY = ly[1];
 
-        int smallx = (hx[0] - lx[0] +1) + (extendBufferX*2);
-        int smally = (hy[1] - ly[1] +1) + (extendBufferY*2);
 
+
+        int cutedNoBuffX = (hx[0] - lx[0] +1);
+        int cutedNoBuffY = (hy[1] - ly[1] +1);
+
+        int extendedX = (cutedNoBuffX) + (extendBufferX*2);
+        int extendedY = (cutedNoBuffY) + (extendBufferY*2);
+
+        int right_buffer = ((extendBufferY ) > GLOBAL.FULL_NBCOL - lowestY)? GLOBAL.FULL_NBCOL-lowestY : (extendBufferY );
+        int left_buffer  = (lowestY - extendBufferY > 0)? extendBufferY : extendBufferY- lowestY;
+/*
         if(smallx >= GLOBAL.FULL_NBLIGNE){
             smallx = GLOBAL.FULL_NBLIGNE;
             extendBufferX = 0;
@@ -257,16 +265,22 @@ public class JoueurArtificiel implements Joueur, Runnable {
             ly[1] = 0;
             bufferY =0;
             lowestY = 0;
-        }
+        }*/
 
 
 
+        int smallSizeX = extendedX + (hx[0] - lx[0] +1);
+        int smallSizeY = left_buffer + right_buffer + (hy[1] - ly[1] +1);
 
         /*TODO: remplacer par System.arrayCopy()*/
-        byte[][] cpy = new byte[smallx][smally];
-        for(int i=0; i < smallx-extendBufferX; i++){
-            for(int j= 0 ; j < smally-extendBufferY; j++ ){
-               cpy[i+extendBufferX][j+extendBufferY] = data[lx[0] +i][ly[1] + j];
+      /*  int x =  (((smallx - extendBufferX) +lx[0] ) > GLOBAL.FULL_NBLIGNE)? 0: lx[0];
+        int y =  (((smally - extendBufferY) +ly[1] ) > GLOBAL.FULL_NBLIGNE)? 0: ly[1];*/
+        System.out.println("smallSizeY: "+smallSizeY);
+        byte[][] cpy = new byte[smallSizeX][smallSizeY];
+        for(int i=0; i < cutedNoBuffX; i++){
+            for(int j= 0 ; j < cutedNoBuffY; j++ ){
+                int t = data[lowestX +i][lowestY + j];
+                cpy[i+bufferX][j+left_buffer] = (byte)t;
             }
         }
 
