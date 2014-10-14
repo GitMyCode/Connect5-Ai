@@ -30,23 +30,24 @@ public class MyTest {
         "000000000000";
 
         String test2 =
-                "000000000000" +
-                        "000000000000" +
-                        "000000000000" +
-                        "000000000000" +
-                        "0000B0N00000" +
-                        "000000N00000" +
-                        "000000N00000" +
-                        "000000B00000" +
-                        "000000000000" +
-                        "000000000000" +
-                        "000000000000" +
-                        "000000000000";
-
+              "" +
+                      "-------B----" +
+                      "--B----N_N--" +
+                      "---N-N-BBBN-" +
+                      "----N-NBB---" +
+                      "---NBNBBBNB-" +
+                      "----NBNN----" +
+                      "---BNBNB----" +
+                      "--N---------" +
+                      "------------" +
+                      "------------" +
+                      "------------" +
+                      "------------";
 
 
         Map<Character,Byte> convert = new HashMap<Character,Byte>();
         convert.put('0',(byte)0);
+        convert.put('_',(byte)0);
         convert.put('N',(byte)1);
         convert.put('B',(byte)2);
 
@@ -69,7 +70,7 @@ public class MyTest {
         // Test B1
         System.out.println("Test #1");
         Grille g = new Grille(nbligne,nbcol,testByte());
-        Position coup = joueur.getProchainCoup(g, 20000);
+        Position coup = joueur.getProchainCoup(g, 2000);
         System.out.println((coup.ligne==4 && coup.colonne==0) ? "Réussi": "Échoué");
 
 

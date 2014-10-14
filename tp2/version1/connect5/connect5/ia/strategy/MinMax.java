@@ -1,13 +1,8 @@
 package connect5.ia.strategy;
 
 import connect5.Grille;
-import connect5.ia.models.Dir;
-import connect5.ia.models.Etat;
-import connect5.ia.models.GLOBAL;
-import connect5.ia.models.Move;
-import org.omg.CORBA.INTERNAL;
+import connect5.ia.models.*;
 
-import javax.annotation.processing.SupportedSourceVersion;
 import java.util.*;
 
 /**
@@ -18,9 +13,8 @@ import java.util.*;
 public class MinMax {
 
 
-
     static boolean pruned = false;
-    static int current_player;
+    static int currentPlayer;
     static int opponent;
     static int MAX_DEPTH = 4;
 
@@ -32,85 +26,80 @@ public class MinMax {
     static int nbMIN;
 
 
-    static Map<Etat,int[]> closelist = new HashMap<Etat, int[]>();
+    static Map<Etat, int[]> closelist = new HashMap<Etat, int[]>();
 
-    public static int getMove(Etat etatInitial, int player_color,int alpha, int beta){
-        nbcol = etatInitial.nbcol;
-        /* Si le joueur est rouge alors son opposent est Jaune*/
-        opponent = (player_color == 1)? 2 : 1;
-        current_player = player_color;
+    public static Integer getMove (Etat etatInitial, int playerColor, int deep) throws Exception {
+        MAX_DEPTH = deep;
+        nbcol = GLOBAL.NBCOL;
+        opponent = (playerColor == 1) ? 2 : 1;
+        currentPlayer = playerColor;
+        nbMAX = 0;
+        nbMIN = 0;
+
 
         long time = System.currentTimeMillis();
 
-        System.out.println(" TRY TO MAX :" +current_player + " AND MIN :" +opponent);
-        int[] play = minmax(etatInitial,0, current_player,Integer.MIN_VALUE, Integer.MAX_VALUE,0);
-        System.out.println("score :"+ play[1] + " play :("+play[0]/nbcol+","+play[0]%nbcol+") ---- nbMAX: "+ nbMAX+" - nbMIN: " + nbMIN );
-        System.out.println("TIME: "+(System.currentTimeMillis() - time)+" ms");
-        System.out.println("Closelist size: "+closelist.size());
-        etatInitial.play(play[0],current_player);
+        System.out.println(" TRY TO MAX :" + currentPlayer + " AND MIN :" + opponent);
+        int[] play = minmax(etatInitial, 0, currentPlayer, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
+        if (play == null) {
+            return null;
+        }
+
+        System.out.println("score :" + play[1] + " play :(" + play[0] / nbcol + "," + play[0] % nbcol + ") ---- nbMAX: " + nbMAX + " - nbMIN: " + nbMIN);
+        System.out.println("TIME: " + (System.currentTimeMillis() - time) + " ms");
+        System.out.println("Closelist size: " + closelist.size());
+        etatInitial.play(play[0], currentPlayer);
         System.out.println(etatInitial.toStringOneDim(etatInitial.one_dim));
         etatInitial.unplay(play[0]);
         return play[0];
     }
 
-    public static int[] minmax(Etat etat, int depth,int player,int alpha,int beta,int last_score) {
+    public static int[] minmax (Etat etat, int depth, int player, int alpha, int beta, int lastScore) throws Exception {
 
-        int last_player = (player ==1)? 2:1;
-
-        int winner =0;
-        if(Math.abs(last_score+ 10000) > 50000){
-            winner = (last_score <0)? opponent : current_player;
+        if (GLOBAL.timeRemaining() < 100) {
+            System.out.println("GOOOO BACK!!");
+            throw new TimeOver("Time Over");
         }
 
-        if( winner!= 0 || etat.isTerminal() || depth == MAX_DEPTH){
 
-            int deep_penality = (player != current_player) ? depth : 0-depth;
-            if(winner!=0){
-                int t = get_score_winner(winner,player,depth);
-               // System.out.println("WINNER :"+winner+"  result:"+t+"  player:"+player);
+        int winner = 0;
+        if (Math.abs(lastScore + 10000) > 50000) {
+            winner = (lastScore < 0) ? opponent : currentPlayer;
+        }
 
-              //  closelist.put(etat,t);
+        if (winner != 0 || etat.isTerminal() || depth == MAX_DEPTH) {
 
-                return new int[] {-1, t};
+            int deepPenality = (player != currentPlayer) ? depth : 0 - depth;
+            if (winner != 0) {
+                int t = getScoreWinner(winner, player, depth);
+                //  closelist.put(etat,t);
+                return new int[]{-1, t};
             }
+            int score = lastScore;
 
-     /*       int score_opponent = etat.evaluate3(opponent);
-            int score_player = etat.evaluate3(current_player);*/
-            int score= last_score; //score_player - score_opponent;
-           // System.out.println(" score :"+score);
-            /*if(last_player == opponent){
-                score = 0 -score;
-            }*/
-
-            //closelist.put(etat,last_score);
-
-            return new int[] {-1,score +deep_penality} ;
+            return new int[]{-1, score + deepPenality};
         }
 
 
         PriorityQueue<Move> nextMoves = etat.getNextMoves(player);
         int bestScore;
-        int currentScore;
-        int bestMove = (player == current_player)? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        Integer currentScore = null;
+        int bestMove = (player == currentPlayer) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
 
-        /*if(nextMoves.isEmpty() || depth == 0){
-            bestScore = evaluer(grid1);
-            return  new int[] {bestMove,bestScore};
-        }*/
         int test = 0;
-        while (!nextMoves.isEmpty()){
+        while (!nextMoves.isEmpty()) {
 
             Move move = nextMoves.poll();
 
 
 
 
-            if(test == 25){
+/*
+            if(test == 40){
                 break;
             }
             test++;
-
-
+*/
 
 
             Etat next_step = etat.clone();
@@ -123,41 +112,44 @@ public class MinMax {
             next_step.score = move.score;
 
 
-            if(player == current_player ){
+            if (player == currentPlayer) {
                 nbMAX++;
-                currentScore = minmax(next_step,depth+1, opponent, alpha,beta,move.score)[1];
-
-                if(bestMove == Integer.MIN_VALUE){
+                Object receive = minmax(next_step, depth + 1, opponent, alpha, beta, move.score)[1];
+                if (receive == null) return null;
+                currentScore = (Integer) receive;
+                if (bestMove == Integer.MIN_VALUE) {
                     bestMove = move.move;
                     alpha = currentScore;
                 }
 
-                if(currentScore > alpha){
+                if (currentScore > alpha) {
                     alpha = currentScore;
                     bestMove = move.move;
                 }
-                if(alpha >= beta){
-                    closelist.put(next_step,new int[]{bestMove,alpha});
-                    return new int[] {bestMove, alpha};
+                if (alpha >= beta) {
+                    closelist.put(next_step, new int[]{bestMove, alpha});
+                    return new int[]{bestMove, alpha};
                 }
 
 
-            }else {
+            } else {
                 nbMIN++;
-                currentScore = minmax(next_step,depth+1,current_player,alpha,beta,move.score)[1];
-                if(bestMove == Integer.MAX_VALUE){
+                Object receive = minmax(next_step, depth + 1, currentPlayer, alpha, beta, move.score)[1];
+                if (receive == null) return null;
+                currentScore = (Integer) receive;
+                if (bestMove == Integer.MAX_VALUE) {
                     bestMove = move.move;
                     beta = currentScore;
                 }
-                if(currentScore < beta){
+                if (currentScore < beta) {
                     beta = currentScore;
                     bestMove = move.move;
 
                 }
-                if(beta <= alpha){
+                if (beta <= alpha) {
 
-                    closelist.put(next_step,new int[]{bestMove,beta});
-                    return new int[] {bestMove, beta};
+                    closelist.put(next_step, new int[]{bestMove, beta});
+                    return new int[]{bestMove, beta};
                 }
 
 
@@ -165,24 +157,23 @@ public class MinMax {
             // reset la case?
         }
 
-        return new int[] {bestMove, ((player == current_player)? alpha: beta)};
+        return new int[]{bestMove, ((player == currentPlayer) ? alpha : beta)};
 
     }
 
 
-
-    private static int evaluer(Etat e,int turn){
+    private static int evaluer (Etat e, int turn) {
 
 
         int winner = e.evaluate();
 
-        if(winner !=0){
-            if(turn == current_player){
+        if (winner != 0) {
+            if (turn == currentPlayer) {
                 return winner;
-            }else if(turn != current_player){
-                return 0-winner;
+            } else if (turn != currentPlayer) {
+                return 0 - winner;
             }
-            
+
         }
         return 0;
 
@@ -195,7 +186,7 @@ public class MinMax {
                 return eval;
             }
         }else{
-            int opposed = (turn == current_player)? opponent : current_player;
+            int opposed = (turn == currentPlayer)? opponent : currentPlayer;
             eval = grid.evaluate(opposed);
             if( opposed== opponent) {
                 return 0- eval;
@@ -207,26 +198,25 @@ public class MinMax {
 
     }
 
-    private static int get_score_winner(int winner, int turn, int depth){
+    private static int getScoreWinner (int winner, int turn, int depth) {
 
-        int opponnent_turn = (turn==1)? 2:1;
 
-        if(winner == opponent){
-            return (0-GLOBAL.WIN) + depth;
-        }else {
+        if (winner == opponent) {
+            return (0 - GLOBAL.WIN) + depth;
+        } else {
             return GLOBAL.WIN - depth;
         }
 
 
     }
 
-    private static List<Integer> getPossibleMove(Grille g){
+    private static List<Integer> getPossibleMove (Grille g) {
         List<Integer> moves = new ArrayList<Integer>();
 
-        for(int l=0;l<g.getData().length;l++)
-            for(int c=0;c<nbcol;c++)
-                if(g.getData()[l][c]==0)
-                    moves.add(l*nbcol+c);
+        for (int l = 0; l < g.getData().length; l++)
+            for (int c = 0; c < nbcol; c++)
+                if (g.getData()[l][c] == 0)
+                    moves.add(l * nbcol + c);
 
 
         return moves;

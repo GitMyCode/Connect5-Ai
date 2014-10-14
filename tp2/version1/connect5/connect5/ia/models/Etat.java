@@ -395,7 +395,7 @@ public class Etat {
     }
 
     public String toStringOneDim(byte[] data){
-        char[] table = {'0', 'N', 'B' };
+        char[] table = {'-', 'N', 'B' };
         String result = "" + nbligne + " " + nbcol+ "\n";
 
         int i=1;
