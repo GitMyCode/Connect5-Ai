@@ -11,43 +11,43 @@ public enum Dir {
     DOWN{
         @Override public Dir opp() { return TOP; }
         @Override public int v() { return GLOBAL.NBCOL; }
-        @Override public boolean boundaries5(int index) { return checkBounderies(EnumSet.of(Cardinal.SUD),index); }
+        @Override public boolean boundaries (int index, int limit) { return checkBounderies(EnumSet.of(Cardinal.SUD),index, limit); }
     },
     TOP{
         @Override public Dir opp() { return DOWN; }
         @Override public int v() { return 0-DOWN.v(); }
-        @Override public boolean boundaries5(int index) { return checkBounderies(EnumSet.of(Cardinal.NORD),index); }
+        @Override public boolean boundaries (int index, int limit) { return checkBounderies(EnumSet.of(Cardinal.NORD),index,limit); }
     },
 
     LEFT{
         @Override public Dir opp() { return RIGHT; }  @Override public int v() { return -1; }
-        @Override public boolean boundaries5(int index) { return checkBounderies(EnumSet.of(Cardinal.OUEST),index); }
+        @Override public boolean boundaries (int index,int limit) { return checkBounderies(EnumSet.of(Cardinal.OUEST),index,limit); }
     },
     RIGHT(){
         @Override public Dir opp() { return LEFT; }
         @Override public int v() { return 1; }
-        @Override public boolean boundaries5(int index) { return checkBounderies(EnumSet.of(Cardinal.EST),index); }
+        @Override public boolean boundaries (int index,int limit) { return checkBounderies(EnumSet.of(Cardinal.EST),index,limit); }
     },
 
     DOWNLEFT(){
         @Override public Dir opp() { return TOPRIGHT; }
         @Override public int v() { return DOWN.v() + LEFT.v(); }
-        @Override public boolean boundaries5(int index) { return DOWN.boundaries5(index) && LEFT.boundaries5(index); }
+        @Override public boolean boundaries (int index, int limit) { return DOWN.boundaries(index,limit) && LEFT.boundaries(index, limit); }
     },
     TOPLEFT(Cardinal.OUEST){
         @Override public Dir opp() { return DOWNRIGHT; }
         @Override public int v() { return TOP.v() + LEFT.v(); }
-        @Override public boolean boundaries5(int index) { return TOP.boundaries5(index)&& LEFT.boundaries5(index); }
+        @Override public boolean boundaries (int index, int limit) { return TOP.boundaries(index, limit)&& LEFT.boundaries(index, limit); }
     },
     DOWNRIGHT(Cardinal.EST){
         @Override public Dir opp() { return TOPLEFT; }
         @Override public int v() { return DOWN.v() + RIGHT.v(); }
-        @Override public boolean boundaries5(int index) { return DOWN.boundaries5(index)&&RIGHT.boundaries5(index); }
+        @Override public boolean boundaries (int index, int limit) { return DOWN.boundaries(index,limit)&&RIGHT.boundaries(index,limit); }
     },
     TOPRIGHT(Cardinal.EST){
         @Override public Dir opp() { return DOWNLEFT; }
         @Override public int v() { return TOP.v() + RIGHT.v(); }
-        @Override public boolean boundaries5(int index) { return TOP.boundaries5(index)&& RIGHT.boundaries5(index); }
+        @Override public boolean boundaries (int index, int limit) { return TOP.boundaries(index,limit)&& RIGHT.boundaries(index, limit); }
     };
 
 
@@ -80,7 +80,7 @@ public enum Dir {
 
     abstract public int v();
     abstract public Dir opp();
-    abstract public boolean boundaries5(int index);
+    abstract public boolean boundaries (int index,int limit);
 
     public int v(int step){
         return this.v() * step;
@@ -99,9 +99,9 @@ public enum Dir {
         return true;
     }
 
-    private static boolean checkBounderies(Set<Cardinal> cardinaux,int index){
+    private static boolean checkBounderies(Set<Cardinal> cardinaux,int index, int limit){
         for(Cardinal c: cardinaux){
-            if(! c.valid(index)){
+            if(! c.validLimit(index, limit)){
                 return false;
             }
         }
@@ -115,33 +115,34 @@ public enum Dir {
 
     public enum Cardinal{
         NORD{
-            @Override boolean valid(int index) {
+            @Override boolean validLimit (int index, int limit) {
 
-                return  (index + TOP.v()*4) >=0;
+                return  (index + TOP.v()* (limit-1)) >=0;
             }
         },
         SUD{
-            @Override boolean valid(int index) {
+            @Override boolean validLimit (int index, int limit) {
                 int length = GLOBAL.NBCOL * GLOBAL.NBLIGNE;
-                return (index+ DOWN.v()*4) < length;
+                return (index+ DOWN.v()* (limit-1)) < length;
             }
         },
          OUEST{
             @Override
-            boolean valid(int index) {
-                if(!(((index%GLOBAL.NBCOL)+1)  >=5)){ return false; }
+            boolean validLimit (int index, int limit) {
+                if(!(((index%GLOBAL.NBCOL)+1)  >= limit)){ return false; }
                 return true;
             }
         },
         EST{
             @Override
-            boolean valid(int index) {
-                if(!((GLOBAL.NBCOL - (index%GLOBAL.NBCOL))  >=5)){ return false; }
+            boolean validLimit (int index, int limit) {
+                if(!((GLOBAL.NBCOL - (index%GLOBAL.NBCOL))  >= limit)){ return false; }
                 return true;
             }
         };
 
-        abstract boolean valid(int index);
+        /*Check if we can get a sequence of 'limit' from the point of the index */
+        abstract boolean validLimit (int index, int limit);
 
     }
 

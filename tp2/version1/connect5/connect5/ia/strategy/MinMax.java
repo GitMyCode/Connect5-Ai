@@ -26,9 +26,12 @@ public class MinMax {
     static int nbMIN;
     static int nbSaveInCloseList;
 
+    static int alpha = Integer.MIN_VALUE;
+    static int beta = Integer.MAX_VALUE;
+
 
     //static Map<Etat, int[]> closelist = new HashMap<Etat, int[]>();
-    static HashSet<Etat> closelist = new HashSet<Etat>();
+    static HashMap<Etat,Integer> closelist = new HashMap<Etat, Integer>();
 
     public static Integer getMove (Etat etatInitial, int playerColor, int deep) throws Exception {
         MAX_DEPTH = deep;
@@ -43,11 +46,8 @@ public class MinMax {
 
         long time = System.currentTimeMillis();
 
-        System.out.println(" TRY TO MAX :" + currentPlayer + " AND MIN :" + opponent);
+        System.out.println(" TRY TO MAX :" + currentPlayer + " AND MIN :" + opponent + "    DEEP: "+ deep);
         int[] play = minmax(etatInitial, 0, currentPlayer, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
-        if (play == null) {
-            return null;
-        }
 
         System.out.println("score :" + play[1] + " play :(" + play[0] / nbcol + "," + play[0] % nbcol + ") ---- nbMAX: " + nbMAX + " - nbMIN: " + nbMIN);
         System.out.println("TIME: " + (System.currentTimeMillis() - time) + " ms");
@@ -60,7 +60,7 @@ public class MinMax {
 
     public static int[] minmax (Etat etat, int depth, int player, int alpha, int beta, int lastScore) throws Exception {
 
-        if (GLOBAL.timeRemaining() < 100) {
+        if (GLOBAL.timeUp()) {
             System.out.println("GOOOO BACK!!");
             throw new TimeOver("Time Over");
         }
@@ -104,24 +104,10 @@ public class MinMax {
 
             next_step.score = move.score;
 
-            if(closelist.contains(next_step)){
-                nbSaveInCloseList++;
-                continue;
-            }
-            closelist.add(next_step);
-
-
-            if(test == 32){
-                break;
-            }
-            test++;
-
 
             if (player == currentPlayer) {
                 nbMAX++;
-                Object receive = minmax(next_step, depth + 1, opponent, alpha, beta, move.score)[1];
-                if (receive == null) return null;
-                currentScore = (Integer) receive;
+                currentScore = minmax(next_step, depth + 1, opponent, alpha, beta, move.score)[1];
                 if (bestMove == Integer.MIN_VALUE) {
                     bestMove = move.move;
                     alpha = currentScore;
@@ -133,15 +119,15 @@ public class MinMax {
                 }
                 if (alpha >= beta) {
                     //closelist.put(next_step, new int[]{bestMove, alpha});
-                    return new int[]{bestMove, alpha};
+                    break;
+                    //return new int[] {bestMove, alpha};
+                    //return new int[]{-1, Integer.MAX_VALUE};
                 }
 
 
             } else {
                 nbMIN++;
-                Object receive = minmax(next_step, depth + 1, currentPlayer, alpha, beta, move.score)[1];
-                if (receive == null) return null;
-                currentScore = (Integer) receive;
+                currentScore = minmax(next_step, depth + 1, currentPlayer, alpha, beta, move.score)[1];
                 if (bestMove == Integer.MAX_VALUE) {
                     bestMove = move.move;
                     beta = currentScore;
@@ -151,10 +137,13 @@ public class MinMax {
                     bestMove = move.move;
 
                 }
-                if (beta <= alpha) {
+                if (alpha >= beta) {
 
+                    break;
                     //closelist.put(next_step, new int[]{bestMove, beta});
-                    return new int[]{bestMove, beta};
+                    //return new int[] {bestMove, beta};
+                    //return new int[]{-1, Integer.MIN_VALUE};
+
                 }
 
 
@@ -162,46 +151,26 @@ public class MinMax {
             // reset la case?
         }
 
+        closelist.put(etat,0);
+
         return new int[]{bestMove, ((player == currentPlayer) ? alpha : beta)};
 
     }
 
 
-    private static int evaluer (Etat e, int turn) {
+    private class Key {
+        Etat etat;
+        boolean isLowerBound= false;
+        int score;
 
-
-        int winner = e.evaluate();
-
-        if (winner != 0) {
-            if (turn == currentPlayer) {
-                return winner;
-            } else if (turn != currentPlayer) {
-                return 0 - winner;
-            }
-
+        public Key(Etat e,Integer score){
+            etat = e;
+            this.score = score;
         }
-        return 0;
-
-/*
-        int eval = grid.evaluate(turn);
-        if(eval != 0){
-            if(turn == opponent) {
-                return 0 - eval;
-            }else {
-                return eval;
-            }
-        }else{
-            int opposed = (turn == currentPlayer)? opponent : currentPlayer;
-            eval = grid.evaluate(opposed);
-            if( opposed== opponent) {
-                return 0- eval;
-            }else {
-                return eval;
-            }
-        }
-*/
 
     }
+
+
 
     private static int getScoreWinner (int winner, int turn, int depth) {
 

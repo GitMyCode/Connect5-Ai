@@ -7,7 +7,9 @@ import connect5.Joueur;
 import connect5.Position;
 import connect5.ia.models.*;
 import connect5.ia.strategy.MinMax;
+import connect5.ia.strategy.NegaScout;
 
+import java.awt.image.LookupTable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -76,18 +78,24 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
 
 
-
-
-        byte[][] firstCut = cutGrid(grille);
-        byte[] finalCut = oneDimentionalArray(firstCut);
-        System.out.println(toStringOneDimWithCol(finalCut,firstCut[0].length,firstCut.length));
-        GLOBAL.NBCOL = firstCut[0].length;
-        GLOBAL.NBLIGNE = firstCut.length;
+        byte[] myGrid;
+        if(grille.getSize() > 81){
+            byte[][] firstCut = cutGrid(grille);
+            byte[] finalCut = oneDimentionalArray(firstCut);
+            System.out.println(toStringOneDimWithCol(finalCut,firstCut[0].length,firstCut.length));
+            GLOBAL.NBCOL = firstCut[0].length;
+            GLOBAL.NBLIGNE = firstCut.length;
+            myGrid = finalCut;
+        }else {
+            myGrid = oneDimentionalArray(grille.getData());
+            GLOBAL.NBCOL = GLOBAL.FULL_NBCOL;
+            GLOBAL.NBLIGNE = GLOBAL.FULL_NBLIGNE;
+        }
 
 
 
         /*INIT ETAT*/
-        Etat init = new Etat(finalCut,player,opponent);
+        Etat init = new Etat(myGrid,player,opponent);
         init.setChecker(checker);
         Direction.init_map(nbcol);
 
@@ -119,16 +127,14 @@ public class JoueurArtificiel implements Joueur, Runnable {
         System.out.println("AI : JOUEUR "+player);
 
 
-
-
         int deep =2;
         List<Integer> moves = new ArrayList<Integer>();
         moves.add(MAXcheckWinMove.move);
         System.out.println(GLOBAL.showTimeRemain());
         boolean stoped = false;
-        while (GLOBAL.timeRemaining() > 200 && !stoped){
+        while (!GLOBAL.timeUp() && !stoped){
             try {
-                Integer res = MinMax.getMove(init,player,deep);
+                Integer res = MinMax.getMove(init, player, deep);
                 if(res != null){
                     moves.add(res);
                     deep += 2;
@@ -233,24 +239,36 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
 
 
-        int extendBufferX= 3;
-        int extendBufferY= 3;
-
-        bufferX = extendBufferX;
-        bufferY = extendBufferY;
         lowestX = lx[0];
         lowestY = ly[1];
+        int highestX= hx[0];
+        int highestY = hy[1];
 
 
 
         int cutedNoBuffX = (hx[0] - lx[0] +1);
         int cutedNoBuffY = (hy[1] - ly[1] +1);
 
+
+        int extendBufferX= (cutedNoBuffX > 5)? 3:3;
+        int extendBufferY= (cutedNoBuffY > 5)? 3:3;
+
+
+
+
+
         int extendedX = (cutedNoBuffX) + (extendBufferX*2);
         int extendedY = (cutedNoBuffY) + (extendBufferY*2);
 
-        int right_buffer = ((extendBufferY ) > GLOBAL.FULL_NBCOL - lowestY)? GLOBAL.FULL_NBCOL-lowestY : (extendBufferY );
-        int left_buffer  = (lowestY - extendBufferY > 0)? extendBufferY : extendBufferY- lowestY;
+        int leftBuffer  = (lowestY - extendBufferY > 0)? extendBufferY : lowestY;
+        int rightBuffer = ((extendBufferY ) > GLOBAL.FULL_NBCOL - (highestY+1))? GLOBAL.FULL_NBCOL-(highestY+1) : (extendBufferY );
+        int topBuffer  =  (lowestX - extendBufferX > 0)? extendBufferX : lowestX;
+        int downBuffer =  (  extendBufferX >(GLOBAL.FULL_NBLIGNE - (highestX+1))  )? GLOBAL.FULL_NBLIGNE- (highestX+1) : extendBufferX ;
+
+
+        bufferY = leftBuffer;
+        bufferX = topBuffer;
+
 /*
         if(smallx >= GLOBAL.FULL_NBLIGNE){
             smallx = GLOBAL.FULL_NBLIGNE;
@@ -269,18 +287,20 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
 
 
-        int smallSizeX = extendedX + (hx[0] - lx[0] +1);
-        int smallSizeY = left_buffer + right_buffer + (hy[1] - ly[1] +1);
+        int smallSizeX = downBuffer + topBuffer + (hx[0] - lx[0] +1);
+        int smallSizeY = leftBuffer + rightBuffer + (hy[1] - ly[1] +1);
 
         /*TODO: remplacer par System.arrayCopy()*/
       /*  int x =  (((smallx - extendBufferX) +lx[0] ) > GLOBAL.FULL_NBLIGNE)? 0: lx[0];
         int y =  (((smally - extendBufferY) +ly[1] ) > GLOBAL.FULL_NBLIGNE)? 0: ly[1];*/
-        System.out.println("smallSizeY: "+smallSizeY);
+        System.out.println("smallSizeY: "+smallSizeY+"      smallSizeX: "+smallSizeX);
+        System.out.println("left_buffer: "+leftBuffer+"       rightBuffer: "+ rightBuffer);
+        System.out.println("topBuffer: "+topBuffer+"     downBuffer: "+downBuffer);
         byte[][] cpy = new byte[smallSizeX][smallSizeY];
         for(int i=0; i < cutedNoBuffX; i++){
             for(int j= 0 ; j < cutedNoBuffY; j++ ){
                 int t = data[lowestX +i][lowestY + j];
-                cpy[i+bufferX][j+left_buffer] = (byte)t;
+                cpy[i+topBuffer][j+leftBuffer] = (byte)t;
             }
         }
 
@@ -356,7 +376,7 @@ public class JoueurArtificiel implements Joueur, Runnable {
         init.setChecker(checker);
         Direction.init_map(nbcol);
 
-        return init.evaluate();
+        return init.evaluate(player);
 
     }
 

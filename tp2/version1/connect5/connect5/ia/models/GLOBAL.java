@@ -13,7 +13,9 @@ public abstract class GLOBAL {
 
 
 
+    public static final int ALMOST_WIN = Integer.MAX_VALUE/2;
     public static final int WIN = Integer.MAX_VALUE- 200;
+    public static final int LIMITE =50;
 
     public static long timer;
     public static long remain;
@@ -35,7 +37,32 @@ public abstract class GLOBAL {
         return remain-passed;
     }
 
+    public static boolean timeUp(){
+        if(timeRemaining() < LIMITE ){
+            return true;
+        }
+
+        return false;
+    }
 
 
+
+
+    public String toStringOneDim(byte[] data,int nbcol){
+        char[] table = {'-', 'N', 'B' };
+        String result =  nbcol+ "\n";
+
+        int i=1;
+        for(byte b : data){
+            char c = (char)b;
+            result += table[b];
+            if(i % nbcol ==0){
+                result += '\n';
+            }
+            i++;
+        }
+
+        return result;
+    }
 
 }

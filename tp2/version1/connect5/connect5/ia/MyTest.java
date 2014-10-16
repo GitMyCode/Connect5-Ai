@@ -1,5 +1,8 @@
-package connect5;
+package connect5.ia;
 
+import connect5.Grille;
+import connect5.Joueur;
+import connect5.Position;
 import connect5.ia.JoueurArtificiel;
 
 import java.util.HashMap;
@@ -45,22 +48,40 @@ public class MyTest {
                       "------------";
 
         //"132.208.137.66";
-      String f=  "-----------\n" +
-                "-----------\n" +
-                "-----------\n" +
-                "---NN------\n" +
-                "---NB------\n" +
-                "---N-B-----\n" +
-                "------B----\n" +
-                "-------B---\n" +
-                "-----------\n" +
-                "-----------\n" +
-                "-----------";
+      String f=
+              "" +
+                      "----------------" +
+                      "----------------" +
+                      "----------------" +
+                      "--------N-------" +
+                      "---B---NBBBBN---" +
+                      "-----N-BN-------" +
+                      "-----N--N-------" +
+                      "-----BNB--------" +
+                      "-----NBN--------" +
+                      "-----NBNB-------" +
+                      "----------------" +
+                      "------B---------" +
+                      "----------------" +
+                      "----------------" +
+                      "----------------";
 
-
+      String testMoreThan5=
+                "-------------\n" +
+                "-------------\n" +
+                "-------------\n" +
+                "-----N-B-----\n" +
+                "-----N-B-----\n" +
+                "-----N-B-----\n" +
+                "-------------\n" +
+                "-----N-B-----\n" +
+                "-----N-B-----\n" +
+                "-----N-------\n" +
+                "-------------";
         Map<Character,Byte> convert = new HashMap<Character,Byte>();
         convert.put('0',(byte)0);
         convert.put('_',(byte)0);
+        convert.put('-',(byte)0);
         convert.put('N',(byte)1);
         convert.put('B',(byte)2);
 
@@ -70,7 +91,7 @@ public class MyTest {
         int[] to_test = new int[nbcol * nbligne];
 
         for(int i=0; i< to_test.length; i++){
-            to_test[i] = convert.get(test2.charAt(i)) -1;
+            to_test[i] = convert.get(f.charAt(i)) -1;
         }
         return to_test;
     }
@@ -82,6 +103,7 @@ public class MyTest {
 
         // Test B1
         System.out.println("Test #1");
+        nbligne = 15; nbcol = 16;
         Grille g = new Grille(nbligne,nbcol,testByte());
         Position coup = joueur.getProchainCoup(g, 2000);
         System.out.println((coup.ligne==4 && coup.colonne==0) ? "Réussi": "Échoué");
