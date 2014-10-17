@@ -30,7 +30,7 @@ public class NegaScout {
 
         long time = System.currentTimeMillis();
 
-        System.out.println(" TRY TO MAX :" + currentPlayer + " AND MIN :" + opponent + "    DEEP: "+ deep);
+        //System.out.println(" TRY TO MAX :" + currentPlayer + " AND MIN :" + opponent + "    DEEP: "+ deep);
 
 
 

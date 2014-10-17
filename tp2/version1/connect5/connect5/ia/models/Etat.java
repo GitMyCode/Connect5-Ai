@@ -31,8 +31,12 @@ public class Etat {
 
     public byte[] one_dim;
     public int score;
-    public boolean isLowerBound=false;
+    public int bestMove;
+    public Integer lowerBound = null;
+    public Integer upperBound = null;
 
+    public LinkedList<Vector5> vector5MAX = new LinkedList<Vector5>();
+    public LinkedList<Vector5> vector5MIN = new LinkedList<Vector5>();
 
     public final int  WIN = 10000;
 
@@ -98,7 +102,15 @@ public class Etat {
 
     @Override
     public boolean equals(Object obj) {
+        if(this ==(Etat) obj){
+            return true;
+        }
+
         Etat etat_b = (Etat) obj;
+        if(one_dim.length != etat_b.one_dim.length ){
+            return false;
+        }
+
         for(int i=0;i< one_dim.length; i++){
             if(one_dim[i] != etat_b.one_dim[i]){
                 return false;
@@ -120,52 +132,6 @@ public class Etat {
 
         one_dim[move] = 0;
     }
-
-    public List<Integer> getEmptyMoves(int player){
-        List<Integer> moves = new ArrayList<Integer>();
-        int nbLibre =0;
-        for(int i=0; i< one_dim.length; i++){
-            if( one_dim[i] ==0 ){
-                nbLibre++;
-                moves.add(i);
-            }
-        }
-        return moves;
-    }
-
-
-    public PriorityQueue<Move> getNextMoves2(int player){
-        int nblibre =0;
-        for(byte b : one_dim){
-            if(b == 0){
-                nblibre++;
-            }
-        }
-
-
-
-        PriorityQueue<Move> ordered_move;
-        if(player == MIN_player) {
-            ordered_move = new PriorityQueue<Move>(nblibre,new CompareMIN());
-        }else{
-            ordered_move = new PriorityQueue<Move>(nblibre,new CompareMAX() );
-        }
-        for(int i =0; i< one_dim.length; i++){
-            if(one_dim[i] ==0){
-                play(i,player);
-                Move a_move =  new Move(i,evaluate4(player));
-                ordered_move.add(a_move);
-                unplay(i);
-
-
-            }
-
-        }
-
-
-        return ordered_move;
-    }
-
 
     public PriorityQueue<Move> getNextMoves(int player_to_max){
 
@@ -228,6 +194,8 @@ public class Etat {
         return ordered_move;
     }
 
+
+
     public class CompareMAX implements Comparator<Move>{
         @Override
         public int compare(Move o1, Move o2) {
@@ -265,34 +233,8 @@ public class Etat {
 
     public int evaluate(int player){
 
-
-/*
-        int max_res = evaluate4(MAX_player);
-        int min_res = evaluate4(MIN_player);
-        if(max_res == GLOBAL.WIN){
-            return GLOBAL.WIN;
-        }else if(min_res == GLOBAL.WIN){
-            return 0-GLOBAL.WIN;
-        }
-*/
-
         return evaluate5(player);
-/*        //int r = checker.determineGagnant(grille);
-        result = checker.determineGagnant(grille); // winner();
-*//*
-        if(r != result){
-            System.out.println("nope pas pret   anwawer: "+r+"  mine: "+result);
-            System.out.println(toStringOneDim(one_dim));
-            System.out.println("--------------------");
-            System.out.println(grille.toString());
-        }*//*
 
-        if(result ==0){
-            result = evaluate2(player);
-        }else{
-            result = WIN;
-        }
-        return result;*/
     }
 
     public int checkWinner(){
@@ -361,7 +303,7 @@ public class Etat {
         for(Vector5 v : all){
             if(v.value > 0){
                 System.out.println("---- value: "+v.value+ "   bi: "+v.bidirectionnel+"         ----");
-                System.out.println(toStringVector(one_dim,v.tab_seq));
+              //  System.out.println(toStringVector(one_dim,v.tab_seq));
             }
 
         }
@@ -374,6 +316,9 @@ public class Etat {
         Vector5[][] memo = new Vector5[AXES][one_dim.length];
         ArrayList<Vector5> allVectorMax = new ArrayList<Vector5>();
         ArrayList<Vector5> allVectorOpponent = new ArrayList<Vector5>();
+
+        boolean playe1Won =false;
+        boolean player2Won =false;
 
         for(int i =0; i< one_dim.length; i++){
             for(Dir D : Dir.direction4){
@@ -429,13 +374,18 @@ public class Etat {
                                     old_ref = memo[axe.i][i + D.v(v)];
                                     if(old_ref != null && !old_ref.moreThan5){
                                         old_ref.value--;
-                                        memo[axe.i][i + D.v(v)] = new_vector;
                                     }
+                                    memo[axe.i][i + D.v(v)] = new_vector;
                                 }
                             }
                             continue;
                         }else{
-                            return (res == MAX_player)? GLOBAL.WIN : 0- GLOBAL.WIN;
+                            if(res == 1){
+                                playe1Won = true;
+                            }else {
+                                player2Won = true;
+                            }
+                            //return (res == MAX_player)? GLOBAL.WIN : 0- GLOBAL.WIN;
                         }
 
 
@@ -473,11 +423,13 @@ public class Etat {
                     }
 
                     /*Just for printing when debugging*/
+/*
                     new_vector.tab_seq[0] = i + D.v(0);
                     new_vector.tab_seq[1] = i + D.v(1);
                     new_vector.tab_seq[2] = i + D.v(2);
                     new_vector.tab_seq[3] = i + D.v(3);
                     new_vector.tab_seq[4] = i + D.v(4);
+*/
 
 
                     if(new_vector.value >0){
@@ -492,20 +444,23 @@ public class Etat {
         }
 
 
-        HashMap<Integer,Vector5> mapMAX = new HashMap<Integer, Vector5>();
-        HashMap<Integer,Vector5> mapMIN = new HashMap<Integer, Vector5>();
 
+        if(playe1Won && player==1 && !player2Won){
+            return (MAX_player == 1)? GLOBAL.WIN: -GLOBAL.WIN;
+        }
+
+        if(player2Won && player==2 && !playe1Won){
+            return (MAX_player == 2)? GLOBAL.WIN: -GLOBAL.WIN;
+        }
         int higthestMAX =0;
+
         for(Vector5 s: allVectorMax){
             if(false){ // special case for win
                 return GLOBAL.WIN;
                 //evaluation += WIN;
             }else {
                 int value = (s.bidirectionnel)? s.value+1 : s.value;
-
-                mapMAX.put(value,s);
                 evaluation += Math.pow(value,4);
-
                 higthestMAX = (value > higthestMAX && s.isCorded)? value : higthestMAX;
 
             }
@@ -516,21 +471,22 @@ public class Etat {
                 return GLOBAL.WIN;
                 //evaluation += WIN;
             }else {
-                 int value = (s.bidirectionnel)? s.value+1 : s.value;
-
-                mapMIN.put(value, s);
+                int value = (s.bidirectionnel)? s.value+1 : s.value;
                 evaluation -= Math.pow(value,4);
-
                 higthestMIN = (value > higthestMIN && s.isCorded)? value : higthestMIN;
             }
         }
 
-
         /* This check is for the situation when we are sure to win */
         if(((one_dim.length-1) - getNblibre()) % 2 ==0 && player ==1){ // Au tour du joueur 2 a jouer apres
 
+
             int maxScore = (MAX_player == 2)? higthestMAX : higthestMIN;
             int oppScore = (MAX_player == 2)? higthestMIN : higthestMAX;
+
+            if(player2Won){
+                return (MAX_player == 2)? GLOBAL.WIN: -GLOBAL.WIN;
+            }
 
             if(maxScore > 3 && maxScore >= oppScore){
                 return (MAX_player == 2)? GLOBAL.ALMOST_WIN + evaluation  : -GLOBAL.ALMOST_WIN +evaluation;
@@ -539,6 +495,10 @@ public class Etat {
         }else if( ((one_dim.length-1)- getNblibre()) % 2 == 1 && player == 2 ){ // Si au tour du joueur 1 apres
             int maxScore = (MAX_player == 1)? higthestMAX : higthestMIN;
             int oppScore = (MAX_player == 1)? higthestMIN : higthestMAX;
+
+            if(playe1Won){
+                return (MAX_player ==1)? GLOBAL.WIN : -GLOBAL.WIN;
+            }
 
             if(maxScore > 3 &&  maxScore >= oppScore){
                 return (MAX_player == 1)? GLOBAL.ALMOST_WIN + evaluation : -GLOBAL.ALMOST_WIN + evaluation;
@@ -669,11 +629,13 @@ public class Etat {
 
                     }
 
+/*
                     new_vector.tab_seq[0] = i + D.v(0);
                     new_vector.tab_seq[1] = i + D.v(1);
                     new_vector.tab_seq[2] = i + D.v(2);
                     new_vector.tab_seq[3] = i + D.v(3);
                     new_vector.tab_seq[4] = i + D.v(4);
+*/
 
 
                     if(new_vector.value >0){
@@ -747,7 +709,7 @@ public class Etat {
         public int valueBirdirection;
         public boolean bidirectionnel = false;
         public Dir Direction;
-        public int[] tab_seq = new int[5];
+        //public int[] tab_seq = new int[5];
 
     }
 

@@ -104,7 +104,9 @@ public class JoueurArtificiel implements Joueur, Runnable {
         //int testeval = init.evaluate();
 
 
-        Move MAXcheckWinMove = init.getNextMoves(player).peek();
+        PriorityQueue<Move>  pq = init.getNextMoves(player);
+
+        Move MAXcheckWinMove =  pq.poll();
         if(MAXcheckWinMove.score == GLOBAL.WIN){
 
             System.out.println("Try WIN: ("+(MAXcheckWinMove.move/GLOBAL.NBCOL)+","+(MAXcheckWinMove.move%GLOBAL.NBCOL)+")");
@@ -120,6 +122,21 @@ public class JoueurArtificiel implements Joueur, Runnable {
             return new Position(choix_converted/GLOBAL.FULL_NBCOL,choix_converted%GLOBAL.FULL_NBCOL);
         }
 
+        /*int bestScoreSoFar = Integer.MIN_VALUE;
+        Move best = MAXcheckWinMove;
+        while (!pq.isEmpty()){
+            Move m = pq.poll();
+            init.play(m.move,player);
+            PriorityQueue<Move> opp =init.getNextMoves(opponent);
+            Move oppMove =  opp.poll();
+            if(oppMove.score > bestScoreSoFar){
+                best = m;
+                bestScoreSoFar = oppMove.score;
+            }
+            init.unplay(m.move);
+        }*/
+
+
 
 
 
@@ -127,19 +144,20 @@ public class JoueurArtificiel implements Joueur, Runnable {
         System.out.println("AI : JOUEUR "+player);
 
 
-        int deep =2;
+        int deep = 2;
         List<Integer> moves = new ArrayList<Integer>();
         moves.add(MAXcheckWinMove.move);
         System.out.println(GLOBAL.showTimeRemain());
+        System.out.println(" TRY TO MAX :" + player + " AND MIN :" + opponent );
+
+        int[] res = null;
         boolean stoped = false;
         while (!GLOBAL.timeUp() && !stoped){
             try {
-                Integer res = MinMax.getMove(init, player, deep);
-                if(res != null){
-                    moves.add(res);
-                    deep += 2;
-                    System.out.println(GLOBAL.showTimeRemain() + "   next deep:"+(deep));
-                }
+                res = MinMax.getMove(init, player, deep);
+                deep += 2;
+                if (res !=null)
+                    moves.add(res[0]);
             }catch (Exception e){
                 if(e.getClass() == TimeOver.class){
                     System.out.println(e);
@@ -147,13 +165,24 @@ public class JoueurArtificiel implements Joueur, Runnable {
                 }
 
             }
-
-
         }
+
+        int choix = moves.get(moves.size()-1);
+        if(res != null){
+            System.out.println("----------------------------- LAST DEPTH : "+GLOBAL.LAST_DEPTH);
+            System.out.println("score :" + res[1] + " play :(" + res[0] / GLOBAL.NBCOL + "," + res[0] % GLOBAL.NBCOL + ")");
+            init.play(res[0], player);
+            System.out.println(init.toStringOneDim(init.one_dim));
+            init.unplay(res[0]);
+        }else {
+            System.out.println("score :" + MAXcheckWinMove.score + " play :(" + choix / GLOBAL.NBCOL + "," + choix% GLOBAL.NBCOL + ")");
+        }
+
+
+
 
         //System.out.println(grille.toString());
         //choix = casesvides.get(choix);
-        int choix = moves.get(moves.size()-1);
         int choix_converted = getMoveCutedGridToFullGrid(choix);
         return new Position(choix_converted/GLOBAL.FULL_NBCOL,choix_converted%GLOBAL.FULL_NBCOL);
     }
@@ -250,8 +279,8 @@ public class JoueurArtificiel implements Joueur, Runnable {
         int cutedNoBuffY = (hy[1] - ly[1] +1);
 
 
-        int extendBufferX= (cutedNoBuffX > 5)? 3:3;
-        int extendBufferY= (cutedNoBuffY > 5)? 3:3;
+        int extendBufferX= (cutedNoBuffX > 5)? 2:3;
+        int extendBufferY= (cutedNoBuffY > 5)? 2:3;
 
 
 

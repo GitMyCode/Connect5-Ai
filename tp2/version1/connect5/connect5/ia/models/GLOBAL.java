@@ -10,6 +10,7 @@ public abstract class GLOBAL {
 
     public static int FULL_NBCOL;
     public static int FULL_NBLIGNE;
+    public static int LAST_DEPTH;
 
 
 

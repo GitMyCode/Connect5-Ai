@@ -29,11 +29,12 @@ public class MinMax {
     static int alpha = Integer.MIN_VALUE;
     static int beta = Integer.MAX_VALUE;
 
+    static boolean activateLookUp = false;
 
     //static Map<Etat, int[]> closelist = new HashMap<Etat, int[]>();
-    static HashMap<Etat,Integer> closelist = new HashMap<Etat, Integer>();
+    static HashMap<Etat,Etat> closelist = new HashMap<Etat, Etat>();
 
-    public static Integer getMove (Etat etatInitial, int playerColor, int deep) throws Exception {
+    public static int[] getMove (Etat etatInitial, int playerColor, int deep) throws Exception {
         MAX_DEPTH = deep;
         nbcol = GLOBAL.NBCOL;
         opponent = (playerColor == 1) ? 2 : 1;
@@ -41,21 +42,21 @@ public class MinMax {
         nbMAX = 0;
         nbMIN = 0;
         nbSaveInCloseList =0;
-        closelist.clear();
+        closelist = new HashMap<Etat, Etat>();
 
 
         long time = System.currentTimeMillis();
+        if(deep > 2){
+            activateLookUp = true;
+        }else{
+            activateLookUp = false;
+        }
 
-        System.out.println(" TRY TO MAX :" + currentPlayer + " AND MIN :" + opponent + "    DEEP: "+ deep);
         int[] play = minmax(etatInitial, 0, currentPlayer, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
+        System.out.println(" NB_SAVE :"+nbSaveInCloseList);
+        GLOBAL.LAST_DEPTH = deep;
 
-        System.out.println("score :" + play[1] + " play :(" + play[0] / nbcol + "," + play[0] % nbcol + ") ---- nbMAX: " + nbMAX + " - nbMIN: " + nbMIN);
-        System.out.println("TIME: " + (System.currentTimeMillis() - time) + " ms");
-        System.out.println("Closelist size: " + closelist.size() + "  nbSave: "+nbSaveInCloseList);
-        etatInitial.play(play[0], currentPlayer);
-        System.out.println(etatInitial.toStringOneDim(etatInitial.one_dim));
-        etatInitial.unplay(play[0]);
-        return play[0];
+        return play;
     }
 
     public static int[] minmax (Etat etat, int depth, int player, int alpha, int beta, int lastScore) throws Exception {
@@ -65,9 +66,31 @@ public class MinMax {
             throw new TimeOver("Time Over");
         }
 
+        if(activateLookUp){
+            if(closelist.containsKey(etat)){
+                Etat ref = closelist.get(etat);
+                nbSaveInCloseList++;
+
+                if(ref.lowerBound !=null && ref.lowerBound >= beta){
+                    return new int[] {-1, ref.lowerBound};
+                }
+                if(ref.upperBound !=null && ref.upperBound <= alpha){
+                    return new int[] {-1, ref.upperBound};
+                }
+                if(ref.lowerBound !=null){
+                    alpha = Math.max(alpha,ref.lowerBound);
+                }
+                if(ref.upperBound !=null){
+                    beta = Math.min(beta, ref.upperBound);
+                }
+
+
+            }
+
+        }
 
         int winner = 0;
-        if (Math.abs(lastScore + 10000) > 50000) {
+        if (Math.abs(lastScore+ 1000) > GLOBAL.ALMOST_WIN+40000) {
             winner = (lastScore < 0) ? opponent : currentPlayer;
         }
 
@@ -90,70 +113,67 @@ public class MinMax {
         Integer currentScore = null;
         int bestMove = (player == currentPlayer) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
 
-        int test = 0;
+
+        int a = alpha; // Pour garder alpha intact
+        int b = beta; // Pour garder beta intact
         while (!nextMoves.isEmpty()) {
-
             Move move = nextMoves.poll();
-
-
-
-
             Etat next_step = etat.clone();
             next_step.play(move.move, player);
-
-
-            next_step.score = move.score;
+            next_step.score = move.score; // garder l'évaluation dans l'Etat
 
 
             if (player == currentPlayer) {
                 nbMAX++;
-                currentScore = minmax(next_step, depth + 1, opponent, alpha, beta, move.score)[1];
+
+                currentScore = minmax(next_step, depth + 1, opponent, a, beta, move.score)[1];
                 if (bestMove == Integer.MIN_VALUE) {
                     bestMove = move.move;
-                    alpha = currentScore;
+                    a = currentScore;
                 }
 
-                if (currentScore > alpha) {
-                    alpha = currentScore;
+                if (currentScore > a) {
+                    a = currentScore;
                     bestMove = move.move;
                 }
-                if (alpha >= beta) {
-                    //closelist.put(next_step, new int[]{bestMove, alpha});
+                if (a >= beta) {
                     break;
-                    //return new int[] {bestMove, alpha};
-                    //return new int[]{-1, Integer.MAX_VALUE};
                 }
 
 
             } else {
                 nbMIN++;
-                currentScore = minmax(next_step, depth + 1, currentPlayer, alpha, beta, move.score)[1];
+                currentScore = minmax(next_step, depth + 1, currentPlayer, alpha, b, move.score)[1];
                 if (bestMove == Integer.MAX_VALUE) {
                     bestMove = move.move;
-                    beta = currentScore;
+                    b = currentScore;
                 }
-                if (currentScore < beta) {
-                    beta = currentScore;
+                if (currentScore < b) {
+                    b = currentScore;
                     bestMove = move.move;
-
                 }
-                if (alpha >= beta) {
-
+                if (alpha >= b) {
                     break;
-                    //closelist.put(next_step, new int[]{bestMove, beta});
-                    //return new int[] {bestMove, beta};
-                    //return new int[]{-1, Integer.MIN_VALUE};
-
                 }
-
-
             }
-            // reset la case?
         }
 
-        closelist.put(etat,0);
 
-        return new int[]{bestMove, ((player == currentPlayer) ? alpha : beta)};
+        if(activateLookUp){
+            Etat eRef = null;
+            eRef = ((eRef =closelist.get(etat)) ==null)? etat : eRef;
+            eRef.bestMove = bestMove;
+            int cur = (player == currentPlayer)? a: b;
+            if(cur <= alpha){
+                eRef.upperBound = b;
+            }else{
+                eRef.lowerBound = a;
+            }
+
+            closelist.put(eRef,eRef);
+        }
+
+        return new int[]{bestMove, ((player == currentPlayer)? a : b)};
 
     }
 
