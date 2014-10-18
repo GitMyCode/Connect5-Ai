@@ -20,8 +20,11 @@ public abstract class GLOBAL {
 
 
 
-    public static final int ALMOST_WIN = Integer.MAX_VALUE/2;
-    public static final int WIN = Integer.MAX_VALUE- 200;
+    public static final int ALMOST_WIN = 5000000; // 50 million
+    public static final int WIN = 100000000; // 100 million
+    public static final int CONNECT4_SCORE = 100000; // 1 million
+
+
     public static final int LIMITE =50;
 
     public static long timer;

@@ -157,11 +157,13 @@ public class JoueurArtificiel implements Joueur, Runnable {
         boolean stoped = false;
         while (!GLOBAL.timeUp() && !stoped){
             try {
+                System.out.println("try deep:   " + deep);
                 res = MinMax.getMove(init, player, deep);
                 deep += 2;
                 if (res !=null)
                     moves.add(res[0]);
-            }catch (Exception e){
+            }catch (TimeOver e){
+                System.out.println("calisse: "+e);
                 if(e.getClass() == TimeOver.class){
                     System.out.println(e);
                     stoped= true;

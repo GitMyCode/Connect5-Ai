@@ -34,7 +34,7 @@ public class MinMax {
     //static Map<Etat, int[]> closelist = new HashMap<Etat, int[]>();
     static HashMap<Etat,Etat> closelist = new HashMap<Etat, Etat>();
 
-    public static int[] getMove (Etat etatInitial, int playerColor, int deep) throws Exception {
+    public static int[] getMove (Etat etatInitial, int playerColor, int deep) throws TimeOver {
         MAX_DEPTH = deep;
         nbcol = GLOBAL.NBCOL;
         opponent = (playerColor == 1) ? 2 : 1;
@@ -59,7 +59,7 @@ public class MinMax {
         return play;
     }
 
-    public static int[] minmax (Etat etat, int depth, int player, int alpha, int beta, int lastScore) throws Exception {
+    public static int[] minmax (Etat etat, int depth, int player, int alpha, int beta, int lastScore) throws TimeOver {
 
         if (GLOBAL.timeUp()) {
             System.out.println("GOOOO BACK!!");
