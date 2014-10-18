@@ -13,6 +13,12 @@ public abstract class GLOBAL {
     public static int LAST_DEPTH;
 
 
+    public static int bufferX;
+    public static int bufferY;
+    public static int lowestX;
+    public static int lowestY;
+
+
 
     public static final int ALMOST_WIN = Integer.MAX_VALUE/2;
     public static final int WIN = Integer.MAX_VALUE- 200;
@@ -46,6 +52,13 @@ public abstract class GLOBAL {
         return false;
     }
 
+    private int getMoveCutedGridToFullGrid(int move){
+        int pos_x,pos_y;
+        pos_x =  ((move/GLOBAL.NBCOL) ) + (lowestX - bufferX);
+        pos_y = ((move%GLOBAL.NBCOL) ) +  (lowestY - bufferY);
+
+        return  pos_x * GLOBAL.FULL_NBCOL + pos_y;
+    }
 
 
 

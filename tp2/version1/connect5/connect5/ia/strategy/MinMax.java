@@ -119,7 +119,7 @@ public class MinMax {
         while (!nextMoves.isEmpty()) {
             Move move = nextMoves.poll();
             Etat next_step = etat.clone();
-            next_step.play(move.move, player);
+            next_step.playAndUpdate(move.move, player);
             next_step.score = move.score; // garder l'évaluation dans l'Etat
 
 

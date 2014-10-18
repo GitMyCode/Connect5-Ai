@@ -67,17 +67,52 @@ public class MyTest {
       String f2= "-----------" +
               "-----------" +
               "----N-N----" +
-              "--NNBBB-BB-" +
+              "--NN-BB-BB-" +
               "---B-NNBN--" +
               "----BNNNNB-" +
               "-----BNNN--" +
               "-----NBNNB-" +
-              "----BNBNBB-" +
+              "-N--BNBNBB-" +
               "----N-BB---" +
               "----BB-----" +
               "------N----" +
               "-----------" +
               "-----------";
+
+        String f3=
+                "----------" +
+                "--N-------" +
+                "--BBNB----" +
+                "---NB--B--" +
+                "---NNBNN--" +
+                "----NNB---" +
+                "----NBNN--" +
+                "---NN--B--" +
+                "--B-B--B--" +
+                "----------" +
+                "----------";
+
+        /*7  10*/
+        String f4=
+                                "-------" +
+                                "-------" +
+                                "-------" +
+                                "---N---" +
+                                "-------" +
+                                "-------" +
+                                "-------" +
+                                "-------" ;
+        String f5=
+                "----------" +
+                        "----------" +
+                        "----N-----" +
+                        "-----N----" +
+                        "----B-N---" +
+                        "---BNN----" +
+                        "----B-----" +
+                        "----B-----" +
+                        "----------" +
+                        "----------";
 
       String testMoreThan5=
                 "-------------\n" +
@@ -104,10 +139,11 @@ public class MyTest {
         int[] to_test = new int[nbcol * nbligne];
 
         for(int i=0; i< to_test.length; i++){
-            to_test[i] = convert.get(f2.charAt(i)) -1;
+            to_test[i] = convert.get(f5.charAt(i)) -1;
         }
         return to_test;
     }
+
 
 
     public static void main(String args[]){
@@ -116,9 +152,9 @@ public class MyTest {
 
         // Test B1
         System.out.println("Test #1");
-        nbligne = 14; nbcol = 11;
+        nbligne = 10; nbcol = 10;
         Grille g = new Grille(nbligne,nbcol,testByte());
-        Position coup = joueur.getProchainCoup(g, 2000);
+        Position coup = joueur.getProchainCoup(g, 20000);
         System.out.println((coup.ligne==4 && coup.colonne==0) ? "Réussi": "Échoué");
 
 

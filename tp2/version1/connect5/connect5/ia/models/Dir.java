@@ -116,6 +116,8 @@ public enum Dir {
     public enum Cardinal{
         NORD{
             @Override boolean validLimit (int index, int limit) {
+                if(index < 0 || index >= GLOBAL.NBCOL*GLOBAL.NBCOL)
+                    return false;
 
                 return  (index + TOP.v()* (limit-1)) >=0;
             }
@@ -123,12 +125,16 @@ public enum Dir {
         SUD{
             @Override boolean validLimit (int index, int limit) {
                 int length = GLOBAL.NBCOL * GLOBAL.NBLIGNE;
+                if(index < 0 || index >= length)
+                    return false;
                 return (index+ DOWN.v()* (limit-1)) < length;
             }
         },
          OUEST{
             @Override
             boolean validLimit (int index, int limit) {
+                if(index < 0 || index >= GLOBAL.NBCOL*GLOBAL.NBCOL)
+                    return false;
                 if(!(((index%GLOBAL.NBCOL)+1)  >= limit)){ return false; }
                 return true;
             }
@@ -136,6 +142,8 @@ public enum Dir {
         EST{
             @Override
             boolean validLimit (int index, int limit) {
+                if(index < 0 || index >= GLOBAL.NBCOL*GLOBAL.NBCOL)
+                    return false;
                 if(!((GLOBAL.NBCOL - (index%GLOBAL.NBCOL))  >= limit)){ return false; }
                 return true;
             }
@@ -148,8 +156,8 @@ public enum Dir {
 
     public enum Axes{
 
-        VERTICAL(LEFT,RIGHT,0),
-        HORIZONTAL(TOP,DOWN,1),
+        VERTICAL(TOP,DOWN,0),
+        HORIZONTAL(RIGHT,LEFT,1),
         DIAGR(DOWNLEFT,TOPRIGHT,2),
         DIAGL(TOPLEFT,DOWNRIGHT,3);
 
@@ -168,6 +176,8 @@ public enum Dir {
 
 
         public static final Map<Dir,Axes> lookup = new EnumMap<Dir, Axes>(Dir.class);
+      //  public static final Map<Axes,Map<Integer,Integer>> mapAxesPointToStartPoint = new HashMap<Axes, Map<Integer, Integer>>();
+      //  public static final Map<Axes,Set<Integer>> mapAxesStartPointSet = new HashMap<Axes, Set<Integer>>();
 
         static {
             for(Dir dir : Dir.values()){
@@ -181,6 +191,42 @@ public enum Dir {
                     lookup.put(dir,DIAGL);
                 }
             }
+
+ /*           for(Axes a : Axes.values()){
+                mapAxesPointToStartPoint.put(a, new HashMap<Integer, Integer>());
+                mapAxesStartPointSet.put(a, new HashSet<Integer>());
+            }
+
+            for(int i=0; i < GLOBAL.NBCOL* GLOBAL.NBLIGNE; i++){
+                int x = i/GLOBAL.NBCOL;
+                int y = i%GLOBAL.NBCOL;
+
+                int startPoint =0;
+                for(Axes a : Axes.values()){
+                    switch (a) {
+                        case HORIZONTAL:
+                            startPoint = x*GLOBAL.NBCOL;
+                            break;
+                        case VERTICAL:
+                            startPoint = y;
+                            break;
+                        case DIAGR:
+                            startPoint = (x+y < GLOBAL.NBLIGNE)? ( (x+y)*GLOBAL.NBCOL) : ((GLOBAL.NBLIGNE-1)*GLOBAL.NBCOL) + (x+y+1) - GLOBAL.NBCOL;
+                            break;
+                        case DIAGL:
+                            startPoint = (x >y) ? (x-y) * GLOBAL.NBCOL : y-x;
+                            break;
+                    }
+                    mapAxesStartPointSet.get(a).add(startPoint);
+                    mapAxesPointToStartPoint.get(a).put(i, startPoint);
+                }
+          }
+*/
+
+
+
+
+
         }
         public static Axes getA(Dir d){
             return lookup.get(d);

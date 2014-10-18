@@ -95,7 +95,10 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
 
         /*INIT ETAT*/
+        GLOBAL.bufferX= bufferX; GLOBAL.bufferY = bufferY;
+        GLOBAL.lowestX = lowestX;GLOBAL.lowestY = lowestY;
         Etat init = new Etat(myGrid,player,opponent);
+        init.initMemo();
         init.setChecker(checker);
         Direction.init_map(nbcol);
 
@@ -405,7 +408,7 @@ public class JoueurArtificiel implements Joueur, Runnable {
         init.setChecker(checker);
         Direction.init_map(nbcol);
 
-        return init.evaluate(player);
+        return 0;//init.evaluate(player);
 
     }
 
