@@ -98,7 +98,7 @@ public class JoueurArtificiel implements Joueur, Runnable {
         GLOBAL.bufferX= bufferX; GLOBAL.bufferY = bufferY;
         GLOBAL.lowestX = lowestX;GLOBAL.lowestY = lowestY;
         Etat init = new Etat(myGrid,player,opponent);
-        init.initMemo();
+      //  init.initMemo();
         init.setChecker(checker);
         Direction.init_map(nbcol);
 
@@ -171,7 +171,6 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
             }
         }
-
         int choix = moves.get(moves.size()-1);
         if(res != null){
             System.out.println("----------------------------- LAST DEPTH : "+GLOBAL.LAST_DEPTH);
@@ -180,6 +179,7 @@ public class JoueurArtificiel implements Joueur, Runnable {
             System.out.println(init.toStringOneDim(init.one_dim));
             init.unplay(res[0]);
         }else {
+            System.out.println("res est  null----------------------");
             System.out.println("score :" + MAXcheckWinMove.score + " play :(" + choix / GLOBAL.NBCOL + "," + choix% GLOBAL.NBCOL + ")");
         }
 

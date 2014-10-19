@@ -88,7 +88,7 @@ public class MyTest {
                 "----NNB---" +
                 "----NBNN--" +
                 "---NN--B--" +
-                "--B-B--B--" +
+                "--B-B-----" +
                 "----------" +
                 "----------";
 
@@ -105,14 +105,28 @@ public class MyTest {
         String f5=
                 "----------" +
                         "----------" +
-                        "----N-----" +
-                        "-----N----" +
-                        "----B-N---" +
-                        "---BNN----" +
-                        "----B-----" +
-                        "----B-----" +
+                        "----------" +
+                        "---NNNBN--" +
+                        "----BBN---" +
+                        "---B-N----" +
+                        "---BN-----" +
+                        "---B------" +
+                        "----------" +
                         "----------" +
                         "----------";
+        String f6 =
+             "----------" +
+                     "----------" +
+                     "----------" +
+                     "---N-N----" +
+                     "---NNNB---" +
+                     "---B-N----" +
+                     "---BN-B---" +
+                     "---BB-----" +
+                     "----------" +
+                     "----------" +
+                     "----------";
+
 
       String testMoreThan5=
                 "-------------\n" +
@@ -139,7 +153,7 @@ public class MyTest {
         int[] to_test = new int[nbcol * nbligne];
 
         for(int i=0; i< to_test.length; i++){
-            to_test[i] = convert.get(f5.charAt(i)) -1;
+            to_test[i] = convert.get(f6.charAt(i)) -1;
         }
         return to_test;
     }
@@ -152,9 +166,9 @@ public class MyTest {
 
         // Test B1
         System.out.println("Test #1");
-        nbligne = 10; nbcol = 10;
+        nbligne = 11; nbcol = 10;
         Grille g = new Grille(nbligne,nbcol,testByte());
-        Position coup = joueur.getProchainCoup(g, 20000);
+        Position coup = joueur.getProchainCoup(g, 111000000);
         System.out.println((coup.ligne==4 && coup.colonne==0) ? "Réussi": "Échoué");
 
 

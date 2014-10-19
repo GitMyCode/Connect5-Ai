@@ -116,7 +116,7 @@ public enum Dir {
     public enum Cardinal{
         NORD{
             @Override boolean validLimit (int index, int limit) {
-                if(index < 0 || index >= GLOBAL.NBCOL*GLOBAL.NBCOL)
+                if(index < 0 || index >= GLOBAL.NBCOL*GLOBAL.NBLIGNE)
                     return false;
 
                 return  (index + TOP.v()* (limit-1)) >=0;
@@ -133,7 +133,7 @@ public enum Dir {
          OUEST{
             @Override
             boolean validLimit (int index, int limit) {
-                if(index < 0 || index >= GLOBAL.NBCOL*GLOBAL.NBCOL)
+                if(index < 0 || index >= GLOBAL.NBCOL*GLOBAL.NBLIGNE)
                     return false;
                 if(!(((index%GLOBAL.NBCOL)+1)  >= limit)){ return false; }
                 return true;
@@ -142,7 +142,7 @@ public enum Dir {
         EST{
             @Override
             boolean validLimit (int index, int limit) {
-                if(index < 0 || index >= GLOBAL.NBCOL*GLOBAL.NBCOL)
+                if(index < 0 || index >= GLOBAL.NBCOL*GLOBAL.NBLIGNE)
                     return false;
                 if(!((GLOBAL.NBCOL - (index%GLOBAL.NBCOL))  >= limit)){ return false; }
                 return true;
