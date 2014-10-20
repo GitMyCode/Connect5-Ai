@@ -84,7 +84,7 @@ public class Etat {
         //Grille new_grille = grille.clone();
         byte[] cloned_array = cloneByteArray(this.one_dim);
         Etat cloned = new Etat(cloned_array,MAX_player,MIN_player);
-        cloned.setChecker(checker);
+       // cloned.setChecker(checker);
 
       //  Vector5[][] clonedMemo = cloneMemoArray(memo2);
       //  Map<Dir.Axes,Map<Integer,Integer>> clonedMapValue = cloneMapValue();
@@ -505,7 +505,7 @@ public class Etat {
 */
 /*
 
-        if(getPlayerToPlayNow()==1 && player ==1){ // Au tour du joueur 2 a jouer apres
+        if(getLastPlayedPlayer()==1 && player ==1){ // Au tour du joueur 2 a jouer apres
             int maxScore = (MAX_player == 2)? MAXhigthestSeqThisAngle : MINhigthestSeqThisAngle;
             int oppScore = (MAX_player == 2)? MINhigthestSeqThisAngle : MAXhigthestSeqThisAngle;
 
@@ -517,7 +517,7 @@ public class Etat {
                 thisEvaluation = (MAX_player == 2)? GLOBAL.ALMOST_WIN + thisEvaluation : -GLOBAL.ALMOST_WIN + thisEvaluation ;
             }
 
-        }else if( getPlayerToPlayNow() ==2 && player == 2 ){ // Si au tour du joueur 1 apres
+        }else if( getLastPlayedPlayer() ==2 && player == 2 ){ // Si au tour du joueur 1 apres
             int maxScore = (MAX_player == 1)? MAXhigthestSeqThisAngle : MINhigthestSeqThisAngle;
             int oppScore = (MAX_player == 1)? MINhigthestSeqThisAngle : MAXhigthestSeqThisAngle;
 
@@ -627,7 +627,7 @@ public class Etat {
 
         int specialCaseForSureWin = 0;
       */
-/*  if(getPlayerToPlayNow() == 1 ){ // Au tour du joueur 2 a jouer apres
+/*  if(getLastPlayedPlayer() == 1 ){ // Au tour du joueur 2 a jouer apres
             int maxScore = (MAX_player == 2)? higthestMAX : higthestMIN;
             int oppScore = (MAX_player == 2)? higthestMIN : higthestMAX;
 
@@ -639,7 +639,7 @@ public class Etat {
                 specialCaseForSureWin= (MAX_player == 2)? GLOBAL.WIN: -GLOBAL.WIN ;
             }
 
-        }else if( getPlayerToPlayNow() == 2 ){ // Si au tour du joueur 1 apres
+        }else if( getLastPlayedPlayer() == 2 ){ // Si au tour du joueur 1 apres
             int maxScore = (MAX_player == 1)? higthestMAX : higthestMIN;
             int oppScore = (MAX_player == 1)? higthestMIN : higthestMAX;
 
@@ -826,13 +826,13 @@ public class Etat {
                     }
 
                     /*Just for printing when debugging*/
-/*
+
                     new_vector.tab_seq[0] = i + D.v(0);
                     new_vector.tab_seq[1] = i + D.v(1);
                     new_vector.tab_seq[2] = i + D.v(2);
                     new_vector.tab_seq[3] = i + D.v(3);
                     new_vector.tab_seq[4] = i + D.v(4);
-*/
+
 
 
                     if(new_vector.value >0){
@@ -855,7 +855,7 @@ public class Etat {
         if(player2Won && player==2 && !playe1Won){
             return (MAX_player == 2)? GLOBAL.WIN: -GLOBAL.WIN;
         }
-        int higthestMAX =0;
+        //int higthestMAX =0;
 /*
 
         int maxLenght = Math.max(allVectorMax.size(),allVectorOpponent.size());
@@ -881,7 +881,7 @@ public class Etat {
         }
 */
 
-
+        higthestMAX=0; higthestMIN=0;
         for(int v1=0; v1 < allVectorMax.size(); v1++){
             Vector5 s = allVectorMax.get(v1);
             int value = (s.bidirectionnel)? s.value+1 : s.value;
@@ -889,7 +889,7 @@ public class Etat {
             higthestMAX = (value > higthestMAX && s.isCorded)? value : higthestMAX;
 
         }
-        int higthestMIN =0;
+        //int higthestMIN =0;
         for(int v2=0; v2 < allVectorOpponent.size(); v2++){
             Vector5 s = allVectorOpponent.get(v2);
             int value = (s.bidirectionnel)? s.value+1 : s.value;
@@ -898,9 +898,21 @@ public class Etat {
         }
 
 
+    /*    int maxScore = (MAX_player == getNextPlayerToPlay())? higthestMAX : higthestMIN;
+        int oppScore = (MAX_player == getNextPlayerToPlay())? higthestMIN : higthestMAX;
+
+        if(player2Won){
+           return (MAX_player == getNextPlayerToPlay())? GLOBAL.WIN: -GLOBAL.WIN;
+        }
+
+        if(maxScore > 3 && maxScore >= oppScore){
+           return (MAX_player == getNextPlayerToPlay())? GLOBAL.ALMOST_WIN + evaluation  : -GLOBAL.ALMOST_WIN +evaluation;
+        }
+*/
+
 
         /* This check is for the situation when we are sure to win */
-        if(getPlayerToPlayNow() ==1 && player ==1){ // Au tour du joueur 2 a jouer apres
+  /*      if(getLastPlayedPlayer() ==1 && player ==1){ // Au tour du joueur 2 a jouer apres
 
 
             int maxScore = (MAX_player == 2)? higthestMAX : higthestMIN;
@@ -914,7 +926,8 @@ public class Etat {
                 return (MAX_player == 2)? GLOBAL.ALMOST_WIN + evaluation  : -GLOBAL.ALMOST_WIN +evaluation;
             }
 
-        }else if( getPlayerToPlayNow() == 2 && player == 2 ){ // Si au tour du joueur 1 apres
+
+        }else if( getLastPlayedPlayer() == 2 && player == 2 ){ // Si au tour du joueur 1 apres
             int maxScore = (MAX_player == 1)? higthestMAX : higthestMIN;
             int oppScore = (MAX_player == 1)? higthestMIN : higthestMAX;
 
@@ -922,9 +935,36 @@ public class Etat {
                 return (MAX_player ==1)? GLOBAL.WIN : -GLOBAL.WIN;
             }
 
+            if(higthestMIN >4 && higthestMIN > higthestMAX ){
+                return -GLOBAL.ALMOST_WIN + evaluation;
+            }
+
+
             if(maxScore > 3 &&  maxScore >= oppScore){
                 return (MAX_player == 1)? GLOBAL.ALMOST_WIN + evaluation : -GLOBAL.ALMOST_WIN + evaluation;
             }
+        }*/
+
+
+        if(getLastPlayedPlayer() == MAX_player){
+
+            if(higthestMAX > 4 && higthestMAX > higthestMIN){
+                return GLOBAL.ALMOST_WIN + evaluation;
+            }
+
+            if(higthestMIN > 3 && higthestMIN >= higthestMAX){
+                return -GLOBAL.ALMOST_WIN +evaluation;
+            }
+
+        }else if(getLastPlayedPlayer() == MIN_player){
+
+            if(higthestMIN > 4 && higthestMIN >higthestMAX){
+                return -GLOBAL.ALMOST_WIN + evaluation;
+            }
+            if(higthestMAX > 3 && higthestMAX >= higthestMIN){
+                return GLOBAL.ALMOST_WIN + evaluation;
+            }
+
         }
 
 
@@ -1140,8 +1180,16 @@ public class Etat {
 
 
 
-    public int getPlayerToPlayNow(){
+    public int getLastPlayedPlayer (){
         if(((one_dim.length-1) - getNblibre()) % 2 ==0){
+            return 1;
+        }else{
+            return 2;
+        }
+    }
+
+    public int getNextPlayerToPlay (){
+        if(((one_dim.length) - getNblibre()) % 2 ==0){
             return 1;
         }else{
             return 2;

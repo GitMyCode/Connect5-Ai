@@ -284,8 +284,8 @@ public class JoueurArtificiel implements Joueur, Runnable {
         int cutedNoBuffY = (hy[1] - ly[1] +1);
 
 
-        int extendBufferX= (cutedNoBuffX > 5)? 2:3;
-        int extendBufferY= (cutedNoBuffY > 5)? 2:3;
+        int extendBufferX= (cutedNoBuffX > 5)? 3:3;
+        int extendBufferY= (cutedNoBuffY > 5)? 3:3;
 
 
 

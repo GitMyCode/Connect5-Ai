@@ -61,10 +61,13 @@ public class MinMax {
 
     public static int[] minmax (Etat etat, int depth, int player, int alpha, int beta, int lastScore) throws TimeOver {
 
+
+
         if (GLOBAL.timeUp()) {
             System.out.println("GOOOO BACK!!");
             throw new TimeOver("Time Over");
         }
+
 
         if(activateLookUp){
             if(closelist.containsKey(etat)){
