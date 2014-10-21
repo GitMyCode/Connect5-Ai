@@ -141,7 +141,7 @@ public class JeuConnect5 implements Runnable {
     private int      gagnant;
     private Grille   grille;
     private Joueur[] joueurs;
-    private int      tempsAlloue = 5000;
+    private int      tempsAlloue = 2000000;//5000;
     private int[]    depassement = new int[] {0,0};
     public  int[]    nbRetards = new int[] {0,0};
     public  boolean  forceStop = false;

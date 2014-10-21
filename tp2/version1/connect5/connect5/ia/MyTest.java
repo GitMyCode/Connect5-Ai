@@ -96,9 +96,9 @@ public class MyTest {
         String f4=
                                 "-------" +
                                 "-------" +
+                                "--N----" +
                                 "-------" +
-                                "---N---" +
-                                "-------" +
+                                "---B---" +
                                 "-------" +
                                 "-------" +
                                 "-------" ;
@@ -143,7 +143,55 @@ public class MyTest {
                  "---------------" +
                  "---------------" ;
 
+        String t1 = //12 11
+          "-----------" +
+                  "-----------" +
+                  "--B--------" +
+                  "---BN--B---" +
+                  "----BNB----" +
+                  "----NB-----" +
+                  "---NNBN----" +
+                  "--N-NN-----" +
+                  "----B------" +
+                  "-----------" +
+                  "-----------" +
+                  "-----------";
 
+        String t2 = //14 13
+
+                "-------------" +
+                        "-------------" +
+                        "-------------" +
+                        "------B------" +
+                        "-----B-NBB---" +
+                        "---BNBNNN----" +
+                        "----NBNNNN---" +
+                        "----BNBBN----" +
+                        "----NBNB-----" +
+                        "---BNBN------" +
+                        "----B--------" +
+                        "-------------" +
+                        "-------------" +
+                        "-------------";
+
+        String t3 =//score :22 play :(6,3)
+                //16 16
+                        "----------------" +
+                        "----------------" +
+                        "----------------" +
+                        "----------N-B---" +
+                        "----------BN----" +
+                        "-------NNNB-----" +
+                        "---N-N-BNBB-----" +
+                        "----BBBNB-N-----" +
+                        "-----BNNBNB-----" +
+                        "----BBBN---N----" +
+                        "---N---BN-------" +
+                        "--------NN------" +
+                        "----------B-----" +
+                        "----------------" +
+                        "----------------" +
+                        "----------------";
 
 
 
@@ -172,7 +220,7 @@ public class MyTest {
         int[] to_test = new int[nbcol * nbligne];
 
         for(int i=0; i< to_test.length; i++){
-            to_test[i] = convert.get(p1.charAt(i)) -1;
+            to_test[i] = convert.get(f4.charAt(i)) -1;
         }
         return to_test;
     }
@@ -185,7 +233,7 @@ public class MyTest {
 
         // Test B1
         System.out.println("Test #1");
-        nbligne = 15; nbcol = 15;
+        nbligne = 8; nbcol = 7;
         Grille g = new Grille(nbligne,nbcol,testByte());
         Position coup = joueur.getProchainCoup(g, 4000);
         System.out.println((coup.ligne==4 && coup.colonne==0) ? "Réussi": "Échoué");

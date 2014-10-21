@@ -105,24 +105,23 @@ public class MinMax {
                 //  closelist.put(etat,t);
                 return new int[]{-1, t};
             }
-            int score = lastScore;
+            int score = lastScore; //etat.evaluate(player);
 
             return new int[]{-1, score + deepPenality};
         }
 
 
-        PriorityQueue<Move> nextMoves = etat.getNextMoves(player);
         int bestScore;
         Integer currentScore = null;
         int bestMove = (player == currentPlayer) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-
+        PriorityQueue<Move> nextMoves = etat.getNextMoves(player);
 
         int a = alpha; // Pour garder alpha intact
         int b = beta; // Pour garder beta intact
         while (!nextMoves.isEmpty()) {
             Move move = nextMoves.poll();
             Etat next_step = etat.clone();
-            next_step.play(move.move, player);
+            next_step.playAndUpdate(move.move, player);
             next_step.score = move.score; // garder l'évaluation dans l'Etat
 
 

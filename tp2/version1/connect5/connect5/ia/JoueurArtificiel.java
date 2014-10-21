@@ -98,7 +98,7 @@ public class JoueurArtificiel implements Joueur, Runnable {
         GLOBAL.bufferX= bufferX; GLOBAL.bufferY = bufferY;
         GLOBAL.lowestX = lowestX;GLOBAL.lowestY = lowestY;
         Etat init = new Etat(myGrid,player,opponent);
-      //  init.initMemo();
+        init.initMemo();
         init.setChecker(checker);
         Direction.init_map(nbcol);
 
@@ -125,7 +125,7 @@ public class JoueurArtificiel implements Joueur, Runnable {
             return new Position(choix_converted/GLOBAL.FULL_NBCOL,choix_converted%GLOBAL.FULL_NBCOL);
         }
 
-        /*int bestScoreSoFar = Integer.MIN_VALUE;
+     /*   int bestScoreSoFar = Integer.MIN_VALUE;
         Move best = MAXcheckWinMove;
         while (!pq.isEmpty()){
             Move m = pq.poll();
@@ -137,9 +137,9 @@ public class JoueurArtificiel implements Joueur, Runnable {
                 bestScoreSoFar = oppMove.score;
             }
             init.unplay(m.move);
-        }*/
-
-
+        }
+        MAXcheckWinMove = best;
+*/
 
 
 
@@ -155,11 +155,11 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
         int[] res = null;
         boolean stoped = false;
-        while (!GLOBAL.timeUp() && !stoped){
+        while (!GLOBAL.timeUp() && !stoped && deep < 5){
             try {
                 System.out.println("try deep:   " + deep);
                 res = MinMax.getMove(init, player, deep);
-                deep += 2;
+                deep += (deep >= 4)? 1 : 2;
                 if (res !=null)
                     moves.add(res[0]);
             }catch (TimeOver e){

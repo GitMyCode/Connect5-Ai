@@ -43,6 +43,8 @@ public class Etat {
     public Map<Dir.Axes,Map<Integer,Integer>> mapMemoAxesValue = new HashMap<Dir.Axes, Map<Integer, Integer>>();
     Map<Dir.Axes,Map<Integer,Integer>> mapAxesPointToStartPoint ;
     Map<Dir.Axes,Set<Integer>> mapAxesStartPointSet ;
+    Map<Dir.Axes,Map<Integer,Integer>> mapAngleDangerMAX;
+    Map<Dir.Axes,Map<Integer,Integer>> mapAngleDangerMIN;
 
 
 
@@ -69,6 +71,7 @@ public class Etat {
         MIN_player = min;
 
         this.one_dim = one_dim;
+       // initMemo();
     }
     public Etat(Grille grille, int max,int min){
         this.grille = grille;
@@ -77,6 +80,7 @@ public class Etat {
         MAX_player = max;
         MIN_player = min;
         one_dim= oneDimentionalArray(grille.getData());
+       // initMemo();
 
     }
     @Override
@@ -84,17 +88,21 @@ public class Etat {
         //Grille new_grille = grille.clone();
         byte[] cloned_array = cloneByteArray(this.one_dim);
         Etat cloned = new Etat(cloned_array,MAX_player,MIN_player);
-       // cloned.setChecker(checker);
+        // cloned.setChecker(checker);
 
-      //  Vector5[][] clonedMemo = cloneMemoArray(memo2);
-      //  Map<Dir.Axes,Map<Integer,Integer>> clonedMapValue = cloneMapValue();
+        //  Vector5[][] clonedMemo = cloneMemoArray(memo2);
+        Map<Dir.Axes,Map<Integer,Integer>> clonedMapValue = cloneMapValue(mapMemoAxesValue);
+        cloned.mapMemoAxesValue = clonedMapValue;
+        //cloned.memo2 = clonedMemo;
+        Map<Dir.Axes,Map<Integer,Integer>> clonedDangerMax=  cloneMapValue(mapAngleDangerMAX);
+        cloned.mapAngleDangerMAX = clonedDangerMax;
+        cloned.mapAngleDangerMIN = cloneMapValue(mapAngleDangerMIN);
 
-  //      cloned.mapMemoAxesValue = clonedMapValue;
-      //  cloned.memo2 = clonedMemo;
-
-      /*  cloned.evaluationHere = evaluationHere;
+        cloned.evaluationHere = evaluationHere;
         cloned.mapAxesPointToStartPoint = mapAxesPointToStartPoint;
         cloned.mapAxesStartPointSet = mapAxesStartPointSet;
+
+      /*
         cloned.hightestMINAngle = (hightestMINAngle!= null)? hightestMINAngle.clone() : null;
         cloned.higthestMAXAngle = (higthestMAXAngle !=null)? higthestMAXAngle.clone() : null;*/
      /*   cloned.higthestMAX = higthestMAX;
@@ -106,10 +114,14 @@ public class Etat {
         return cloned;
     }
 
-    private  Map<Dir.Axes,Map<Integer,Integer>> cloneMapValue(){
+
+    private  Map<Dir.Axes,Map<Integer,Integer>> cloneMapValue(Map<Dir.Axes,Map<Integer,Integer>> toClone){
         Map<Dir.Axes,Map<Integer,Integer>> c = new HashMap<Dir.Axes, Map<Integer, Integer>>();
         for(Dir.Axes ax : Dir.Axes.values()){
-            c.put(ax, new HashMap<Integer, Integer>(mapMemoAxesValue.get(ax)));
+            c.put(ax, new HashMap<Integer, Integer>());
+            for(Map.Entry<Integer,Integer> it : toClone.get(ax).entrySet()){
+                c.get(ax).put(it.getKey(),it.getValue());
+            }
         }
         return c;
 
@@ -179,63 +191,29 @@ public class Etat {
         return true;
     }
 
-    /*public void playAndUpdate(int move,int player){
+    public void playAndUpdate(int move,int player){
         one_dim[move] = (byte)player;
 
         int oldScore =0;
         int thisScore=0;
+        int stepInAdvance =0;
+        boolean stepAheadWasBlocked = false;
         for(Dir D : Dir.direction4 ){
             Dir.Axes axe = Dir.Axes.getA(D);
             Integer startPoint = mapAxesPointToStartPoint.get(axe).get(move);
             oldScore += mapMemoAxesValue.get(axe).get(startPoint);
             int thisAngleScore = axeAngleValue(startPoint, D,player);
 
-
-
-
-            if(player == MIN_player){
-                if(higthestMAXAngle !=null && higthestMAXAngle.isThisAngle(axe,move)){ // si c'était le meilleur angle du MIN
-                    if( MAXhigthestSeqThisAngle < higthestMAX){ // Si le coup a réduit le coup d'avance de MIN
-                         higthestMAXAngle = null; higthestMAX =0;
-                    }
-
-
-                }
-                 if(hightestMINAngle!=null && hightestMINAngle.isThisAngle(axe,move)){ // si le coup donne l'avance
-                    if(higthestMAX < higthestMIN){
-                        thisAngleScore = -GLOBAL.CONNECT4_SCORE;
-                    }
-                }
-            }
-
-            if(player  == MAX_player){
-                if(hightestMINAngle !=null && hightestMINAngle.isThisAngle(axe,move)){ // si c'était le meilleur angle du MIN
-                    if( MINhigthestSeqThisAngle < higthestMIN){ // Si le coup a réduit le coup d'avance de MIN
-                         hightestMINAngle = null; higthestMIN =0;
-                    }
-                }
-                if(higthestMAXAngle!=null && higthestMAXAngle.isThisAngle(axe,move)){ // si le coup donne l'avance
-                    if(higthestMAX > higthestMIN){
-                        thisAngleScore = GLOBAL.CONNECT4_SCORE;
-                    }
-                }
-
-            }
-
-
             thisScore+= thisAngleScore;
-
-            //update old
-
-
-
+            updateAngleMaps(axe,startPoint);
 
             mapMemoAxesValue.get(axe).put(startPoint,thisAngleScore);
 
         }
+        stepInAdvance = getScoreStepAhead();
 
-        evaluationHere = (evaluationHere - oldScore) + thisScore;
-    }*/
+        evaluationHere = (evaluationHere - oldScore) + thisScore + stepInAdvance;
+    }
     public void play(int move,int player){
         one_dim[move] = (byte)player;
     }
@@ -297,8 +275,15 @@ public class Etat {
             if( (pos_x >= lowestX-buffer) && (pos_x <= highestX+buffer ) && (pos_y  >= lowestY -buffer) && (pos_y <= highestY +buffer  ) ){
                 if(one_dim[i] ==0){
                     play(i,player_to_max);
-                     int evaluation = evaluate(player_to_max);
-                      // int evaluation = evalPoint(i,player_to_max);
+                        int evaluation2 = evaluate(player_to_max);
+                        int test = calculateAllAngle(2);
+                        int evaluation = evalPoint(i,player_to_max);
+                        if(!areAllEqual(evaluation,evaluation2,test)){
+                            System.out.println("prob: TotalScan: "+ evaluation2+" allAngle: "+test
+                            +" thisPoint:" +evaluation);
+                            calculateAllAngle(2);
+                            evalPoint(i,player_to_max);
+                        }
                         Move aMove =  new Move(i,evaluation);
                         ordered_move.add(aMove);
 
@@ -335,7 +320,7 @@ public class Etat {
         return (x*nbcol+y);
     }
 
-/*
+
 
 
     int MAXhigthestSeqThisAngle =0;
@@ -347,18 +332,24 @@ public class Etat {
         HashSet<Vector5> allV = new HashSet<Vector5>();
         Map<Integer,Vector5> tempMemo = new HashMap<Integer, Vector5>();
 
-     */
-/*   playe1Won =false;
-        player2Won = false;*//*
+        playe1Won =false;
+        player2Won = false;
 
         Dir.Axes axe = Dir.Axes.getA(D);
         for (int i= point; D.boundaries(i,5);i= i+ D.v(1)){
             if(true) {
                 int res = one_dim[i] | one_dim[i + D.v(1)] | one_dim[i + D.v(2)] | one_dim[i + D.v(3)] | one_dim[i + D.v(4)];
                 if (res == 1 || res == 2) { //
-                    */
-/*We must not count vector that have more than 5*//*
 
+/*We must not count vector that have more than 5*/
+
+                    int[] tab_s = new int[5];
+
+                    tab_s[0] = i + D.v(0);
+                    tab_s[1] = i + D.v(1);
+                    tab_s[2] = i + D.v(2);
+                    tab_s[3] = i + D.v(3);
+                    tab_s[4] = i + D.v(4);
                     if (tempMemo.containsKey(i)&& tempMemo.get(i).moreThan5) {
                         continue;
                     }
@@ -367,7 +358,7 @@ public class Etat {
 
                     int nb_seqt = 0;
                     if (one_dim[i + D.v(0)] == res) {
-                        nb_seqt += 1 << 0;
+                        nb_seqt += 1 ;
                     }
                     if (one_dim[i + D.v(1)] == res) {
                         nb_seqt += 1 << 1;
@@ -385,8 +376,8 @@ public class Etat {
                     int vecteur_value = Integer.bitCount(nb_seqt);
                     if (vecteur_value == 5) {
 
-                        */
-/*TODO there is a chance where we return before checking if the other player won*//*
+
+/*TODO there is a chance where we return before checking if the other player won*/
 
                         if (D.boundaries(i, 6) && one_dim[i + D.v(5)] == res) {
                             new_vector.moreThan5 = true;
@@ -411,15 +402,15 @@ public class Etat {
                         }
                     }
 
-                    */
-/*Check if they are next to each other  ->   01110 :Yes  01011 : No*//*
+
+/*Check if they are next to each other  ->   01110 :Yes  01011 : No*/
 
                     if ((5 - (Integer.numberOfLeadingZeros(nb_seqt) - 27)) - Integer.numberOfTrailingZeros(nb_seqt) == vecteur_value) {
                         new_vector.isCorded = true;
                     }
-                    */
+
 /*Check if they there is free space on the two side. If yes we can assume that we could put a least one more
-                    * before being blocked. So we do + 1   *//*
+                    * before being blocked. So we do + 1   */
 
                     if (isBidirectionnel(i, i + D.v(4), D)) {
                         new_vector.bidirectionnel = true;
@@ -433,15 +424,11 @@ public class Etat {
 
 
 
-                    new_vector.tab_seq[0] = i + D.v(0);
-                    new_vector.tab_seq[1] = i + D.v(1);
-                    new_vector.tab_seq[2] = i + D.v(2);
-                    new_vector.tab_seq[3] = i + D.v(3);
-                    new_vector.tab_seq[4] = i + D.v(4);
+                    new_vector.tab_seq = tab_s;
 
 
-                    */
-/*Update the memo[][] to avoid count two vector in the same place same direction*//*
+
+/*Update the memo[][] to avoid count two vector in the same place same direction*/
 
                     for (int v = 0; v < 5; v++) {
                         if ((nb_seqt & (power2[v])) != 0) {
@@ -452,8 +439,14 @@ public class Etat {
                             }else {
                                 old_ref = null;
                             }
+
+
+
                             if (old_ref == null || old_ref.valueBirdirection <= new_vector.valueBirdirection) {
-                                if (old_ref != null) old_ref.value--;
+                                if (old_ref != null){
+                                    old_ref.value--;
+                                    old_ref.valueBirdirection--;
+                                }
                                 tempMemo.put(i+D.v(v),new_vector);
                             } else {
                                 new_vector.valueBirdirection--;
@@ -502,36 +495,6 @@ public class Etat {
         }
 
 
-*/
-/*
-
-        if(getLastPlayedPlayer()==1 && player ==1){ // Au tour du joueur 2 a jouer apres
-            int maxScore = (MAX_player == 2)? MAXhigthestSeqThisAngle : MINhigthestSeqThisAngle;
-            int oppScore = (MAX_player == 2)? MINhigthestSeqThisAngle : MAXhigthestSeqThisAngle;
-
-            if(player2Won){
-                thisEvaluation= (MAX_player == 2)? GLOBAL.WIN: -GLOBAL.WIN ;
-            }
-
-            if(maxScore > 3 && maxScore >= oppScore){
-                thisEvaluation = (MAX_player == 2)? GLOBAL.ALMOST_WIN + thisEvaluation : -GLOBAL.ALMOST_WIN + thisEvaluation ;
-            }
-
-        }else if( getLastPlayedPlayer() ==2 && player == 2 ){ // Si au tour du joueur 1 apres
-            int maxScore = (MAX_player == 1)? MAXhigthestSeqThisAngle : MINhigthestSeqThisAngle;
-            int oppScore = (MAX_player == 1)? MINhigthestSeqThisAngle : MAXhigthestSeqThisAngle;
-
-            if(playe1Won){
-                thisEvaluation =  (MAX_player ==1)? GLOBAL.WIN : -GLOBAL.WIN;
-            }
-
-            if(maxScore > 3 &&  maxScore >= oppScore){
-                thisEvaluation = (MAX_player == 1)? GLOBAL.ALMOST_WIN + thisEvaluation: -GLOBAL.ALMOST_WIN + thisEvaluation ;
-            }
-        }
-*//*
-
-
        return thisEvaluation;
     }
 
@@ -539,6 +502,8 @@ public class Etat {
 
         int oldScore =0;
         int thisScore=0;
+        int stepInAdvance =0;
+        boolean stepAheadWasBlocked = false;
         for(Dir D : Dir.direction4 ){
             Dir.Axes axe = Dir.Axes.getA(D);
             Integer startPoint = mapAxesPointToStartPoint.get(axe).get(move);
@@ -546,16 +511,44 @@ public class Etat {
             thisScore+= axeAngleValue(startPoint, D,player);
 
 
+            int tempMax =-1;
+            if(mapAngleDangerMAX.get(axe).containsKey(startPoint)){
+                tempMax = mapAngleDangerMAX.get(axe).get(startPoint);
+            }
+            int tempMin =-1;
+            if(mapAngleDangerMIN.get(axe).containsKey(startPoint)){
+                tempMin = mapAngleDangerMIN.get(axe).get(startPoint);
+            }
+            updateAngleMaps(axe,startPoint);
+
+
+
+            stepInAdvance = getScoreStepAhead();
+
+            if(tempMax >0){
+                mapAngleDangerMAX.get(axe).put(startPoint,tempMax);
+            }else{
+                mapAngleDangerMAX.get(axe).remove(startPoint);
+            }
+            if(tempMin >0){
+                mapAngleDangerMIN.get(axe).put(startPoint,tempMin);
+            }else {
+                mapAngleDangerMIN.get(axe).remove(startPoint);
+            }
+            if(stepInAdvance == 0 ){
+                stepAheadWasBlocked = true;
+            }
+            if(stepInAdvance == GLOBAL.WIN || stepInAdvance == -GLOBAL.WIN){
+                stepAheadWasBlocked = false;
+                break;
+            }
+
 
         }
+        stepInAdvance = (stepAheadWasBlocked)? 0 : stepInAdvance;
 
 
-
-
-
-
-
-        return (evaluationHere-oldScore) + thisScore;
+        return (evaluationHere-oldScore) + (thisScore + stepInAdvance);
 
     }
 
@@ -598,11 +591,14 @@ public class Etat {
         }
 
 
-
+        mapAngleDangerMAX = new HashMap<Dir.Axes, Map<Integer, Integer>>();
+        mapAngleDangerMIN = new HashMap<Dir.Axes, Map<Integer, Integer>>();
 
 
         for(Dir.Axes a : Dir.Axes.values()){
             mapMemoAxesValue.put(a, new HashMap<Integer, Integer>());
+            mapAngleDangerMAX.put(a, new HashMap<Integer, Integer>());
+            mapAngleDangerMIN.put(a, new HashMap<Integer, Integer>());
             wtfMap.put(a, new HashMap<Integer, Map<Integer, Vector5>>());
         }
         for(Dir d : Dir.direction4){
@@ -615,18 +611,20 @@ public class Etat {
                 test[i] =startPoint;
                 int eval = axeAngleValue(startPoint,d,MAX_player);
                 mapMemoAxesValue.get(a).put(startPoint,eval);
+                updateAngleMaps(a,startPoint);
+
                 i++;
             }
-         */
+
 /*   System.out.println("all the startPoint: "+ Arrays.toString(test));
-            System.out.println(toStringVector(one_dim,test));*//*
+            System.out.println(toStringVector(one_dim,test));*/
 
 
         }
 
 
         int specialCaseForSureWin = 0;
-      */
+
 /*  if(getLastPlayedPlayer() == 1 ){ // Au tour du joueur 2 a jouer apres
             int maxScore = (MAX_player == 2)? higthestMAX : higthestMIN;
             int oppScore = (MAX_player == 2)? higthestMIN : higthestMAX;
@@ -649,22 +647,22 @@ public class Etat {
             if(playe1Won){
                 specialCaseForSureWin =  (MAX_player ==1)? GLOBAL.WIN : -GLOBAL.WIN;
             }
-        }*//*
+        }*/
 
 
-        if(higthestMIN > 3  && higthestMIN > higthestMAX){
+        /*if(higthestMIN > 3  && higthestMIN > higthestMAX){
             mapMemoAxesValue.get(hightestMINAngle.axes).put(hightestMINAngle.startPoint,-GLOBAL.ALMOST_WIN);
         }else if( higthestMAX > 3 && higthestMAX > higthestMIN){
             mapMemoAxesValue.get(higthestMAXAngle.axes).put(higthestMAXAngle.startPoint,GLOBAL.ALMOST_WIN);
         }
+*/
 
 
-       */
 /* if(specialCaseForSureWin >0){
             mapMemoAxesValue.get(higthestMAXAngle.axes).put(higthestMAXAngle.startPoint,specialCaseForSureWin);
         }else if(specialCaseForSureWin <0){
         }
-*//*
+*/
 
 
 
@@ -679,6 +677,91 @@ public class Etat {
 
     }
 
+    public void updateAngleMaps(Dir.Axes axe, int starPoint){
+
+        if(MINhigthestSeqThisAngle > 3){
+            mapAngleDangerMIN.get(axe).put(starPoint,MINhigthestSeqThisAngle);
+        }else{
+            mapAngleDangerMIN.get(axe).remove(starPoint);
+        }
+
+        if(MAXhigthestSeqThisAngle > 3){
+            mapAngleDangerMAX.get(axe).put(starPoint,MAXhigthestSeqThisAngle);
+        }else{
+            mapAngleDangerMAX.get(axe).remove(starPoint);
+        }
+
+    }
+
+    public int getScoreStepAhead(){
+        int maxAhead =0;
+        int minAhead =0;
+
+        if(playe1Won && getLastPlayedPlayer()==1 && !player2Won){
+            return (MAX_player == 1)? GLOBAL.WIN: -GLOBAL.WIN;
+        }
+
+        if(player2Won && getLastPlayedPlayer()==2 && !playe1Won){
+            return (MAX_player == 2)? GLOBAL.WIN: -GLOBAL.WIN;
+        }
+
+
+        Iterator<Map.Entry<Dir.Axes,Map<Integer,Integer>>> itMax = mapAngleDangerMAX.entrySet().iterator();
+        Iterator<Map.Entry<Dir.Axes,Map<Integer,Integer>>> itMin = mapAngleDangerMIN.entrySet().iterator();
+        for(Map.Entry<Dir.Axes,Map<Integer,Integer>> entry : mapAngleDangerMAX.entrySet()){
+            for(Integer i : entry.getValue().values()){
+                if(i > maxAhead){
+                    maxAhead = i;
+                }
+            }
+        }
+        for(Map.Entry<Dir.Axes,Map<Integer,Integer>> entry : mapAngleDangerMIN.entrySet()){
+            for(Integer i : entry.getValue().values()){
+                if(i > minAhead){
+                    minAhead = i;
+                }
+            }
+        }
+
+/*
+
+        for(Integer i : itMax.next().getValue().values()){
+            if(i > maxAhead){
+                maxAhead = i;
+            }
+        }
+
+        for(Integer i : itMin.next().getValue().values()){
+            if(i > minAhead){
+                minAhead = i;
+            }
+        }
+*/
+
+
+        if(getLastPlayedPlayer() == MAX_player){
+
+            if(maxAhead > 4 && maxAhead > minAhead){
+                return GLOBAL.ALMOST_WIN ;
+            }
+
+            if(minAhead > 3 && minAhead >= maxAhead){
+                return -GLOBAL.ALMOST_WIN;
+            }
+
+        }else if(getLastPlayedPlayer() == MIN_player){
+
+            if(minAhead > 4 && minAhead >maxAhead){
+                return -GLOBAL.ALMOST_WIN ;
+            }
+            if(maxAhead > 3 && maxAhead >= minAhead){
+                return GLOBAL.ALMOST_WIN ;
+            }
+
+        }
+        return 0;
+    }
+
     public int calculateAllAngle(int player){
         int total=0;
         for(Dir d : Dir.direction4){
@@ -691,22 +774,22 @@ public class Etat {
              //   test[i] =startPoint;
                 int t = axeAngleValue(startPoint,d,player);
                 total += t;
-                mapMemoAxesValue.get(a).put(startPoint,t);
+              //  mapMemoAxesValue.get(a).put(startPoint,t);
                 if(higthestMIN> 3){
                     int df=0;
                 }
                 i++;
             }
-         */
+
 /*   System.out.println("all the startPoint: "+ Arrays.toString(test));
-            System.out.println(toStringVector(one_dim,test));*//*
+            System.out.println(toStringVector(one_dim,test));*/
 
 
         }
         return total;
     }
 
-*/
+
 
 
 
@@ -717,9 +800,8 @@ public class Etat {
         //memo2 = memo;
         LinkedList<Vector5> allVectorMax = new LinkedList<Vector5>();
         LinkedList<Vector5> allVectorOpponent = new LinkedList<Vector5>();
-        /*vector5MAX = allVectorMax;
+        vector5MAX = allVectorMax;
         vector5MIN = allVectorOpponent;
-*/
         boolean playe1Won =false;
         boolean player2Won =false;
 
@@ -816,7 +898,10 @@ public class Etat {
                         if( (nb_seqt&(power2[v])) != 0){
                             old_ref = memo[axe.i][i + D.v(v)];
                             if(old_ref ==null || old_ref.valueBirdirection <= new_vector.valueBirdirection ) {
-                                if (old_ref != null) old_ref.value--;
+                                if (old_ref != null){
+                                    old_ref.value--;
+                                    old_ref.valueBirdirection--;
+                                }
                                 memo[axe.i][i + D.v(v)] = new_vector;
                             }else {
                                 new_vector.valueBirdirection--;
@@ -848,11 +933,11 @@ public class Etat {
 
 
 
-        if(playe1Won && player==1 && !player2Won){
+        if(playe1Won && getLastPlayedPlayer()==1 && !player2Won){
             return (MAX_player == 1)? GLOBAL.WIN: -GLOBAL.WIN;
         }
 
-        if(player2Won && player==2 && !playe1Won){
+        if(player2Won && getLastPlayedPlayer()==2 && !playe1Won){
             return (MAX_player == 2)? GLOBAL.WIN: -GLOBAL.WIN;
         }
         //int higthestMAX =0;
@@ -884,17 +969,23 @@ public class Etat {
         higthestMAX=0; higthestMIN=0;
         for(int v1=0; v1 < allVectorMax.size(); v1++){
             Vector5 s = allVectorMax.get(v1);
-            int value = (s.bidirectionnel)? s.value+1 : s.value;
-            evaluation += Math.pow(value,4);
-            higthestMAX = (value > higthestMAX && s.isCorded)? value : higthestMAX;
+            if(s.value >0){
+                int value = (s.bidirectionnel)? s.value+1 : s.value;
+                evaluation += Math.pow(value,4);
+                higthestMAX = (value > higthestMAX && s.isCorded)? value : higthestMAX;
+
+            }
 
         }
         //int higthestMIN =0;
         for(int v2=0; v2 < allVectorOpponent.size(); v2++){
             Vector5 s = allVectorOpponent.get(v2);
-            int value = (s.bidirectionnel)? s.value+1 : s.value;
-            evaluation -= Math.pow(value,4);
-            higthestMIN = (value > higthestMIN && s.isCorded)? value : higthestMIN;
+            if(s.value > 0){
+                int value = (s.bidirectionnel)? s.value+1 : s.value;
+                evaluation -= Math.pow(value,4);
+                higthestMIN = (value > higthestMIN && s.isCorded)? value : higthestMIN;
+            }
+
         }
 
 
@@ -1198,13 +1289,33 @@ public class Etat {
 
     public void print_all_vector(List<Vector5> all){
 
+        int total=0;
         for(Vector5 v : all){
             if(v.value > 0){
-                System.out.println("---- value: "+v.value+ "   bi: "+v.bidirectionnel+"         ----");
+                int value = (v.bidirectionnel)? v.value+1 : v.value;
+                System.out.println("---- value: "+v.value+ "   bi: "+v.bidirectionnel+"  ---- score: "+ Math.pow(value,4));
                 System.out.println(toStringVector(one_dim,v.tab_seq));
+                total += Math.pow(value,4);
             }
         }
+        System.out.println("Total theses vector: "+total);
     }
 
+    public static boolean areAllEqual(int... values)
+    {
+        if (values.length == 0)
+        {
+            return true; // Alternative below
+        }
+        int checkValue = values[0];
+        for (int i = 1; i < values.length; i++)
+        {
+            if (values[i] != checkValue)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }
