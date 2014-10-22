@@ -117,13 +117,13 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
             return new Position(choix_converted/GLOBAL.FULL_NBCOL,choix_converted%GLOBAL.FULL_NBCOL);
         }
-        Move MINcheckWinMove = init.getNextMoves(opponent).poll();
+        /*Move MINcheckWinMove = init.getNextMoves(opponent).poll();
         if(MINcheckWinMove.score == (0-GLOBAL.WIN)){
             System.out.println("Try to save: ("+(MINcheckWinMove.move/GLOBAL.NBCOL)+","+(MINcheckWinMove.move%GLOBAL.NBCOL)+")");
             int choix_converted = getMoveCutedGridToFullGrid(MINcheckWinMove.move);
 
             return new Position(choix_converted/GLOBAL.FULL_NBCOL,choix_converted%GLOBAL.FULL_NBCOL);
-        }
+        }*/
 
      /*   int bestScoreSoFar = Integer.MIN_VALUE;
         Move best = MAXcheckWinMove;

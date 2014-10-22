@@ -47,7 +47,7 @@ public class MinMax {
 
         long time = System.currentTimeMillis();
         if(deep > 2){
-            activateLookUp = true;
+            activateLookUp = false;
         }else{
             activateLookUp = false;
         }
