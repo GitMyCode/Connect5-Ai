@@ -57,13 +57,26 @@ public class JoueurArtificiel implements Joueur, Runnable {
         GLOBAL.FULL_NBCOL = grille.getData()[0].length;
         GLOBAL.FULL_NBLIGNE = grille.getData().length;
 
-        Etat init = getInitStat(grille);
+        ArrayList<Integer> casesvides = new ArrayList<Integer>();
+        for(int l=0;l<GLOBAL.FULL_NBLIGNE;l++)
+            for(int c=0;c<GLOBAL.FULL_NBCOL;c++)
+                if(grille.getData()[l][c]==0)
+                    casesvides.add(l*GLOBAL.FULL_NBCOL+c);
 
+        GLOBAL.MAX = ( ((GLOBAL.FULL_NBCOL*GLOBAL.FULL_NBLIGNE) - casesvides.size()) % 2  == 0)? 1:2;
+        GLOBAL.MIN = (GLOBAL.MAX==1)? 2:1;
 
-        if(init.getNblibre() == (GLOBAL.FULL_NBCOL * GLOBAL.FULL_NBLIGNE)){
+        if(casesvides.size() == (GLOBAL.FULL_NBCOL * GLOBAL.FULL_NBLIGNE)){
             System.out.println("first hit");
             return new Position(GLOBAL.FULL_NBLIGNE/2,GLOBAL.FULL_NBCOL/2);
         }
+
+
+
+        Etat init = getInitStat(grille);
+
+
+
 
         PriorityQueue<Move>  pq = init.getNextMoves(GLOBAL.MAX);
 
@@ -132,11 +145,23 @@ public class JoueurArtificiel implements Joueur, Runnable {
         GLOBAL.FULL_NBCOL = grille.getData()[0].length;
         GLOBAL.FULL_NBLIGNE = grille.getData().length;
 
-        Etat init = getInitStat(grille);
-        if(init.getNblibre() == (GLOBAL.FULL_NBCOL * GLOBAL.FULL_NBLIGNE)){
+        ArrayList<Integer> casesvides = new ArrayList<Integer>();
+        for(int l=0;l<GLOBAL.FULL_NBLIGNE;l++)
+            for(int c=0;c<GLOBAL.FULL_NBCOL;c++)
+                if(grille.getData()[l][c]==0)
+                    casesvides.add(l*GLOBAL.FULL_NBCOL+c);
+
+        GLOBAL.MAX = ( ((GLOBAL.FULL_NBCOL*GLOBAL.FULL_NBLIGNE) - casesvides.size()) % 2  == 0)? 1:2;
+        GLOBAL.MIN = (GLOBAL.MAX==1)? 2:1;
+
+        if(casesvides.size() == (GLOBAL.FULL_NBCOL * GLOBAL.FULL_NBLIGNE)){
             System.out.println("first hit");
             return new Position(GLOBAL.FULL_NBLIGNE/2,GLOBAL.FULL_NBCOL/2);
         }
+
+
+        Etat init = getInitStat(grille);
+
 
 
         System.out.println("AI : JOUEUR "+GLOBAL.MAX);
@@ -184,14 +209,7 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
     public Etat getInitStat(Grille grille){
 
-        ArrayList<Integer> casesvides = new ArrayList<Integer>();
-        for(int l=0;l<GLOBAL.FULL_NBLIGNE;l++)
-            for(int c=0;c<GLOBAL.FULL_NBCOL;c++)
-                if(grille.getData()[l][c]==0)
-                    casesvides.add(l*GLOBAL.FULL_NBCOL+c);
 
-        GLOBAL.MAX = ( ((GLOBAL.FULL_NBCOL*GLOBAL.FULL_NBLIGNE) - casesvides.size()) % 2  == 0)? 1:2;
-        GLOBAL.MIN = (GLOBAL.MAX==1)? 2:1;
 
         byte[] myGrid;
         if(grille.getSize() > 81){
