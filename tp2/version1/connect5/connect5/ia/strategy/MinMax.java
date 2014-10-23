@@ -118,7 +118,7 @@ public class MinMax {
 
         int a = alpha; // Pour garder alpha intact
         int b = beta; // Pour garder beta intact
-        int limit = 17;
+        int limit = 20;
         while (!nextMoves.isEmpty()) {
 
             Move move = nextMoves.poll();

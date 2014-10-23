@@ -282,6 +282,20 @@ score :4999414 play :(10,6)
                         "------------" +
                         "------------";
 
+        String t9= //12 12
+                "------------" +
+                        "---B--------" +
+                        "----N-N-----" +
+                        "-----N------" +
+                        "-----NNNB---" +
+                        "-----B-NX---" +
+                        "-----BN-B---" +
+                        "-----BB-----" +
+                        "-----B------" +
+                        "-----N------" +
+                        "------------" +
+                        "------------";
+
 
 
 
@@ -310,7 +324,7 @@ score :4999414 play :(10,6)
         int[] to_test = new int[nbcol * nbligne];
 
         for(int i=0; i< to_test.length; i++){
-            to_test[i] = convert.get(t8.charAt(i)) -1;
+            to_test[i] = convert.get(t9.charAt(i)) -1;
         }
         return to_test;
     }

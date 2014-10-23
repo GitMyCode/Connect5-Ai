@@ -5,6 +5,10 @@ package connect5.ia.models;
  */
 public abstract class GLOBAL {
 
+    public static int MAX;
+    public static int MIN;
+
+
     public static int NBCOL;
     public static int NBLIGNE;
 

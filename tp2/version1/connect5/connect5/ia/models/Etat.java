@@ -100,11 +100,11 @@ public class Etat {
         // cloned.setChecker(checker);
 
         //  Vector5[][] clonedMemo = cloneMemoArray(memo2);
-        Map<Dir.Axes,Map<Integer,Integer>> clonedMapValue = cloneMapValue(mapMemoAxesValue);
+        Map<Dir.Axes,Map<Integer,Integer>> clonedMapValue = cloneMap(mapMemoAxesValue);
         cloned.mapMemoAxesValue = clonedMapValue;
         //cloned.memo2 = clonedMemo;
-        cloned.mapAngleDangerMAX=  cloneMapValue(mapAngleDangerMAX);
-        cloned.mapAngleDangerMIN = cloneMapValue(mapAngleDangerMIN);
+        cloned.mapAngleDangerMAX=  cloneMap(mapAngleDangerMAX);
+        cloned.mapAngleDangerMIN = cloneMap(mapAngleDangerMIN);
 
         cloned.evaluationHere = this.evaluationHere;
         cloned.mapAxesPointToStartPoint = mapAxesPointToStartPoint;
@@ -124,7 +124,7 @@ public class Etat {
     }
 
 
-    private  Map<Dir.Axes,Map<Integer,Integer>> cloneMapValue(Map<Dir.Axes,Map<Integer,Integer>> toClone){
+    private  Map<Dir.Axes,Map<Integer,Integer>> cloneMap (Map<Dir.Axes, Map<Integer, Integer>> toClone){
         Map<Dir.Axes,Map<Integer,Integer>> c = new HashMap<Dir.Axes, Map<Integer, Integer>>();
         for(Dir.Axes ax : Dir.Axes.values()){
             c.put(ax, new HashMap<Integer, Integer>());
@@ -251,9 +251,6 @@ public class Etat {
     }
 
     public void unplay(int move){
-
-        //  grille.set(new Position(move / nbcol, move % nbcol), 0);
-
         one_dim[move] = 0;
     }
 
@@ -267,26 +264,29 @@ public class Etat {
 
         int nblibre =0;
 
+
+        /* This is to cut the area to explore */
         int a=0;
-        for(byte b : one_dim){
+        for(byte carreau : one_dim){
 
 
             int pos_x =  ((a/GLOBAL.NBCOL) ) ;
             int pos_y = ((a%GLOBAL.NBCOL) ) ;
 
 
-            if(b != 0 ){
+            if(carreau != 0 ){
                 lowestX = (lowestX > pos_x)? pos_x : lowestX;
                 lowestY = (lowestY > pos_y)? pos_y : lowestY;
                 highestX= (highestX < pos_x)? pos_x: highestX;
                 highestY= (highestY < pos_y)? pos_y : highestY;
 
             }
-            if(b == 0){
+            if(carreau == 0){
                 nblibre++;
             }
             a++;
         }
+        /***************************************/
 
 
         PriorityQueue<Move> ordered_move;
@@ -337,25 +337,18 @@ public class Etat {
         return grille;
     }
 
+    /*OLD FUNCTION
+    * */
     public int evaluate(int player){
 
         return evaluate5(player);
 
     }
 
-    public int checkWinner(){
-        return checker.determineGagnant(grille);
-    }
-
     public boolean isTerminal(){
         return getNblibre() == 0;
     }
-    public void setChecker(GrilleVerificateur checker){
-        this.checker = checker;
-    }
-    public int xy_to_value(int x, int y){
-        return (x*nbcol+y);
-    }
+
 
 
 
@@ -373,58 +366,58 @@ public class Etat {
         player2Won = false;
 
         Dir.Axes axe = Dir.Axes.getA(D);
-        for (int i= point; D.boundaries(i,5);i= i+ D.v(1)){
+        for (int i= point; D.boundaries(i,5);i= i+ D.step(1)){
             if(true) {
-                int res = one_dim[i] | one_dim[i + D.v(1)] | one_dim[i + D.v(2)] | one_dim[i + D.v(3)] | one_dim[i + D.v(4)];
+                int res = one_dim[i] | one_dim[i + D.step(1)] | one_dim[i + D.step(2)] | one_dim[i + D.step(3)] | one_dim[i + D.step(4)];
                 if (res == 1 || res == 2) { //
 
 /*We must not count vector that have more than 5*/
 
                     int[] tab_s = new int[5];
 
-                    tab_s[0] = i + D.v(0);
-                    tab_s[1] = i + D.v(1);
-                    tab_s[2] = i + D.v(2);
-                    tab_s[3] = i + D.v(3);
-                    tab_s[4] = i + D.v(4);
+                    tab_s[0] = i + D.step(0);
+                    tab_s[1] = i + D.step(1);
+                    tab_s[2] = i + D.step(2);
+                    tab_s[3] = i + D.step(3);
+                    tab_s[4] = i + D.step(4);
                     if (tempMemo.containsKey(i)&& tempMemo.get(i).moreThan5) {
                         continue;
                     }
 
 
                     int nb_seqt = 0;
-                    if (one_dim[i + D.v(0)] == res) {
+                    if (one_dim[i + D.step(0)] == res) {
                         nb_seqt += 1 ;
                     }
-                    if (one_dim[i + D.v(1)] == res) {
+                    if (one_dim[i + D.step(1)] == res) {
                         nb_seqt += 1 << 1;
                     }
-                    if (one_dim[i + D.v(2)] == res) {
+                    if (one_dim[i + D.step(2)] == res) {
                         nb_seqt += 1 << 2;
                     }
-                    if (one_dim[i + D.v(3)] == res) {
+                    if (one_dim[i + D.step(3)] == res) {
                         nb_seqt += 1 << 3;
                     }
-                    if (one_dim[i + D.v(4)] == res) {
+                    if (one_dim[i + D.step(4)] == res) {
                         nb_seqt += 1 << 4;
                     }
 
                     Vector5 new_vector = new Vector5(nb_seqt,D);
-                    new_vector.setIfDirectionnel(isBidirectionnel(i,i+D.v(4),D));
+                    new_vector.setIfDirectionnel(isBidirectionnel(i,i+D.step(4),D));
 
                     if (new_vector.suite == 5) {
 /*TODO there is a chance where we return before checking if the other player won*/
 
-                        if (D.boundaries(i, 6) && one_dim[i + D.v(5)] == res) {
+                        if (D.boundaries(i, 6) && one_dim[i + D.step(5)] == res) {
                             new_vector.moreThan5 = true;
                             Vector5 old_ref;
                             for (int v = 0; v < 6; v++) {
                                 if ((nb_seqt & (power2[v])) != 0) {
-                                    old_ref = tempMemo.get(i+D.v(v));
+                                    old_ref = tempMemo.get(i+D.step(v));
                                     if (old_ref != null && !old_ref.moreThan5) {
                                         old_ref.value--;
                                     }
-                                    tempMemo.put(i+D.v(v),new_vector);
+                                    tempMemo.put(i+D.step(v),new_vector);
                                 }
                             }
                             continue;
@@ -446,7 +439,7 @@ public class Etat {
                     for (int v = 0; v < 5; v++) {
                         if ((nb_seqt & (power2[v])) != 0) {
 
-                            int steped = i+D.v(v);
+                            int steped = i+D.step(v);
                             if(tempMemo.containsKey(steped)){
                                 old_ref = tempMemo.get(steped);
                             }else {
@@ -457,7 +450,7 @@ public class Etat {
                                     old_ref.value--;
                                     old_ref.valueBirdirection--;
                                 }
-                                tempMemo.put(i+D.v(v),new_vector);
+                                tempMemo.put(i+D.step(v),new_vector);
                             } else {
                                 new_vector.valueBirdirection--;
                                 new_vector.value--;
@@ -617,59 +610,8 @@ public class Etat {
 
                 i++;
             }
-
-/*   System.out.println("all the startPoint: "+ Arrays.toString(test));
-            System.out.println(toStringVector(one_dim,test));*/
-
-
         }
-
-
-        int specialCaseForSureWin = 0;
-
-/*  if(getLastPlayedPlayer() == 1 ){ // Au tour du joueur 2 a jouer apres
-            int maxScore = (MAX_player == 2)? higthestMAX : higthestMIN;
-            int oppScore = (MAX_player == 2)? higthestMIN : higthestMAX;
-
-            if(maxScore > 3 && maxScore >= oppScore){
-                specialCaseForSureWin = (MAX_player == 2)? GLOBAL.ALMOST_WIN : -GLOBAL.ALMOST_WIN ;
-            }
-
-            if(player2Won){
-                specialCaseForSureWin= (MAX_player == 2)? GLOBAL.WIN: -GLOBAL.WIN ;
-            }
-
-        }else if( getLastPlayedPlayer() == 2 ){ // Si au tour du joueur 1 apres
-            int maxScore = (MAX_player == 1)? higthestMAX : higthestMIN;
-            int oppScore = (MAX_player == 1)? higthestMIN : higthestMAX;
-
-            if(maxScore > 3 &&  maxScore >= oppScore){
-                specialCaseForSureWin = (MAX_player == 1)? GLOBAL.ALMOST_WIN : -GLOBAL.ALMOST_WIN ;
-            }
-            if(playe1Won){
-                specialCaseForSureWin =  (MAX_player ==1)? GLOBAL.WIN : -GLOBAL.WIN;
-            }
-        }*/
-
-
-        /*if(higthestMIN > 3  && higthestMIN > higthestMAX){
-            mapMemoAxesValue.get(hightestMINAngle.axes).put(hightestMINAngle.startPoint,-GLOBAL.ALMOST_WIN);
-        }else if( higthestMAX > 3 && higthestMAX > higthestMIN){
-            mapMemoAxesValue.get(higthestMAXAngle.axes).put(higthestMAXAngle.startPoint,GLOBAL.ALMOST_WIN);
-        }
-*/
-
-
-/* if(specialCaseForSureWin >0){
-            mapMemoAxesValue.get(higthestMAXAngle.axes).put(higthestMAXAngle.startPoint,specialCaseForSureWin);
-        }else if(specialCaseForSureWin <0){
-        }
-*/
-
-
-
-
-        int t=0;
+/*        int t=0;
         for(Map m : mapMemoAxesValue.values()){
             for(Object i : m.values()){
                 t += (Integer) i;
@@ -677,7 +619,7 @@ public class Etat {
         }
         if(evaluationHere != t){
             System.out.println("peut etre ici!");
-        }
+        }*/
 
     }
 
@@ -687,9 +629,6 @@ public class Etat {
             mapAngleDangerMIN.get(axe).put(starPoint,MINhigthestSeqThisAngle);
         }else{
             if(mapAngleDangerMIN.get(axe).containsKey(starPoint)){
-                if(higthestMIN > 3){
-                    System.out.println("sdf");
-                }
                 mapAngleDangerMIN.get(axe).remove(starPoint);
             }
         }
@@ -698,13 +637,9 @@ public class Etat {
             mapAngleDangerMAX.get(axe).put(starPoint,MAXhigthestSeqThisAngle);
         }else{
             if(mapAngleDangerMAX.get(axe).containsKey(starPoint)){
-                if(higthestMAX > 3){
-                    System.out.println("sdf");
-                }
                 mapAngleDangerMAX.get(axe).remove(starPoint);
             }
         }
-        int after=0;
 
     }
 
@@ -837,36 +772,6 @@ public class Etat {
         return 0;
     }
 
-    public int calculateAllAngle(int player){
-        int total=0;
-
-        vector5MAX_2 = new LinkedList<Vector5>();
-        vector5MIN_2 = new LinkedList<Vector5>();
-
-        for(Dir d : Dir.direction4){
-            Dir.Axes a = Dir.Axes.getA(d);
-            //int test[] = new int[mapAxesStartPointSet.get(a).size()];
-            int i=0;
-            //   System.out.println(a + " nbStartpoint:"+ test.length );
-            for(Iterator<Integer> it = mapAxesStartPointSet.get(a).iterator(); it.hasNext(); ){
-                int startPoint = it.next();
-             //   test[i] =startPoint;
-                int t = axeAngleValue(startPoint,d,player);
-                total += t;
-              //  mapMemoAxesValue.get(a).put(startPoint,t);
-                if(higthestMIN> 3){
-                    int df=0;
-                }
-                i++;
-            }
-
-/*   System.out.println("all the startPoint: "+ Arrays.toString(test));
-            System.out.println(toStringVector(one_dim,test));*/
-
-
-        }
-        return total;
-    }
 
 
 
@@ -892,7 +797,7 @@ public class Etat {
                 }
 
                 //START loop
-                int res = one_dim[i]|one_dim[i+ D.v(1)]|one_dim[i+ D.v(2)]|one_dim[i+ D.v(3)]|one_dim[i+ D.v(4)];
+                int res = one_dim[i]|one_dim[i+ D.step(1)]|one_dim[i+ D.step(2)]|one_dim[i+ D.step(3)]|one_dim[i+ D.step(4)];
 
                 if(res== 1 || res == 2){ //
 
@@ -908,19 +813,19 @@ public class Etat {
                     new_vector.Direction = D;
 
                     int nb_seqt=0;
-                    if(one_dim[i + D.v(0)] == res){
+                    if(one_dim[i + D.step(0)] == res){
                         nb_seqt += 1<<0;
                     }
-                    if(one_dim[i + D.v(1)] == res){
+                    if(one_dim[i + D.step(1)] == res){
                         nb_seqt += 1<<1;
                     }
-                    if(one_dim[i + D.v(2)] == res){
+                    if(one_dim[i + D.step(2)] == res){
                         nb_seqt += 1<<2;
                     }
-                    if(one_dim[i + D.v(3)] == res){
+                    if(one_dim[i + D.step(3)] == res){
                         nb_seqt += 1<<3;
                     }
-                    if(one_dim[i + D.v(4)] == res){
+                    if(one_dim[i + D.step(4)] == res){
                         nb_seqt += 1<<4;
                     }
 
@@ -930,16 +835,16 @@ public class Etat {
                     if(vecteur_value == 5){
 
                         /*TODO there is a chance where we return before checking if the other player won*/
-                        if(D.boundaries(i,6) && one_dim[i+ D.v(5)] == res){
+                        if(D.boundaries(i,6) && one_dim[i+ D.step(5)] == res){
                             new_vector.moreThan5= true;
                             Vector5 old_ref;
                             for(int v=0;v<6;v++){
                                 if( (nb_seqt&(power2[v])) != 0){
-                                    old_ref = memo[axe.i][i + D.v(v)];
+                                    old_ref = memo[axe.i][i + D.step(v)];
                                     if(old_ref != null && !old_ref.moreThan5){
                                         old_ref.value--;
                                     }
-                                    memo[axe.i][i + D.v(v)] = new_vector;
+                                    memo[axe.i][i + D.step(v)] = new_vector;
                                 }
                             }
                             continue;
@@ -961,7 +866,7 @@ public class Etat {
                     }
                     /*Check if they there is free space on the two side. If yes we can assume that we could put a least one more
                     * before being blocked. So we do + 1   */
-                    if(isBidirectionnel(i,i+D.v(4),D)){
+                    if(isBidirectionnel(i,i+D.step(4),D)){
                         new_vector.bidirectionnel = true;
                         new_vector.valueBirdirection = vecteur_value+1;
                     }else {
@@ -975,13 +880,13 @@ public class Etat {
                     /*Update the memo[][] to avoid count two vector in the same place same direction*/
                     for(int v=0;v<5;v++){
                         if( (nb_seqt&(power2[v])) != 0){
-                            old_ref = memo[axe.i][i + D.v(v)];
+                            old_ref = memo[axe.i][i + D.step(v)];
                             if(old_ref ==null || old_ref.value < new_vector.valueBirdirection ) {
                                 if (old_ref != null){
                                     old_ref.value--;
                                     old_ref.valueBirdirection--;
                                 }
-                                memo[axe.i][i + D.v(v)] = new_vector;
+                                memo[axe.i][i + D.step(v)] = new_vector;
                             }else {
                                 new_vector.valueBirdirection--;
                                 new_vector.value--;
@@ -991,11 +896,11 @@ public class Etat {
 
                     /*Just for printing when debugging*/
 
-                    new_vector.tab_seq[0] = i + D.v(0);
-                    new_vector.tab_seq[1] = i + D.v(1);
-                    new_vector.tab_seq[2] = i + D.v(2);
-                    new_vector.tab_seq[3] = i + D.v(3);
-                    new_vector.tab_seq[4] = i + D.v(4);
+                    new_vector.tab_seq[0] = i + D.step(0);
+                    new_vector.tab_seq[1] = i + D.step(1);
+                    new_vector.tab_seq[2] = i + D.step(2);
+                    new_vector.tab_seq[3] = i + D.step(3);
+                    new_vector.tab_seq[4] = i + D.step(4);
 
 
 
@@ -1009,33 +914,6 @@ public class Etat {
                 }
             }
         }
-
-
-        //int higthestMAX =0;
-/*
-
-        int maxLenght = Math.max(allVectorMax.size(),allVectorOpponent.size());
-        for(int v=0; v< maxLenght;  ){
-
-            boolean hadRemove = false;
-            if(v < allVectorMax.size()){
-               Vector5 s = allVectorMax.get(v);
-                if(s.value <=0){
-                    allVectorMax.remove(v);
-                   hadRemove = true;
-                }
-            }
-
-            if(v < allVectorOpponent.size()){
-               Vector5 s = allVectorOpponent.get(v);
-                if(s.value <=0){
-                    allVectorOpponent.remove(v);
-                   hadRemove = true;
-                }
-            }
-            v = (hadRemove)? v: v+1;
-        }
-*/
 
         higthestMAX=0; higthestMIN=0;
         for(int v1=0; v1 < allVectorMax.size(); v1++){
@@ -1068,54 +946,6 @@ public class Etat {
         if(player2Won && getLastPlayedPlayer()==2 && !playe1Won){
             return ((MAX_player == 2)? GLOBAL.WIN: -GLOBAL.WIN ) + evaluation;
         }
-
-
-    /*    int maxScore = (MAX_player == getNextPlayerToPlay())? higthestMAX : higthestMIN;
-        int oppScore = (MAX_player == getNextPlayerToPlay())? higthestMIN : higthestMAX;
-
-        if(player2Won){
-           return (MAX_player == getNextPlayerToPlay())? GLOBAL.WIN: -GLOBAL.WIN;
-        }
-
-        if(maxScore > 3 && maxScore >= oppScore){
-           return (MAX_player == getNextPlayerToPlay())? GLOBAL.ALMOST_WIN + evaluation  : -GLOBAL.ALMOST_WIN +evaluation;
-        }
-*/
-
-
-        /* This check is for the situation when we are sure to win */
-  /*      if(getLastPlayedPlayer() ==1 && player ==1){ // Au tour du joueur 2 a jouer apres
-
-
-            int maxScore = (MAX_player == 2)? higthestMAX : higthestMIN;
-            int oppScore = (MAX_player == 2)? higthestMIN : higthestMAX;
-
-            if(player2Won){
-                return (MAX_player == 2)? GLOBAL.WIN: -GLOBAL.WIN;
-            }
-
-            if(maxScore > 3 && maxScore >= oppScore){
-                return (MAX_player == 2)? GLOBAL.ALMOST_WIN + evaluation  : -GLOBAL.ALMOST_WIN +evaluation;
-            }
-
-
-        }else if( getLastPlayedPlayer() == 2 && player == 2 ){ // Si au tour du joueur 1 apres
-            int maxScore = (MAX_player == 1)? higthestMAX : higthestMIN;
-            int oppScore = (MAX_player == 1)? higthestMIN : higthestMAX;
-
-            if(playe1Won){
-                return (MAX_player ==1)? GLOBAL.WIN : -GLOBAL.WIN;
-            }
-
-            if(higthestMIN >4 && higthestMIN > higthestMAX ){
-                return -GLOBAL.ALMOST_WIN + evaluation;
-            }
-
-
-            if(maxScore > 3 &&  maxScore >= oppScore){
-                return (MAX_player == 1)? GLOBAL.ALMOST_WIN + evaluation : -GLOBAL.ALMOST_WIN + evaluation;
-            }
-        }*/
 
 
         if(getLastPlayedPlayer() == MAX_player){
@@ -1191,43 +1021,6 @@ public class Etat {
 
 
 
-    public String toStringVector(byte[] data_original, int[] vector){
-
-
-
-        byte[] data = new byte[nbcol *nbligne];
-        System.arraycopy(data_original,0,data,0,data_original.length);
-
-        char[] table = {'_', 'N', 'B','X' };
-        String result = "" + nbligne + " " + nbcol+ "\n";
-        for(int j=0; j< vector.length; j++){
-            data[vector[j]] = 3;
-        }
-
-
-        int i=1;
-        for(byte b : data){
-            char c = (char)b;
-            result += table[b];
-            if(i % nbcol ==0){
-                result += '\n';
-            }
-            i++;
-        }
-
-        return result;
-
-    }
-
-
-
-
-
-   public static void main(String[] args) {
-
-
-
-    }
 
 
     public boolean isBidirectionnel(int index,int last_index, Dir D) {
@@ -1266,18 +1059,7 @@ public class Etat {
     }
 
 
-    public void pintTotalMapMemoAxeValue(){
-        int t=0;
 
-        for(Map m : mapMemoAxesValue.values()){
-            for(Object i : m.values()){
-                t += (Integer) i;
-            }
-
-        }
-        System.out.println(t);
-
-    }
 
 
 
@@ -1317,22 +1099,7 @@ public class Etat {
         }
         return one_dim;
     }
-    public String toStringOneDim(byte[] data){
-        char[] table = {'-', 'N', 'B','X' };
-        String result = "" + nbligne + " " + nbcol+ "\n";
 
-        int i=1;
-        for(byte b : data){
-            char c = (char)b;
-            result += table[b];
-            if(i % nbcol ==0){
-                result += '\n';
-            }
-            i++;
-        }
-
-        return result;
-    }
 
 
 
@@ -1352,73 +1119,7 @@ public class Etat {
         }
     }
 
-    public void print_all_vector(List<Vector5> all){
 
-        int total=0;
-        for(Vector5 v : all){
-            if(v.value > 0){
-                int value = (v.bidirectionnel)? v.value+1 : v.value;
-                System.out.println("---- value: "+v.value+ "   bi: "+v.bidirectionnel+"  ---- score: "+ Math.pow(value,4));
-                System.out.println(toStringVector(one_dim,v.tab_seq));
-                total += Math.pow(value,4);
-            }
-        }
-        System.out.println("Total theses vector: "+total);
-    }
-    private void printAllDiffVector(List<Vector5> l1, List<Vector5> l2){
-
-        int total=0;
-
-        for(Vector5 v : l1){
-            if(v.value > 0){
-                if(!l2.contains(l1)){
-                    int value = (v.bidirectionnel)? v.value+1 : v.value;
-                    System.out.println("---- value: "+v.value+ "   bi: "+v.bidirectionnel+"  ---- score: "+ Math.pow(value,4));
-                    System.out.println(toStringVector(one_dim,v.tab_seq));
-                    total += Math.pow(value,4);
-                }
-
-
-            }
-        }
-        System.out.println("Total theses vector: "+total);
-    }
-
-    public static boolean areAllEqual(int... values)
-    {
-        if (values.length == 0)
-        {
-            return true; // Alternative below
-        }
-        int checkValue = values[0];
-        for (int i = 1; i < values.length; i++)
-        {
-            if (values[i] != checkValue)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public void printAllStartPoint(){
-        for(Dir d : Dir.direction4){
-            Dir.Axes a = Dir.Axes.getA(d);
-            int test[] = new int[mapAxesStartPointSet.get(a).size()];
-            int i=0;
-            System.out.println(a + " nbStartpoint:"+ test.length + " Axe: "+a);
-            for(Iterator<Integer> it = mapAxesStartPointSet.get(a).iterator(); it.hasNext(); ){
-                int startPoint = it.next();
-                test[i] =startPoint;
-                i++;
-            }
-            System.out.println("all the startPoint: "+ Arrays.toString(test));
-            System.out.println(toStringVector(one_dim,test));
-
-
-        }
-
-    }
 
     public int getMaxSeq(){
         int maxAhead =0;
@@ -1442,6 +1143,39 @@ public class Etat {
             }
         }
         return minAhead;
+    }
+
+
+
+    public int calculateAllAngle(int player){
+        int total=0;
+
+        vector5MAX_2 = new LinkedList<Vector5>();
+        vector5MIN_2 = new LinkedList<Vector5>();
+
+        for(Dir d : Dir.direction4){
+            Dir.Axes a = Dir.Axes.getA(d);
+            //int test[] = new int[mapAxesStartPointSet.get(a).size()];
+            int i=0;
+            //   System.out.println(a + " nbStartpoint:"+ test.length );
+            for(Iterator<Integer> it = mapAxesStartPointSet.get(a).iterator(); it.hasNext(); ){
+                int startPoint = it.next();
+             //   test[i] =startPoint;
+                int t = axeAngleValue(startPoint,d,player);
+                total += t;
+              //  mapMemoAxesValue.get(a).put(startPoint,t);
+                if(higthestMIN> 3){
+                    int df=0;
+                }
+                i++;
+            }
+
+/*   System.out.println("all the startPoint: "+ Arrays.toString(test));
+            System.out.println(toStringVector(one_dim,test));*/
+
+
+        }
+        return total;
     }
 
 }

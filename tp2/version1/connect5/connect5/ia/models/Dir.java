@@ -82,11 +82,11 @@ public enum Dir {
     abstract public Dir opp();
     abstract public boolean boundaries (int index,int limit);
 
-    public int v(int step){
+    public int step (int step){
         return this.v() * step;
     }
     public boolean checkPossibleConnect(byte[] array,int i,int player){
-        int res = array[i]|array[i+ this.v(1)]|array[i+ this.v(2)]|array[i+ this.v(3)]|array[i+ this.v(4)];
+        int res = array[i]|array[i+ this.step(1)]|array[i+ this.step(2)]|array[i+ this.step(3)]|array[i+ this.step(4)];
         if(res > 2){
             return false;
         }

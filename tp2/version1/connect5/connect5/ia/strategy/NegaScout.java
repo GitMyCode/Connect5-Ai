@@ -1,5 +1,6 @@
 package connect5.ia.strategy;
 
+import connect5.ia.Utilitaires.Util;
 import connect5.ia.models.Etat;
 import connect5.ia.models.GLOBAL;
 import connect5.ia.models.Move;
@@ -74,7 +75,7 @@ public class NegaScout {
         System.out.println("TIME: " + (System.currentTimeMillis() - time) + " ms");
         //System.out.println("Closelist size: " + closelist.size() + "  nbSave: " + nbSaveInCloseList);
         etatInitial.play(moveInteger, currentPlayer);
-        System.out.println(etatInitial.toStringOneDim(etatInitial.one_dim));
+        System.out.println(Util.toStringOneDim(etatInitial.one_dim));
         etatInitial.unplay(moveInteger);
         return moveInteger;
 

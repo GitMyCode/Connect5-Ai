@@ -3,7 +3,7 @@ package connect5.ia.models;
 /**
  * Created by MB on 10/23/2014.
  */
-class Vector5 implements Comparable {
+public class Vector5 implements Comparable {
         public boolean isCorded = false;
         public boolean moreThan5 = false;
         public int suite=0;
