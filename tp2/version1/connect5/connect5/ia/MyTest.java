@@ -268,6 +268,20 @@ score :4999414 play :(10,6)
                         "-------------------" +
                         "-------------------";
 
+        String t8=//12 12
+                "------------" +
+                        "------------" +
+                        "----------B-" +
+                        "-----B---N--" +
+                        "------N-N---" +
+                        "--NBBBBNN---" +
+                        "-----BN-N---" +
+                        "-----B---N--" +
+                        "----------B-" +
+                        "------------" +
+                        "------------" +
+                        "------------";
+
 
 
 
@@ -296,7 +310,7 @@ score :4999414 play :(10,6)
         int[] to_test = new int[nbcol * nbligne];
 
         for(int i=0; i< to_test.length; i++){
-            to_test[i] = convert.get(t7.charAt(i)) -1;
+            to_test[i] = convert.get(t8.charAt(i)) -1;
         }
         return to_test;
     }
@@ -309,7 +323,7 @@ score :4999414 play :(10,6)
 
         // Test B1
         System.out.println("Test #1");
-        nbligne = 17; nbcol = 19;
+        nbligne = 12; nbcol = 12;
         Grille g = new Grille(nbligne,nbcol,testByte());
         Position coup = joueur.getProchainCoup(g, 4000);
         System.out.println((coup.ligne==4 && coup.colonne==0) ? "Réussi": "Échoué");

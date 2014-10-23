@@ -159,7 +159,7 @@ public class JoueurArtificiel implements Joueur, Runnable {
             try {
                 System.out.println("try deep:   " + deep);
                 res = MinMax.getMove(init, player, deep);
-                deep += (deep >= 5)? 1 : 2;
+                deep += (deep >= 4)? 1 : 2;
                 if (res !=null)
                     moves.add(res[0]);
 

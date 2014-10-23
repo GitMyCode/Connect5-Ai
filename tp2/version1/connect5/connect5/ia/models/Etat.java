@@ -390,8 +390,7 @@ public class Etat {
                     if (tempMemo.containsKey(i)&& tempMemo.get(i).moreThan5) {
                         continue;
                     }
-                    Vector5 new_vector = new Vector5();
-                    new_vector.Direction = D;
+
 
                     int nb_seqt = 0;
                     if (one_dim[i + D.v(0)] == res) {
@@ -410,11 +409,10 @@ public class Etat {
                         nb_seqt += 1 << 4;
                     }
 
-                    int vecteur_value = Integer.bitCount(nb_seqt);
+                    Vector5 new_vector = new Vector5(nb_seqt,D);
+                    new_vector.setIfDirectionnel(isBidirectionnel(i,i+D.v(4),D));
 
-                    if (vecteur_value == 5) {
-
-
+                    if (new_vector.suite == 5) {
 /*TODO there is a chance where we return before checking if the other player won*/
 
                         if (D.boundaries(i, 6) && one_dim[i + D.v(5)] == res) {
@@ -439,28 +437,9 @@ public class Etat {
                             //return (res == MAX_player)? GLOBAL.WIN : 0- GLOBAL.WIN;
                         }
                     }
-/*Check if they are next to each other  ->   01110 :Yes  01011 : No*/
-
-                    if ((5 - (Integer.numberOfLeadingZeros(nb_seqt) - 27)) - Integer.numberOfTrailingZeros(nb_seqt) == vecteur_value) {
-                        new_vector.isCorded = true;
-                    }
-
-/*Check if they there is free space on the two side. If yes we can assume that we could put a least one more
-                    * before being blocked. So we do + 1   */
-
-                    if (isBidirectionnel(i, i + D.v(4), D)) {
-                        new_vector.bidirectionnel = true;
-                        new_vector.valueBirdirection = vecteur_value + 1;
-                    } else {
-                        new_vector.valueBirdirection = vecteur_value;
-                    }
 
                     Vector5 old_ref;
-                    new_vector.value = vecteur_value;
-
-
                     new_vector.tab_seq = tab_s;
-
 
 /*Update the memo[][] to avoid count two vector in the same place same direction*/
 
@@ -473,9 +452,6 @@ public class Etat {
                             }else {
                                 old_ref = null;
                             }
-
-
-
                             if (old_ref == null || old_ref.valueBirdirection <= new_vector.valueBirdirection) {
                                 if (old_ref != null){
                                     old_ref.value--;
@@ -508,15 +484,15 @@ public class Etat {
                 if(s.isMAXvector){
                     vector5MAX_2.add(s);
                     thisEvaluation += Math.pow(value,4);
-                    if(value > MAXhigthestSeqThisAngle && s.isCorded){
-                        MAXhigthestSeqThisAngle = value;
+                    if(s.getThreatValue()> MAXhigthestSeqThisAngle ){
+                        MAXhigthestSeqThisAngle = s.getThreatValue();
                     }
 
                 }else {
                     vector5MIN_2.add(s);
                     thisEvaluation -= Math.pow(value,4);
-                    if(value > MINhigthestSeqThisAngle && s.isCorded){
-                        MINhigthestSeqThisAngle = value;
+                    if(s.getThreatValue() > MINhigthestSeqThisAngle ){
+                        MINhigthestSeqThisAngle = s.getThreatValue();
                     }
                 }
             }

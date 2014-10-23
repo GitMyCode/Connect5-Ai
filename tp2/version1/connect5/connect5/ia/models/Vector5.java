@@ -15,16 +15,24 @@ class Vector5 implements Comparable {
         public boolean isMAXvector = false;
         public int binarySeq=0;
 
+        public Vector5(){}
 
-        public Vector5(int binarySeq ){
+        public Vector5(int binarySeq,Dir D ){
+            Direction = D;
             this.binarySeq = binarySeq;
             value = Integer.bitCount(binarySeq);
             valueBirdirection = value;
+            /*Check if they are next to each other  ->   01110 :Yes  01011 : No*/
             if ((5 - (Integer.numberOfLeadingZeros(binarySeq) - 27)) -
                     Integer.numberOfTrailingZeros(binarySeq) == value) {
                 isCorded = true;
+                suite = value;
             }
         }
+
+
+/*Check if they there is free space on the two side. If yes we can assume that we could put a least one more
+                    * before being blocked. So we do + 1   */
 
         public void setIfDirectionnel(boolean bidirectionnel){
             this.bidirectionnel = bidirectionnel;
@@ -48,6 +56,16 @@ class Vector5 implements Comparable {
 
 
             return 0;
+        }
+
+        public int getThreatValue(){
+
+            if(isCorded){
+                return valueBirdirection;
+            }else if( valueBirdirection >4) {
+                return valueBirdirection;
+            }
+            return value;
         }
 
         public int vectorHeuristic(){
