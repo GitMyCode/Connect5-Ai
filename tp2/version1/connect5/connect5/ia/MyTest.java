@@ -204,7 +204,7 @@ public class MyTest {
                       "--------" +
                       "--------";
         static String t6 =
-                /* BUGGGGG TODO*/
+                /* BUGGGGG TODO  NE COMPTE PAS LES 6 et pense qu'il gagne*/
                /* "score :99999999 play :(12,13)\n" +
                         "20 20" +*/
                         "--------------------" +
