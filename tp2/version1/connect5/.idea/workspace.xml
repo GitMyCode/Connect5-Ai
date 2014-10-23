@@ -72,13 +72,13 @@
     <favorites_list name="connect5" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5107527">
+    <splitter split-orientation="horizontal" split-proportion="0.5591398">
       <split-first>
         <leaf>
           <file leaf-file-name="FenetreConnect5.java" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/connect5/FenetreConnect5.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1734" max-vertical-offset="3383">
+                <state vertical-scroll-proportion="0.0" vertical-offset="1581" max-vertical-offset="3383">
                   <caret line="120" column="46" selection-start-line="120" selection-start-column="46" selection-end-line="120" selection-end-column="46" />
                   <folding />
                 </state>
@@ -128,8 +128,8 @@
           <file leaf-file-name="MinMax.java" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/connect5/ia/strategy/MinMax.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1512" max-vertical-offset="3808">
-                  <caret line="113" column="22" selection-start-line="113" selection-start-column="22" selection-end-line="113" selection-end-column="22" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="1351" max-vertical-offset="3825">
+                  <caret line="123" column="28" selection-start-line="123" selection-start-column="28" selection-end-line="123" selection-end-column="28" />
                   <folding />
                 </state>
               </provider>
@@ -155,26 +155,25 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Etat.java" pinned="false" current="true" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/connect5/ia/models/Etat.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.6976744" vertical-offset="3435" max-vertical-offset="25279">
-                  <caret line="228" column="0" selection-start-line="228" selection-start-column="0" selection-end-line="228" selection-end-column="0" />
-                  <folding>
-                    <element signature="e#3288#3321#0" expanded="true" />
-                    <element signature="e#6726#6727#0" expanded="true" />
-                    <element signature="e#6770#6771#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="JeuConnect5.java" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/connect5/JeuConnect5.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.0" vertical-offset="697" max-vertical-offset="2431">
                   <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
                   <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Etat.java" pinned="false" current="true" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/connect5/ia/models/Etat.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="7.702924" vertical-offset="5756" max-vertical-offset="25415">
+                  <caret line="741" column="65" selection-start-line="741" selection-start-column="65" selection-end-line="741" selection-end-column="65" />
+                  <folding>
+                    <element signature="e#763#772#0" expanded="true" />
+                    <element signature="e#836#845#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -186,8 +185,8 @@
           <file leaf-file-name="MyTest.java" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/connect5/ia/MyTest.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="3128" max-vertical-offset="4505">
-                  <caret line="202" column="34" selection-start-line="202" selection-start-column="34" selection-end-line="202" selection-end-column="34" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="3060" max-vertical-offset="4726">
+                  <caret line="204" column="10" selection-start-line="204" selection-start-column="10" selection-end-line="204" selection-end-column="10" />
                   <folding />
                 </state>
               </provider>
@@ -233,11 +232,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="JoueurArtificiel.java" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="JoueurArtificiel.java" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/connect5/ia/JoueurArtificiel.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="1.5474061" vertical-offset="1600" max-vertical-offset="10047">
-                  <caret line="160" column="0" selection-start-line="160" selection-start-column="0" selection-end-line="160" selection-end-column="0" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="2397" max-vertical-offset="10047">
+                  <caret line="178" column="44" selection-start-line="178" selection-start-column="44" selection-end-line="178" selection-end-column="44" />
                   <folding>
                     <element signature="e#4817#4826#0" expanded="true" />
                   </folding>
@@ -255,15 +254,17 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Etat.java" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="Etat.java" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/connect5/ia/models/Etat.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="4895" max-vertical-offset="25279">
-                  <caret line="212" column="30" selection-start-line="212" selection-start-column="30" selection-end-line="212" selection-end-column="30" />
+                <state vertical-scroll-proportion="-3.0561404" vertical-offset="15992" max-vertical-offset="25449">
+                  <caret line="800" column="12" selection-start-line="800" selection-start-column="12" selection-end-line="800" selection-end-column="12" />
                   <folding>
-                    <element signature="e#6726#6727#0" expanded="true" />
-                    <element signature="e#6770#6771#0" expanded="true" />
-                    <element signature="e#9845#9863#0" expanded="true" />
+                    <element signature="e#763#772#0" expanded="true" />
+                    <element signature="e#836#845#0" expanded="true" />
+                    <element signature="e#6886#6887#0" expanded="true" />
+                    <element signature="e#6930#6931#0" expanded="true" />
+                    <element signature="e#10254#10272#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -272,8 +273,8 @@
           <file leaf-file-name="Grid.java" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/connect5/ia/models/Grid.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="2736" max-vertical-offset="3638">
-                  <caret line="194" column="21" selection-start-line="194" selection-start-column="21" selection-end-line="194" selection-end-column="21" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="475" max-vertical-offset="3638">
+                  <caret line="60" column="16" selection-start-line="60" selection-start-column="16" selection-end-line="60" selection-end-column="16" />
                   <folding />
                 </state>
               </provider>
@@ -304,8 +305,8 @@
         <option value="$PROJECT_DIR$/connect5/JoueurClientSocket.java" />
         <option value="$PROJECT_DIR$/connect5/ia/models/Dir.java" />
         <option value="$PROJECT_DIR$/connect5/ia/strategy/MinMax.java" />
-        <option value="$PROJECT_DIR$/connect5/ia/JoueurArtificiel.java" />
         <option value="$PROJECT_DIR$/connect5/ia/MyTest.java" />
+        <option value="$PROJECT_DIR$/connect5/ia/JoueurArtificiel.java" />
         <option value="$PROJECT_DIR$/connect5/ia/models/Etat.java" />
       </list>
     </option>
@@ -392,7 +393,7 @@
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../../../PROJETS/code-shed/longuest-increasing-seq" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -892,12 +893,12 @@
       <workItem from="1413681313998" duration="22423000" />
       <workItem from="1413825273021" duration="8523000" />
       <workItem from="1413904652560" duration="127000" />
-      <workItem from="1413927889941" duration="41810000" />
+      <workItem from="1413927889941" duration="49973000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="507329000" />
+    <option name="totallyTimeSpent" value="515492000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -921,7 +922,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1050" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -934,12 +935,12 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2612903" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.48313385" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6115343" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995737" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38628945" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32208923" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="-1280" y="512" width="1280" height="512" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5005441" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="-1280" y="512" width="1280" height="512" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4513369" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Run with VisualVM" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
@@ -968,14 +969,14 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2612903" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6332971" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33188248" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995737" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38628945" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4352557" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="-1280" y="512" width="1280" height="512" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29488575" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="-1280" y="512" width="1280" height="512" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4513369" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Run with VisualVM" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
@@ -983,7 +984,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Debug with VisualVM" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
-      <window_info id="JProfiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41283423" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
+      <window_info id="JProfiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.41240478" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
@@ -1008,45 +1009,27 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/connect5/ia/models/Etat.java</url>
-          <line>228</line>
+          <line>235</line>
           <properties />
           <option name="timeStamp" value="800" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/connect5/ia/models/Etat.java</url>
-          <line>709</line>
-          <properties />
-          <option name="timeStamp" value="835" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/connect5/ia/models/Etat.java</url>
-          <line>217</line>
+          <line>223</line>
           <properties />
           <option name="timeStamp" value="954" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/connect5/ia/models/Etat.java</url>
-          <line>221</line>
+          <line>227</line>
           <properties />
           <option name="timeStamp" value="955" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/connect5/ia/models/Etat.java</url>
-          <line>721</line>
-          <properties />
-          <option name="timeStamp" value="977" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/connect5/ia/models/Etat.java</url>
-          <line>303</line>
-          <properties />
-          <option name="timeStamp" value="1023" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="1024" />
+      <option name="time" value="1033" />
     </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
@@ -1085,9 +1068,8 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="9075" max-vertical-offset="18156">
           <caret line="556" column="13" selection-start-line="556" selection-start-column="13" selection-end-line="556" selection-end-column="13" />
           <folding>
-            <element signature="e#3288#3321#0" expanded="true" />
-            <element signature="e#6726#6727#0" expanded="true" />
-            <element signature="e#6770#6771#0" expanded="true" />
+            <element signature="e#763#772#0" expanded="true" />
+            <element signature="e#836#845#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1397,10 +1379,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/FenetreConnect5.java">
+    <entry file="file://$PROJECT_DIR$/connect5/ia/models/Grid.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1734" max-vertical-offset="3383">
-          <caret line="120" column="46" selection-start-line="120" selection-start-column="46" selection-end-line="120" selection-end-column="46" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="475" max-vertical-offset="3638">
+          <caret line="60" column="16" selection-start-line="60" selection-start-column="16" selection-end-line="60" selection-end-column="16" />
           <folding />
         </state>
       </provider>
@@ -1413,26 +1395,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/ia/models/Grid.java">
+    <entry file="file://$PROJECT_DIR$/connect5/FenetreConnect5.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2736" max-vertical-offset="3638">
-          <caret line="194" column="21" selection-start-line="194" selection-start-column="21" selection-end-line="194" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1734" max-vertical-offset="3383">
+          <caret line="120" column="46" selection-start-line="120" selection-start-column="46" selection-end-line="120" selection-end-column="46" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/connect5/ia/MyTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3128" max-vertical-offset="4505">
-          <caret line="202" column="34" selection-start-line="202" selection-start-column="34" selection-end-line="202" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="3060" max-vertical-offset="4726">
+          <caret line="204" column="10" selection-start-line="204" selection-start-column="10" selection-end-line="204" selection-end-column="10" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/connect5/ia/JoueurArtificiel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.5474061" vertical-offset="1600" max-vertical-offset="10047">
-          <caret line="160" column="0" selection-start-line="160" selection-start-column="0" selection-end-line="160" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2397" max-vertical-offset="10047">
+          <caret line="178" column="44" selection-start-line="178" selection-start-column="44" selection-end-line="178" selection-end-column="44" />
           <folding>
             <element signature="e#4817#4826#0" expanded="true" />
           </folding>
@@ -1441,20 +1423,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/connect5/ia/strategy/MinMax.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1512" max-vertical-offset="3808">
-          <caret line="113" column="22" selection-start-line="113" selection-start-column="22" selection-end-line="113" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1351" max-vertical-offset="3825">
+          <caret line="123" column="28" selection-start-line="123" selection-start-column="28" selection-end-line="123" selection-end-column="28" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/connect5/ia/models/Etat.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6976744" vertical-offset="3435" max-vertical-offset="25279">
-          <caret line="228" column="0" selection-start-line="228" selection-start-column="0" selection-end-line="228" selection-end-column="0" />
+        <state vertical-scroll-proportion="7.702924" vertical-offset="5756" max-vertical-offset="25415">
+          <caret line="741" column="65" selection-start-line="741" selection-start-column="65" selection-end-line="741" selection-end-column="65" />
           <folding>
-            <element signature="e#3288#3321#0" expanded="true" />
-            <element signature="e#6726#6727#0" expanded="true" />
-            <element signature="e#6770#6771#0" expanded="true" />
+            <element signature="e#763#772#0" expanded="true" />
+            <element signature="e#836#845#0" expanded="true" />
           </folding>
         </state>
       </provider>

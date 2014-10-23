@@ -47,7 +47,7 @@ public class MinMax {
 
         long time = System.currentTimeMillis();
         if(deep > 2){
-            activateLookUp = false;
+            activateLookUp = true;
         }else{
             activateLookUp = false;
         }
@@ -122,6 +122,7 @@ public class MinMax {
             Move move = nextMoves.poll();
             Etat next_step = etat.clone();
             next_step.playAndUpdate(move.move, player);
+            //next_step.play(move.move,player);
             next_step.score = move.score; // garder l'évaluation dans l'Etat
 
 

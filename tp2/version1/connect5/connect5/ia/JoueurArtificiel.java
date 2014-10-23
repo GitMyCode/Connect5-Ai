@@ -155,11 +155,11 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
         int[] res = null;
         boolean stoped = false;
-        while (!GLOBAL.timeUp() && !stoped && deep < 5){
+        while (!GLOBAL.timeUp() && !stoped ){
             try {
                 System.out.println("try deep:   " + deep);
                 res = MinMax.getMove(init, player, deep);
-                deep += (deep >= 4)? 1 : 2;
+                deep += (deep >= 5)? 1 : 2;
                 if (res !=null)
                     moves.add(res[0]);
             }catch (TimeOver e){
@@ -175,7 +175,7 @@ public class JoueurArtificiel implements Joueur, Runnable {
         if(res != null){
             System.out.println("----------------------------- LAST DEPTH : "+GLOBAL.LAST_DEPTH);
             System.out.println("score :" + res[1] + " play :(" + res[0] / GLOBAL.NBCOL + "," + res[0] % GLOBAL.NBCOL + ")");
-            init.play(res[0], player);
+            init.play(res[0], 3);
             System.out.println(init.toStringOneDim(init.one_dim));
             init.unplay(res[0]);
         }else {
