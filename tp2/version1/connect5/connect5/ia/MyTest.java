@@ -1,7 +1,7 @@
 package connect5.ia;
 
 import connect5.Grille;
-import connect5.Joueur;
+//import connect5.Joueur;
 import connect5.Position;
 import connect5.ia.JoueurArtificiel;
 
@@ -333,13 +333,13 @@ score :4999414 play :(10,6)
 
     public static void main(String args[]){
 
-        Joueur joueur = new JoueurArtificiel();
+        JoueurArtificiel joueur = new JoueurArtificiel();
 
         // Test B1
         System.out.println("Test #1");
         nbligne = 12; nbcol = 12;
         Grille g = new Grille(nbligne,nbcol,testByte());
-        Position coup = joueur.getProchainCoup(g, 4000);
+        Position coup = joueur.getProchainCoupTEST(g, 2);
         System.out.println((coup.ligne==4 && coup.colonne==0) ? "Réussi": "Échoué");
 
 
@@ -349,7 +349,7 @@ score :4999414 play :(10,6)
             g.set(0, 2+i, 1);
             g.set(4, 2+i, 2);
         }*/
-        coup = joueur.getProchainCoup(g, 20000);
+        coup = joueur.getProchainCoupTEST(g, 2);
         System.out.println("Test #1");
         System.out.println((coup.ligne==0 && (coup.colonne==1||coup.colonne==6)) ? "Réussi": "Échoué");
 

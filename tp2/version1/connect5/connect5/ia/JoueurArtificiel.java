@@ -127,6 +127,61 @@ public class JoueurArtificiel implements Joueur, Runnable {
         return new Position(choix_converted/GLOBAL.FULL_NBCOL,choix_converted%GLOBAL.FULL_NBCOL);
     }
 
+    public Position getProchainCoupTEST(Grille grille, int maxDepth){
+        GLOBAL.startTimer(Integer.MAX_VALUE);
+        GLOBAL.FULL_NBCOL = grille.getData()[0].length;
+        GLOBAL.FULL_NBLIGNE = grille.getData().length;
+
+        Etat init = getInitStat(grille);
+        if(init.getNblibre() == (GLOBAL.FULL_NBCOL * GLOBAL.FULL_NBLIGNE)){
+            System.out.println("first hit");
+            return new Position(GLOBAL.FULL_NBLIGNE/2,GLOBAL.FULL_NBCOL/2);
+        }
+
+
+        System.out.println("AI : JOUEUR "+GLOBAL.MAX);
+        int deep = 2;
+        List<Integer> moves = new ArrayList<Integer>();
+        moves.add(init.getNextMoves(GLOBAL.MAX).poll().move);
+        System.out.println(GLOBAL.showTimeRemain());
+        System.out.println(" TRY TO MAX :" + GLOBAL.MAX + " AND MIN :" + GLOBAL.MAX );
+
+        int[] res = null;
+        boolean stoped = false;
+        while (deep <=maxDepth && !stoped ){
+            try {
+                System.out.println("try deep:   " + deep);
+                res = MinMax.getMove(init, GLOBAL.MAX, deep);
+                deep += (deep >= 4)? 1 : 2;
+                if (res !=null)
+                    moves.add(res[0]);
+
+                if(res[1] >= GLOBAL.WIN - 4000){
+                    stoped= true;
+                }
+
+            }catch (TimeOver e){
+                System.out.println(e);
+                stoped=true;
+            }
+        }
+        MinMax.closelist.clear();
+        int choix = moves.get(moves.size()-1);
+        if(res != null){
+            System.out.println("----------------------------- LAST DEPTH : "+GLOBAL.LAST_DEPTH);
+            System.out.println("score :" + res[1] + " play :(" + res[0] / GLOBAL.NBCOL + "," + res[0] % GLOBAL.NBCOL + ")");
+            init.play(res[0], 3);
+            System.out.println(Util.toStringOneDim(init.one_dim));
+            init.unplay(res[0]);
+        }else {
+            System.out.println("res est  null----------------------");
+            System.out.println("play :(" + choix / GLOBAL.NBCOL + "," + choix% GLOBAL.NBCOL + ")");
+        }
+
+        int choix_converted = getMoveCutedGridToFullGrid(choix);
+        return new Position(choix_converted/GLOBAL.FULL_NBCOL,choix_converted%GLOBAL.FULL_NBCOL);
+    }
+
     public Etat getInitStat(Grille grille){
 
         ArrayList<Integer> casesvides = new ArrayList<Integer>();
