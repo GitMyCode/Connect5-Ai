@@ -34,6 +34,9 @@ public class Etat {
     public int bestMove;
     public Integer lowerBound = null;
     public Integer upperBound = null;
+    public int depth = 0;
+    public int maxDepth =0;
+
 
     public LinkedList<Vector5> vector5MAX = new LinkedList<Vector5>();
     public LinkedList<Vector5> vector5MIN = new LinkedList<Vector5>();
@@ -182,11 +185,12 @@ public class Etat {
         if(this ==(Etat) obj){
             return true;
         }
-
         Etat etat_b = (Etat) obj;
-        if(one_dim.length != etat_b.one_dim.length ){
+        if(etat_b.depth != depth){
             return false;
         }
+
+
 
         for(int i=0;i< one_dim.length; i++){
             if(one_dim[i] != etat_b.one_dim[i]){
@@ -293,7 +297,7 @@ public class Etat {
         }
 
 
-        int buffer = (one_dim.length > 90)? 1: 3;
+        int buffer = 2;
 
         for(int i =0; i< one_dim.length; i++){
 
@@ -303,9 +307,9 @@ public class Etat {
             if( (pos_x >= lowestX-buffer) && (pos_x <= highestX+buffer ) && (pos_y  >= lowestY -buffer) && (pos_y <= highestY +buffer  ) ){
                 if(one_dim[i] ==0){
                     play(i,player_to_max);
-                    int evaluation2 = evaluate(player_to_max);
+                    //int evaluation = evaluate(player_to_max);
                     int evaluation= evalPoint(i,player_to_max);
-
+/*
                     if(!areAllEqual(evaluation,evaluation2)){
                         if(true){///evaluation  < GLOBAL.ALMOST_WIN-6000 && evaluation > -GLOBAL.ALMOST_WIN+6000 ){
                             System.out.println("prob: TotalScan: "+ evaluation2
@@ -316,7 +320,7 @@ public class Etat {
                             System.out.println(toStringOneDim(one_dim));
                         }
 
-                    }
+                    }*/
                     Move aMove =  new Move(i,evaluation);
                     ordered_move.add(aMove);
 
@@ -407,6 +411,7 @@ public class Etat {
                     }
 
                     int vecteur_value = Integer.bitCount(nb_seqt);
+
                     if (vecteur_value == 5) {
 
 
@@ -434,8 +439,6 @@ public class Etat {
                             //return (res == MAX_player)? GLOBAL.WIN : 0- GLOBAL.WIN;
                         }
                     }
-
-
 /*Check if they are next to each other  ->   01110 :Yes  01011 : No*/
 
                     if ((5 - (Integer.numberOfLeadingZeros(nb_seqt) - 27)) - Integer.numberOfTrailingZeros(nb_seqt) == vecteur_value) {
@@ -752,7 +755,7 @@ public class Etat {
 
             for(Dir.Axes axes : Dir.Axes.values()){
                 for(Map.Entry<Integer,Integer> max :  mapAngleDangerMAX.get(axes).entrySet()){
-                    if( !(axes == axe && max.getKey() == startPoint)){
+                    if( !(axes == axe && max.getKey().equals(startPoint))){
                         if(max.getValue() > maxAhead){
                             maxAhead = max.getValue();
                         }
@@ -761,7 +764,7 @@ public class Etat {
                     }
                 }
                 for(Map.Entry<Integer,Integer> min : mapAngleDangerMIN.get(axes).entrySet()){
-                    if( !(axes == axe && min.getKey() == startPoint)){
+                    if( !(axes == axe && min.getKey().equals(startPoint))){
                         if(min.getValue() > minAhead){
                             minAhead = min.getValue();
                         }
@@ -1208,45 +1211,7 @@ public class Etat {
 
     }
 
-    class Vector5 {
-        public boolean isCorded = false;
-        public boolean moreThan5 = false;
-        public int value;
-        public int valueBirdirection;
-        public boolean bidirectionnel = false;
-        public Dir Direction;
-        public int[] tab_seq = new int[5];
-        public boolean isMAXvector = false;
 
-/*
-        @Override
-        public boolean equals (Object obj) {
-
-        }*/
-
-        public Vector5 clone() {
-            Vector5 n  = new Vector5();
-            n.isCorded = this.isCorded;
-            n.moreThan5 = moreThan5;
-            n.value = value;
-            n.valueBirdirection = valueBirdirection;
-            n.Direction = Direction;
-
-            return n;
-        }
-
-        @Override
-        public boolean equals (Object obj) {
-            Vector5 v = (Vector5) obj;
-            for(int i =0; i<tab_seq.length; i++){
-                if(tab_seq[i] != v.tab_seq[i]){
-                    return false;
-                }
-            }
-            return true;
-
-        }
-    }
 
 
 

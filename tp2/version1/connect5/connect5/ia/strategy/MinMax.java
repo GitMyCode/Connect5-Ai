@@ -32,7 +32,7 @@ public class MinMax {
     static boolean activateLookUp = false;
 
     //static Map<Etat, int[]> closelist = new HashMap<Etat, int[]>();
-    static HashMap<Etat,Etat> closelist = new HashMap<Etat, Etat>();
+    public static HashMap<Etat,Etat> closelist = new HashMap<Etat, Etat>();
 
     public static int[] getMove (Etat etatInitial, int playerColor, int deep) throws TimeOver {
         MAX_DEPTH = deep;
@@ -42,7 +42,7 @@ public class MinMax {
         nbMAX = 0;
         nbMIN = 0;
         nbSaveInCloseList =0;
-        closelist = new HashMap<Etat, Etat>();
+        //closelist = new HashMap<Etat, Etat>();
 
 
         long time = System.currentTimeMillis();
@@ -69,15 +69,15 @@ public class MinMax {
         }
 
 
-        if(activateLookUp){
+        if(activateLookUp && depth != 0){
             if(closelist.containsKey(etat)){
                 Etat ref = closelist.get(etat);
                 nbSaveInCloseList++;
 
-                if(ref.lowerBound !=null && ref.lowerBound >= beta){
+                if(ref.lowerBound !=null && ref.lowerBound >= beta && ref.maxDepth == MAX_DEPTH){
                     return new int[] {-1, ref.lowerBound};
                 }
-                if(ref.upperBound !=null && ref.upperBound <= alpha){
+                if(ref.upperBound !=null && ref.upperBound <= alpha && ref.maxDepth == MAX_DEPTH){
                     return new int[] {-1, ref.upperBound};
                 }
                 if(ref.lowerBound !=null){
@@ -118,9 +118,23 @@ public class MinMax {
 
         int a = alpha; // Pour garder alpha intact
         int b = beta; // Pour garder beta intact
+        int limit = 17;
         while (!nextMoves.isEmpty()) {
+
             Move move = nextMoves.poll();
+            /*if(bestMove == Integer.MAX_VALUE || bestMove == Integer.MIN_VALUE){
+                bestMove = move.score;
+            }*/
+           /* if(player == currentPlayer && move.score < -GLOBAL.CONNECT4_SCORE && limit< 15){
+                break;
+            }*/
+            if(limit <0   ){
+                break;
+            }
+            limit--;
             Etat next_step = etat.clone();
+            next_step.depth= depth+1;
+            next_step.maxDepth = MAX_DEPTH;
             next_step.playAndUpdate(move.move, player);
             //next_step.play(move.move,player);
             next_step.score = move.score; // garder l'évaluation dans l'Etat
@@ -172,7 +186,7 @@ public class MinMax {
             }else{
                 eRef.lowerBound = a;
             }
-
+            eRef.depth= depth;
             closelist.put(eRef,eRef);
         }
 

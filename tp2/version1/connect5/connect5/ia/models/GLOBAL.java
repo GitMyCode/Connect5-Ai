@@ -25,12 +25,15 @@ public abstract class GLOBAL {
     public static final int CONNECT4_SCORE = 100000; // 1 million
 
 
-    public static final int LIMITE =50;
+    public static final int LIMITE =80;
 
     public static long timer;
     public static long remain;
+    public static boolean END = false;
+
 
     public static void startTimer(int delais){
+        END = false;
         timer = System.currentTimeMillis();
         remain = delais;
     }
@@ -48,8 +51,14 @@ public abstract class GLOBAL {
     }
 
     public static boolean timeUp(){
-        if(timeRemaining() < LIMITE ){
+        if(END){
             return true;
+        }
+
+        if(timeRemaining() < LIMITE ){
+            END = true;
+            return true;
+
         }
 
         return false;

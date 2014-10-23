@@ -155,22 +155,24 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
         int[] res = null;
         boolean stoped = false;
-        while (!GLOBAL.timeUp() && !stoped ){
+        while (!stoped ){
             try {
                 System.out.println("try deep:   " + deep);
                 res = MinMax.getMove(init, player, deep);
                 deep += (deep >= 5)? 1 : 2;
                 if (res !=null)
                     moves.add(res[0]);
-            }catch (TimeOver e){
-                System.out.println("calisse: "+e);
-                if(e.getClass() == TimeOver.class){
-                    System.out.println(e);
+
+                if(res[1] >= GLOBAL.WIN - 4000){
                     stoped= true;
                 }
 
+            }catch (TimeOver e){
+                System.out.println(e);
+                stoped=true;
             }
         }
+        MinMax.closelist.clear();
         int choix = moves.get(moves.size()-1);
         if(res != null){
             System.out.println("----------------------------- LAST DEPTH : "+GLOBAL.LAST_DEPTH);

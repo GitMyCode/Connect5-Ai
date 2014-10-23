@@ -204,6 +204,31 @@ public class MyTest {
                       "--------" +
                       "--------" +
                       "--------";
+        String t6 =
+                /* BUGGGGG TODO*/
+               /* "score :99999999 play :(12,13)\n" +
+                        "20 20" +*/
+                        "--------------------" +
+                        "----------------B---" +
+                        "---------------NN---" +
+                        "-------------BBBN---" +
+                        "------------N-NBN---" +
+                        "-----------N--NBN---" +
+                        "------B---N-BNBBBBN-" +
+                        "-------N-B-BNBBNN---" +
+                        "--------N-BNBBBBN---" +
+                        "---------NBN-N-BN---" +
+                        "-----B---BNNNBNNNNB-" +
+                        "------N-BBNB--BBBN--" +
+                        "-------NNBNNB--B-N--" +
+                        "--------NBN-B---N---" +
+                        "---------NBBN-------" +
+                        "--------BNB-B-------" +
+                        "---------B----------" +
+                        "--------N-----------" +
+                        "--------------------" +
+                        "--------------------";
+
 
         String t5 =
                 //11 10 prob: TotalScan: 1 thisPoint:-14
@@ -217,6 +242,32 @@ public class MyTest {
                         "------N----" +
                         "---B-------" +
                         "-----------";
+
+
+        String t7 =
+        /*----------------------------- LAST DEPTH : 2
+score :4999414 play :(10,6)
+17 19
+*/
+
+                        "-------------------" +
+                        "-------------------" +
+                        "-------------------" +
+                        "-------------------" +
+                        "-------------------" +
+                        "---------B---------" +
+                        "--------N-N--------" +
+                        "--------BNNNBN-----" +
+                        "-------NBBB-N------" +
+                        "--------B--N-N-----" +
+                        "-------BB-----B----" +
+                        "------B-N----------" +
+                        "-----N-------------" +
+                        "-------------------" +
+                        "-------------------" +
+                        "-------------------" +
+                        "-------------------";
+
 
 
 
@@ -245,7 +296,7 @@ public class MyTest {
         int[] to_test = new int[nbcol * nbligne];
 
         for(int i=0; i< to_test.length; i++){
-            to_test[i] = convert.get(t4.charAt(i)) -1;
+            to_test[i] = convert.get(t7.charAt(i)) -1;
         }
         return to_test;
     }
@@ -258,7 +309,7 @@ public class MyTest {
 
         // Test B1
         System.out.println("Test #1");
-        nbligne = 9; nbcol = 8;
+        nbligne = 17; nbcol = 19;
         Grille g = new Grille(nbligne,nbcol,testByte());
         Position coup = joueur.getProchainCoup(g, 4000);
         System.out.println((coup.ligne==4 && coup.colonne==0) ? "Réussi": "Échoué");
