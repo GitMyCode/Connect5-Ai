@@ -16,7 +16,6 @@ public class MyTest {
     static int nbcol = 12;
     static int nbligne = 12;
 
-    public static int[] testByte(){
 
         String to_convert =
         "000000000000" +
@@ -143,7 +142,7 @@ public class MyTest {
                  "---------------" +
                  "---------------" ;
 
-        String t1 = //12 11
+        static String t1 = //12 11
           "-----------" +
                   "-----------" +
                   "--B--------" +
@@ -157,7 +156,7 @@ public class MyTest {
                   "-----------" +
                   "-----------";
 
-        String t2 = //14 13
+        static String t2 = //14 13
 
                 "-------------" +
                         "-------------" +
@@ -174,7 +173,7 @@ public class MyTest {
                         "-------------" +
                         "-------------";
 
-        String t3 =//score :22 play :(6,3)
+        static String t3 =//score :22 play :(6,3)
                 //16 16
                         "----------------" +
                         "----------------" +
@@ -193,7 +192,7 @@ public class MyTest {
                         "----------------" +
                         "----------------";
 
-        String t4 =
+        static String t4 =
                 //9 8
               "--------" +
                       "--------" +
@@ -204,7 +203,7 @@ public class MyTest {
                       "--------" +
                       "--------" +
                       "--------";
-        String t6 =
+        static String t6 =
                 /* BUGGGGG TODO*/
                /* "score :99999999 play :(12,13)\n" +
                         "20 20" +*/
@@ -230,7 +229,7 @@ public class MyTest {
                         "--------------------";
 
 
-        String t5 =
+        static String t5 =
                 //11 10 prob: TotalScan: 1 thisPoint:-14
                         "-----------" +
                         "-----------" +
@@ -244,7 +243,7 @@ public class MyTest {
                         "-----------";
 
 
-        String t7 =
+        static String t7 =
         /*----------------------------- LAST DEPTH : 2
 score :4999414 play :(10,6)
 17 19
@@ -268,7 +267,7 @@ score :4999414 play :(10,6)
                         "-------------------" +
                         "-------------------";
 
-        String t8=//12 12
+        static String t8=//12 12
                 "------------" +
                         "------------" +
                         "----------B-" +
@@ -282,13 +281,14 @@ score :4999414 play :(10,6)
                         "------------" +
                         "------------";
 
-        String t9= //12 12
-                "------------" +
+        /*TODO DOUBLE THREAT*/
+        static String t9= //12 12     NE DOIT PAS JOUER (5,8)
+                        "------------" +
                         "---B--------" +
                         "----N-N-----" +
                         "-----N------" +
                         "-----NNNB---" +
-                        "-----B-NX---" +
+                        "-----B-N----" +
                         "-----BN-B---" +
                         "-----BB-----" +
                         "-----B------" +
@@ -311,6 +311,9 @@ score :4999414 play :(10,6)
                 "-----N-B-----\n" +
                 "-----N-------\n" +
                 "-------------";
+
+
+    public static int[] testByte(String theGrid,int nbcol, int nbligne){
         Map<Character,Byte> convert = new HashMap<Character,Byte>();
         convert.put('0',(byte)0);
         convert.put('_',(byte)0);
@@ -324,7 +327,7 @@ score :4999414 play :(10,6)
         int[] to_test = new int[nbcol * nbligne];
 
         for(int i=0; i< to_test.length; i++){
-            to_test[i] = convert.get(t9.charAt(i)) -1;
+            to_test[i] = convert.get(theGrid.charAt(i)) -1;
         }
         return to_test;
     }
@@ -338,7 +341,7 @@ score :4999414 play :(10,6)
         // Test B1
         System.out.println("Test #1");
         nbligne = 12; nbcol = 12;
-        Grille g = new Grille(nbligne,nbcol,testByte());
+        Grille g = new Grille(nbligne,nbcol,testByte(t9,12,12));
         Position coup = joueur.getProchainCoupTEST(g, 2);
         System.out.println((coup.ligne==4 && coup.colonne==0) ? "Réussi": "Échoué");
 

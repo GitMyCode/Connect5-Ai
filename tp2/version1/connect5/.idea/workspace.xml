@@ -105,11 +105,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="MinMax.java" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="MinMax.java" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/connect5/ia/strategy/MinMax.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1729" max-vertical-offset="4063">
-                  <caret line="125" column="38" selection-start-line="125" selection-start-column="38" selection-end-line="125" selection-end-column="38" />
+                <state vertical-scroll-proportion="0.54561406" vertical-offset="1729" max-vertical-offset="4063">
+                  <caret line="123" column="33" selection-start-line="123" selection-start-column="33" selection-end-line="123" selection-end-column="33" />
                   <folding />
                 </state>
               </provider>
@@ -182,11 +182,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="JoueurArtificiel.java" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="JoueurArtificiel.java" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/connect5/ia/JoueurArtificiel.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.8947368" vertical-offset="0" max-vertical-offset="10438">
-                  <caret line="46" column="44" selection-start-line="46" selection-start-column="44" selection-end-line="46" selection-end-column="44" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="10438">
+                  <caret line="40" column="5" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
                   <folding>
                     <element signature="e#2974#2983#0" expanded="true" />
                     <element signature="e#5200#5209#0" expanded="true" />
@@ -203,11 +203,11 @@
           <file leaf-file-name="MyTest.java" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/connect5/ia/MyTest.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.5675676" vertical-offset="5491" max-vertical-offset="6171">
-                  <caret line="344" column="0" selection-start-line="344" selection-start-column="0" selection-end-line="344" selection-end-column="0" />
+                <state vertical-scroll-proportion="0.7027027" vertical-offset="5389" max-vertical-offset="6222">
+                  <caret line="343" column="64" selection-start-line="343" selection-start-column="64" selection-end-line="343" selection-end-column="64" />
                   <folding>
                     <element signature="imports" expanded="true" />
-                    <element signature="e#10598#10614#0" expanded="true" />
+                    <element signature="e#10767#10783#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -396,68 +396,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ia" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ia" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Utilitaires" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="connect5" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ia" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="models" />
               <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -975,12 +913,12 @@
       <workItem from="1413681313998" duration="22423000" />
       <workItem from="1413825273021" duration="8523000" />
       <workItem from="1413904652560" duration="127000" />
-      <workItem from="1413927889941" duration="79589000" />
+      <workItem from="1413927889941" duration="80747000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="545108000" />
+    <option name="totallyTimeSpent" value="546266000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1089,12 +1027,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/connect5/ia/MyTest.java</url>
-          <line>342</line>
-          <properties />
-          <option name="timeStamp" value="1070" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/connect5/ia/models/Etat.java</url>
           <line>323</line>
@@ -1502,14 +1434,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/connect5/ia/strategy/MinMax.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1729" max-vertical-offset="4063">
-          <caret line="125" column="38" selection-start-line="125" selection-start-column="38" selection-end-line="125" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/connect5/ia/models/GLOBAL.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1700">
@@ -1520,8 +1444,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/connect5/ia/JoueurArtificiel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8947368" vertical-offset="0" max-vertical-offset="10438">
-          <caret line="46" column="44" selection-start-line="46" selection-start-column="44" selection-end-line="46" selection-end-column="44" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="10438">
+          <caret line="40" column="5" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
           <folding>
             <element signature="e#2974#2983#0" expanded="true" />
             <element signature="e#5200#5209#0" expanded="true" />
@@ -1530,13 +1454,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/connect5/ia/strategy/MinMax.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.54561406" vertical-offset="1729" max-vertical-offset="4063">
+          <caret line="123" column="33" selection-start-line="123" selection-start-column="33" selection-end-line="123" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/connect5/ia/MyTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5675676" vertical-offset="5491" max-vertical-offset="6171">
-          <caret line="344" column="0" selection-start-line="344" selection-start-column="0" selection-end-line="344" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.7027027" vertical-offset="5389" max-vertical-offset="6222">
+          <caret line="343" column="64" selection-start-line="343" selection-start-column="64" selection-end-line="343" selection-end-column="64" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#10598#10614#0" expanded="true" />
+            <element signature="e#10767#10783#0" expanded="true" />
           </folding>
         </state>
       </provider>
