@@ -87,13 +87,6 @@ public class Vector5 implements Comparable {
             return value;
         }
 
-        public int vectorHeuristic(){
-            int eval=0;
-            if(suite>0){
-                eval += Math.pow(valueBirdirection,4);
-            }
-            return eval;
-        }
 
         public void reduceVector(){
             suite--;
