@@ -9,6 +9,7 @@ import connect5.ia.models.TimeOver;
 import java.awt.*;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.TreeSet;
 
 /**
  * Created by MB on 10/15/2014.
@@ -37,9 +38,9 @@ public class NegaScout {
 
         Move bestMove = null;
         int best = Integer.MIN_VALUE;
-        PriorityQueue<Move> allMoves = etatInitial.getNextMoves(playerColor);
+        TreeSet<Move> allMoves = etatInitial.getNextMoves(playerColor);
         /*List<Integer> allMove = etatInitial.getEmptyMoves(2);*/
-        Move move = allMoves.poll();
+        Move move = allMoves.pollFirst();
         Etat nextState = etatInitial.clone();
         nextState.play(move.move,playerColor);
 
@@ -50,7 +51,7 @@ public class NegaScout {
 
 
         while (!allMoves.isEmpty()){
-            move = allMoves.poll();
+            move = allMoves.pollFirst();
             nextState = etatInitial.clone();
             nextState.play(move.move,playerColor);
 
@@ -101,12 +102,12 @@ public class NegaScout {
         b = beta;
         int bestMove=-1;
 
-        PriorityQueue<Move> nextMoves = etat.getNextMoves(player);
+        TreeSet<Move> nextMoves = etat.getNextMoves(player);
         boolean first = true;
         while (!nextMoves.isEmpty()){
 
 
-            Move moveM = nextMoves.poll();
+            Move moveM = nextMoves.pollFirst();
             Integer move = moveM.move;
             if(opponent == player){
                // moveM.score = -moveM.score;
@@ -159,12 +160,12 @@ public class NegaScout {
         a= alpha;
         b = beta;
 
-        PriorityQueue<Move> nextMoves = etat.getNextMoves(player);
+        TreeSet<Move> nextMoves = etat.getNextMoves(player);
         boolean first = true;
         while (!nextMoves.isEmpty()){
 
 
-            Move moveM = nextMoves.poll();
+            Move moveM = nextMoves.pollFirst();
             if(player==opponent){
                 moveM.score = -moveM.score;
             }

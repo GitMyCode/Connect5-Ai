@@ -114,24 +114,21 @@ public class MinMax {
         int bestScore;
         Integer currentScore = null;
         int bestMove = (player == currentPlayer) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-        PriorityQueue<Move> nextMoves = etat.getNextMoves(player);
+        TreeSet<Move> nextMoves = etat.getNextMoves(player);
 
         int a = alpha; // Pour garder alpha intact
         int b = beta; // Pour garder beta intact
-        int limit = 20;
+        //int limit = 20;
         while (!nextMoves.isEmpty()) {
 
-            Move move = nextMoves.poll();
+            Move move = nextMoves.pollFirst();
             /*if(bestMove == Integer.MAX_VALUE || bestMove == Integer.MIN_VALUE){
                 bestMove = move.score;
             }*/
            /* if(player == currentPlayer && move.score < -GLOBAL.CONNECT4_SCORE && limit< 15){
                 break;
             }*/
-            if(limit <0   ){
-                break;
-            }
-            limit--;
+
             Etat next_step = etat.clone();
             next_step.depth= depth+1;
             next_step.maxDepth = MAX_DEPTH;

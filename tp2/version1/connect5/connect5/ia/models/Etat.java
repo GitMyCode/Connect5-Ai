@@ -254,7 +254,7 @@ public class Etat {
         one_dim[move] = 0;
     }
 
-    public PriorityQueue<Move> getNextMoves(int player_to_max){
+    public TreeSet<Move> getNextMoves(int player_to_max){
 
         int lowestX = Integer.MAX_VALUE ;
         int lowestY = Integer.MAX_VALUE;
@@ -290,10 +290,13 @@ public class Etat {
 
 
         PriorityQueue<Move> ordered_move;
+        TreeSet<Move> orderedMovesTree;
         if(player_to_max == MIN_player) {
             ordered_move = new PriorityQueue<Move>(nblibre,new CompareMIN());
+            orderedMovesTree = new TreeSet<Move>(new CompareMIN());
         }else{
             ordered_move = new PriorityQueue<Move>(nblibre,new CompareMAX() );
+            orderedMovesTree = new TreeSet<Move>(new CompareMAX());
         }
 
 
@@ -307,8 +310,9 @@ public class Etat {
             if( (pos_x >= lowestX-buffer) && (pos_x <= highestX+buffer ) && (pos_y  >= lowestY -buffer) && (pos_y <= highestY +buffer  ) ){
                 if(one_dim[i] ==0){
                     play(i,player_to_max);
-                    //int evaluation = evaluate(player_to_max);
+                  //  int evaluation = evaluate(player_to_max);
                     int evaluation= evalPoint(i,player_to_max);
+                    //System.out.println("evaluate");
 /*
                     if(!areAllEqual(evaluation,evaluation2)){
                         if(true){///evaluation  < GLOBAL.ALMOST_WIN-6000 && evaluation > -GLOBAL.ALMOST_WIN+6000 ){
@@ -322,7 +326,11 @@ public class Etat {
 
                     }*/
                     Move aMove =  new Move(i,evaluation);
-                    ordered_move.add(aMove);
+                    //ordered_move.add(aMove);
+                    orderedMovesTree.add(aMove);
+                    if(orderedMovesTree.size() > 12){
+                        orderedMovesTree.pollLast();
+                    }
 
                     unplay(i);
                 }
@@ -330,7 +338,7 @@ public class Etat {
         }
 
 
-        return ordered_move;
+        return orderedMovesTree;
     }
 
     public Grille getGrille(){
@@ -643,7 +651,7 @@ public class Etat {
 
     }
 
-    public int getScoreStepAheadExcept(Dir.Axes axe, Integer startPoint){
+    public int getScoreStepAheadExcept(Dir.Axes axeExclude, Integer startPointExclude){
         {
             int maxAhead =0;
             int minAhead =0;
@@ -657,16 +665,16 @@ public class Etat {
             }
 
 
-            if(mapAngleDangerMAX.get(axe).entrySet().size() ==0){
+            if(mapAngleDangerMAX.get(axeExclude).entrySet().size() ==0){
                 maxAhead = MAXhigthestSeqThisAngle;
             }
-            if(mapAngleDangerMIN.get(axe).entrySet().size() ==0){
+            if(mapAngleDangerMIN.get(axeExclude).entrySet().size() ==0){
                 minAhead = MINhigthestSeqThisAngle;
             }
 
             for(Dir.Axes axes : Dir.Axes.values()){
                 for(Map.Entry<Integer,Integer> max :  mapAngleDangerMAX.get(axes).entrySet()){
-                    if( !(axes == axe && max.getKey().equals(startPoint))){
+                    if( !(axes == axeExclude && max.getKey().equals(startPointExclude))){
                         if(max.getValue() > maxAhead){
                             maxAhead = max.getValue();
                         }
@@ -675,7 +683,7 @@ public class Etat {
                     }
                 }
                 for(Map.Entry<Integer,Integer> min : mapAngleDangerMIN.get(axes).entrySet()){
-                    if( !(axes == axe && min.getKey().equals(startPoint))){
+                    if( !(axes == axeExclude && min.getKey().equals(startPointExclude))){
                         if(min.getValue() > minAhead){
                             minAhead = min.getValue();
                         }
@@ -1073,9 +1081,17 @@ public class Etat {
             if(o1.score < o2.score){
                 return 1;
             }
+            if(o1.move > o2.move){
+                return -1;
+            }
+            if(o1.move < o2.move){
+                return 1;
+            }
+
             return 0;
         }
     }
+
 
     public class CompareMIN implements Comparator<Move>{
         @Override
@@ -1085,6 +1101,12 @@ public class Etat {
                 return -1;
             }
             if(o1.score > o2.score){
+                return 1;
+            }
+            if(o1.move < o2.move){
+                return -1;
+            }
+            if(o1.move > o2.move){
                 return 1;
             }
             return 0;

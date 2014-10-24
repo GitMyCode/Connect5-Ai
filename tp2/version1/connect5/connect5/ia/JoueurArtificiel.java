@@ -78,9 +78,9 @@ public class JoueurArtificiel implements Joueur, Runnable {
 
 
 
-        PriorityQueue<Move>  pq = init.getNextMoves(GLOBAL.MAX);
+        TreeSet<Move>  pq = init.getNextMoves(GLOBAL.MAX);
 
-        Move MAXcheckWinMove =  pq.poll();
+        Move MAXcheckWinMove =  pq.pollFirst();
         if(MAXcheckWinMove.score == GLOBAL.WIN){
 
             System.out.println("Try WIN: ("+(MAXcheckWinMove.move/GLOBAL.NBCOL)+","+(MAXcheckWinMove.move%GLOBAL.NBCOL)+")");
@@ -167,7 +167,7 @@ public class JoueurArtificiel implements Joueur, Runnable {
         System.out.println("AI : JOUEUR "+GLOBAL.MAX);
         int deep = 2;
         List<Integer> moves = new ArrayList<Integer>();
-        moves.add(init.getNextMoves(GLOBAL.MAX).poll().move);
+        moves.add(init.getNextMoves(GLOBAL.MAX).pollFirst().move);
         System.out.println(GLOBAL.showTimeRemain());
         System.out.println(" TRY TO MAX :" + GLOBAL.MAX + " AND MIN :" + GLOBAL.MAX );
 
