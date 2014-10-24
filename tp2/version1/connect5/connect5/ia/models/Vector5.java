@@ -31,6 +31,12 @@ public class Vector5 implements Comparable {
         }
 
 
+        public int getHeuristicVal(){
+            int eval =0;
+            if(value ==0)return 0;
+            eval += (isCorded)? Math.pow(valueBirdirection,4.1): Math.pow(valueBirdirection,4);
+            return eval;
+        }
 /*Check if they there is free space on the two side. If yes we can assume that we could put a least one more
                     * before being blocked. So we do + 1   */
 
@@ -44,6 +50,7 @@ public class Vector5 implements Comparable {
 
         }
 
+
 /*
         @Override
         public boolean equals (Object obj) {
@@ -52,8 +59,20 @@ public class Vector5 implements Comparable {
 
         @Override
         public int compareTo (Object o) {
-
-
+            Vector5 otherV = (Vector5) o;
+            if(valueBirdirection < otherV.valueBirdirection ){
+                return -1;
+            }
+            if(value < otherV.value){
+                return -1;
+            }
+            if(value == otherV.value){
+                if(isCorded){
+                    return 1;
+                }else {
+                    return -1;
+                }
+            }
 
             return 0;
         }

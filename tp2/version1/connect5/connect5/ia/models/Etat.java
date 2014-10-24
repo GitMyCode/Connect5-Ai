@@ -328,7 +328,7 @@ public class Etat {
                     Move aMove =  new Move(i,evaluation);
                     //ordered_move.add(aMove);
                     orderedMovesTree.add(aMove);
-                    if(orderedMovesTree.size() > 12){
+                    if(orderedMovesTree.size() > 16){
                         orderedMovesTree.pollLast();
                     }
 
@@ -453,7 +453,7 @@ public class Etat {
                             }else {
                                 old_ref = null;
                             }
-                            if (old_ref == null || old_ref.valueBirdirection <= new_vector.valueBirdirection) {
+                            if (old_ref == null || old_ref.compareTo(new_vector)== -1) {
                                 if (old_ref != null){
                                     old_ref.value--;
                                     old_ref.valueBirdirection--;
@@ -484,14 +484,14 @@ public class Etat {
             if(s.value >0){
                 if(s.isMAXvector){
                     vector5MAX_2.add(s);
-                    thisEvaluation += Math.pow(value,4);
+                    thisEvaluation += s.getHeuristicVal();
                     if(s.getThreatValue()> MAXhigthestSeqThisAngle ){
                         MAXhigthestSeqThisAngle = s.getThreatValue();
                     }
 
                 }else {
                     vector5MIN_2.add(s);
-                    thisEvaluation -= Math.pow(value,4);
+                    thisEvaluation -= s.getHeuristicVal();
                     if(s.getThreatValue() > MINhigthestSeqThisAngle ){
                         MINhigthestSeqThisAngle = s.getThreatValue();
                     }
