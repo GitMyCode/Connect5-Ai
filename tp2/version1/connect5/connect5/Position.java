@@ -15,7 +15,7 @@ package connect5;
  */
 public class Position {
     public Position(){
-        
+
     }
     public Position(int l, int c){
         ligne = l;
