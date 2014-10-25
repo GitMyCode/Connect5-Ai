@@ -296,6 +296,35 @@ score :4999414 play :(10,6)
                         "------------" +
                         "------------";
 
+        static String t10= //11 12
+                // ne pas jouer (6,6)
+                        "------------" +
+                        "------------" +
+                        "------------" +
+                        "-----NB-----" +
+                        "---BBBNN----" +
+                        "----BBN-NN--" +
+                        "---N-B-B-N--" +
+                        "------N---N-" +
+                        "-----------B" +
+                        "------------" +
+                        "------------";
+
+        static String t11= // 12 11  en ce moment il pense qu<il peut gagner avec cette grid
+                        "-----------" +
+                        "-----------" +
+                        "-----------" +
+                        "------B----" +
+                        "---N--NN---" +
+                        "----NBN----" +
+                        "----BNN----" +
+                        "---BBNB----" +
+                        "--B-BB-----" +
+                        "-N--B------" +
+                        "----N------" +
+                        "-----------";
+
+
 
 
 
@@ -313,7 +342,7 @@ score :4999414 play :(10,6)
                 "-------------";
 
 
-    public static int[] testByte(String theGrid,int nbcol, int nbligne){
+    public static int[] testByte(String theGrid,int nbligne, int nbcol){
         Map<Character,Byte> convert = new HashMap<Character,Byte>();
         convert.put('0',(byte)0);
         convert.put('_',(byte)0);
@@ -340,9 +369,9 @@ score :4999414 play :(10,6)
 
         // Test B1
         System.out.println("Test #1");
-        nbligne = 12; nbcol = 12;
-        Grille g = new Grille(nbligne,nbcol,testByte(t9,12,12));
-        Position coup = joueur.getProchainCoupTEST(g, 2);
+        //nbligne = 12; nbcol = 12;
+        Grille g = new Grille(12,11,testByte(t11,12,11));
+        Position coup = joueur.getProchainCoupTEST(g, 10);
         System.out.println((coup.ligne==4 && coup.colonne==0) ? "Réussi": "Échoué");
 
 
@@ -352,9 +381,9 @@ score :4999414 play :(10,6)
             g.set(0, 2+i, 1);
             g.set(4, 2+i, 2);
         }*/
-        coup = joueur.getProchainCoupTEST(g, 2);
+/*        coup = joueur.getProchainCoupTEST(g, 2);
         System.out.println("Test #1");
-        System.out.println((coup.ligne==0 && (coup.colonne==1||coup.colonne==6)) ? "Réussi": "Échoué");
+        System.out.println((coup.ligne==0 && (coup.colonne==1||coup.colonne==6)) ? "Réussi": "Échoué");*/
 
     }
 }

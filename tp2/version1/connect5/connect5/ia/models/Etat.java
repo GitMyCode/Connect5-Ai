@@ -2,6 +2,7 @@ package connect5.ia.models;
 
 import connect5.Grille;
 import connect5.GrilleVerificateur;
+import connect5.ia.Utilitaires.Util;
 
 import java.util.*;
 
@@ -55,6 +56,7 @@ public class Etat {
     Map<Dir.Axes,Map<Integer,Integer>> mapAngleDangerMAX;
     Map<Dir.Axes,Map<Integer,Integer>> mapAngleDangerMIN;
 
+    public Map<Integer,Treat> mapTreat = new HashMap<Integer, Treat>();
 
 
     public Map<Dir.Axes,Map<Integer,Map<Integer,Vector5>>> wtfMap = new HashMap<Dir.Axes, Map<Integer, Map<Integer, Vector5>>>();
@@ -266,12 +268,11 @@ public class Etat {
 
 
         /* This is to cut the area to explore */
-        int a=0;
-        for(byte carreau : one_dim){
+        for(int index =0; index< one_dim.length; index++){
+            byte carreau = one_dim[index];
 
-
-            int pos_x =  ((a/GLOBAL.NBCOL) ) ;
-            int pos_y = ((a%GLOBAL.NBCOL) ) ;
+            int pos_x =  ((index/GLOBAL.NBCOL) ) ;
+            int pos_y = ((index%GLOBAL.NBCOL) ) ;
 
 
             if(carreau != 0 ){
@@ -284,7 +285,6 @@ public class Etat {
             if(carreau == 0){
                 nblibre++;
             }
-            a++;
         }
         /***************************************/
 
@@ -337,6 +337,16 @@ public class Etat {
             }
         }
 
+        int limit = (player_to_max == MAX_player) ? -GLOBAL.WIN: GLOBAL.WIN;
+
+        /*while(orderedMovesTree.size()>1){
+            if(orderedMovesTree.last().score == limit){
+                orderedMovesTree.pollLast();
+                System.out.println("cuted");
+            }else{
+                break;
+            }
+        }*/
 
         return orderedMovesTree;
     }
@@ -376,45 +386,28 @@ public class Etat {
         Dir.Axes axe = Dir.Axes.getA(D);
         for (int i= point; D.boundaries(i,5);i= i+ D.step(1)){
             if(true) {
-                int res = one_dim[i] | one_dim[i + D.step(1)] | one_dim[i + D.step(2)] | one_dim[i + D.step(3)] | one_dim[i + D.step(4)];
+
+
+                int res = getPlayerLine(i,D);
                 if (res == 1 || res == 2) { //
 
-/*We must not count vector that have more than 5*/
 
-                    int[] tab_s = new int[5];
+                    /*Juste pour voir les vecteur dans un print pas necessaire pour le programme*/
+                    int[] tab_s = getTabSeq(i,D);
 
-                    tab_s[0] = i + D.step(0);
-                    tab_s[1] = i + D.step(1);
-                    tab_s[2] = i + D.step(2);
-                    tab_s[3] = i + D.step(3);
-                    tab_s[4] = i + D.step(4);
+
+                    /*TODO ne marche pas! We must not count vector that have more than 5*/
                     if (tempMemo.containsKey(i)&& tempMemo.get(i).moreThan5) {
                         continue;
                     }
 
-
-                    int nb_seqt = 0;
-                    if (one_dim[i + D.step(0)] == res) {
-                        nb_seqt += 1 ;
-                    }
-                    if (one_dim[i + D.step(1)] == res) {
-                        nb_seqt += 1 << 1;
-                    }
-                    if (one_dim[i + D.step(2)] == res) {
-                        nb_seqt += 1 << 2;
-                    }
-                    if (one_dim[i + D.step(3)] == res) {
-                        nb_seqt += 1 << 3;
-                    }
-                    if (one_dim[i + D.step(4)] == res) {
-                        nb_seqt += 1 << 4;
-                    }
+                    int nb_seqt = getSEQ(i,D,res); // nombre de jeton sur la ligne
 
                     Vector5 new_vector = new Vector5(nb_seqt,D);
                     new_vector.setIfDirectionnel(isBidirectionnel(i,i+D.step(4),D));
 
                     if (new_vector.suite == 5) {
-/*TODO there is a chance where we return before checking if the other player won*/
+                    /*TODO there is a chance where we return before checking if the other player won*/
 
                         if (D.boundaries(i, 6) && one_dim[i + D.step(5)] == res) {
                             new_vector.moreThan5 = true;
@@ -442,7 +435,7 @@ public class Etat {
                     Vector5 old_ref;
                     new_vector.tab_seq = tab_s;
 
-/*Update the memo[][] to avoid count two vector in the same place same direction*/
+                    /*Update the memo[][] to avoid count two vector in the same place same direction*/
 
                     for (int v = 0; v < 5; v++) {
                         if ((nb_seqt & (power2[v])) != 0) {
@@ -554,7 +547,7 @@ public class Etat {
     }
 
     public void initMemo(){
-
+        //checkAllArrayTreat();
         mapAxesPointToStartPoint = new HashMap<Dir.Axes, Map<Integer, Integer>>();
         mapAxesStartPointSet = new HashMap<Dir.Axes, Set<Integer>>();
         mapMemoAxesValue = new HashMap<Dir.Axes, Map<Integer, Integer>>();
@@ -948,11 +941,11 @@ public class Etat {
 
 
         if(playe1Won && getLastPlayedPlayer()==1 && !player2Won){
-            return ((MAX_player == 1)? GLOBAL.WIN: -GLOBAL.WIN ) + evaluation;
+            return ((MAX_player == 1)? GLOBAL.WIN: -GLOBAL.WIN );
         }
 
         if(player2Won && getLastPlayedPlayer()==2 && !playe1Won){
-            return ((MAX_player == 2)? GLOBAL.WIN: -GLOBAL.WIN ) + evaluation;
+            return ((MAX_player == 2)? GLOBAL.WIN: -GLOBAL.WIN );
         }
 
 
@@ -1026,6 +1019,93 @@ public class Etat {
     }
 
 
+    public void checkAllArrayTreat(){
+
+        for(int i=0; i< one_dim.length; i++){
+            checkDoubleTreat(i);
+        }
+
+    }
+
+    public void checkDoubleTreat(int point){
+
+
+        HashSet<Dir.Axes> axesDone = new HashSet<Dir.Axes>();
+        Vector5 v1 =null;
+        Vector5 v2 =null;
+
+        for(Dir D : Dir.direction8){
+            if(!axesDone.contains(D) && D.boundaries(point,5)){
+                int player = getPlayerLine(point,D);
+                if(player ==1 || player == 2){
+
+                    int seqBinary = getSEQ(point,D,player);
+                    int seqValue = Integer.bitCount(seqBinary);
+                    boolean isSuite = checkIfSuite(seqBinary,seqValue);
+
+                    if(seqValue >3){
+                        axesDone.add(D.axe);
+
+                        int[] t = getTabSeq(point,D);
+                        Vector5 v = new Vector5(seqBinary,D);
+                        v.tab_seq = t;
+                        if(v1 ==null){
+                            v1 = v;
+                        }else {
+                            v2 = v;
+                        }
+                    }
+                }
+            }
+        }
+
+        if(v1 !=null && v2 != null){
+           Treat t = new Treat(v1,v2);
+           mapTreat.put(point,t);
+        }
+
+
+    }
+
+
+    public int getPlayerLine(int point,Dir D){
+       return one_dim[point]|one_dim[point+ D.step(1)]|one_dim[point+ D.step(2)]|one_dim[point+ D.step(3)]|one_dim[point+ D.step(4)];
+    }
+    public int getSEQ(int point,Dir D,int player){
+        int nbSeq=0;
+        if(one_dim[point + D.step(0)] == player){
+            nbSeq += 1<<0;
+        }
+        if(one_dim[point + D.step(1)] == player){
+            nbSeq += 1<<1;
+        }
+        if(one_dim[point + D.step(2)] == player){
+            nbSeq += 1<<2;
+        }
+        if(one_dim[point + D.step(3)] == player){
+            nbSeq += 1<<3;
+        }
+        if(one_dim[point + D.step(4)] == player){
+            nbSeq += 1<<4;
+        }
+        return nbSeq;
+    }
+
+
+    public int[] getTabSeq(int point, Dir D){
+        int[] tabSeq = new int[5];
+        tabSeq[0] = point + D.step(0);
+        tabSeq[1] = point + D.step(1);
+        tabSeq[2] = point + D.step(2);
+        tabSeq[3] = point + D.step(3);
+        tabSeq[4] = point + D.step(4);
+        return tabSeq;
+    }
+
+
+    public boolean checkIfSuite(int bitSuite,int suiteValue){
+        return ((5-  (Integer.numberOfLeadingZeros(bitSuite)-27)) - Integer.numberOfTrailingZeros(bitSuite) == suiteValue  );
+    }
 
 
 

@@ -83,6 +83,16 @@ public abstract class Util {
 
     }
 
+
+    static public void printGridWithThisPoint(int point,byte[] grid){
+
+        byte b = grid[point];
+        grid[point] = 3;
+        System.out.println(toStringOneDim(grid));
+        grid[point] = b;
+
+    }
+
     static public String toStringOneDim(byte[] data){
         char[] table = {'-', 'N', 'B','X' };
         String result = "" + GLOBAL.NBLIGNE + " " + GLOBAL.NBCOL+ "\n";
@@ -109,6 +119,16 @@ public abstract class Util {
 
         }
         System.out.println(t);
+
+    }
+
+    static public void printAllTreat(Map<Integer,Treat> mapTreat,byte[] array){
+
+        for(Map.Entry<Integer,Treat> entry : mapTreat.entrySet()){
+            System.out.println(toStringVector(array, entry.getValue().treat1.tab_seq));
+            System.out.println(toStringVector(array, entry.getValue().treat2.tab_seq));
+        }
+
 
     }
 
