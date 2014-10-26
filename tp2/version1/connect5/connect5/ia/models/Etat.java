@@ -209,7 +209,7 @@ public class Etat {
         int stepInAdvance =0;
         boolean stepAheadWasBlocked = false;
         for(Dir D : Dir.direction4 ){
-            Dir.Axes axe = Dir.Axes.getA(D);
+            Dir.Axes axe = Dir.Axes.getAxe(D);
             Integer startPoint = mapAxesPointToStartPoint.get(axe).get(move);
             oldScore += mapMemoAxesValue.get(axe).get(startPoint);
             int thisAngleScore = axeAngleValue(startPoint, D,player);
@@ -386,7 +386,7 @@ public class Etat {
 
 
         Map<Integer,Vector5> tempMemo = new HashMap<Integer, Vector5>();
-        Dir.Axes axe = Dir.Axes.getA(D);
+        Dir.Axes axe = Dir.Axes.getAxe(D);
         for (int i= point; D.boundaries(i,5);i= i+ D.step(1)){
             if(true) {
 
@@ -519,7 +519,7 @@ public class Etat {
         boolean checkP1win = false;
         boolean checkP2win = false;
         for(Dir D : Dir.direction4 ){
-            Dir.Axes axe = Dir.Axes.getA(D);
+            Dir.Axes axe = Dir.Axes.getAxe(D);
             Integer startPoint = mapAxesPointToStartPoint.get(axe).get(move);
             oldScore += mapMemoAxesValue.get(axe).get(startPoint);
             thisScore+= axeAngleValue(startPoint, D,player);
@@ -603,7 +603,7 @@ public class Etat {
             wtfMap.put(a, new HashMap<Integer, Map<Integer, Vector5>>());
         }
         for(Dir d : Dir.direction4){
-            Dir.Axes a = Dir.Axes.getA(d);
+            Dir.Axes a = Dir.Axes.getAxe(d);
             int test[] = new int[mapAxesStartPointSet.get(a).size()];
             int i=0;
             //   System.out.println(a + " nbStartpoint:"+ test.length );
@@ -809,7 +809,7 @@ public class Etat {
                 if(res== 1 || res == 2){ //
 
 
-                    Dir.Axes axe = Dir.Axes.getA(D);
+                    Dir.Axes axe = Dir.Axes.getAxe(D);
                     /*We must not count vector that have more than 5*/
                     if(memo[axe.i][i]!=null && memo[axe.i][i].moreThan5){
                         continue;
@@ -1045,10 +1045,10 @@ public class Etat {
         /*TODO
         * Ce rappeler que ca marche pas si ya un vecteur d<un player et ensuite 2 d<un autre*/
         for(Dir D : Dir.direction4){
-            Dir.Axes axe = Dir.Axes.getA(D);
+            Dir.Axes axe = Dir.Axes.getAxe(D);
             int startPoint = mapAxesPointToStartPoint.get(axe).get(point);
 
-            axeAngleValue(startPoint,D,1);
+            axeAngleValue(startPoint, D, 1);
             for(Vector5 v : allV){
 
                 if(v1!= null && v.isMAXvector != v1.isMAXvector){
@@ -1266,7 +1266,7 @@ public class Etat {
         vector5MIN_2 = new LinkedList<Vector5>();
 
         for(Dir d : Dir.direction4){
-            Dir.Axes a = Dir.Axes.getA(d);
+            Dir.Axes a = Dir.Axes.getAxe(d);
             //int test[] = new int[mapAxesStartPointSet.get(a).size()];
             int i=0;
             //   System.out.println(a + " nbStartpoint:"+ test.length );
