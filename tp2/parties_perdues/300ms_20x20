@@ -1,0 +1,1234 @@
+Début de la partie...
+Tour #0
+  Joueur #1  [temps alloué = 300 ms] ...
+first hit
+    Réponse reçue du Joueur #1 [1 ms]: 10,10
+Tour #0
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [325 ms]: 9,9
+Tour #1
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 8      smallSizeX: 8
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+8 8
+--------
+--------
+--------
+---B----
+----N---
+--------
+--------
+--------
+
+AI : JOUEUR 1
+Time: 299 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+ NB_SAVE :1
+try deep:   5
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 4
+score :-60 play :(4,3)
+8 8
+--------
+--------
+--------
+---B----
+---XN---
+--------
+--------
+--------
+
+    Réponse reçue du Joueur #1 [221 ms]: 10,9
+Tour #1
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [319 ms]: 10,8
+Tour #2
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 9      smallSizeX: 8
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+8 9
+---------
+---------
+---------
+----B----
+---BNN---
+---------
+---------
+---------
+
+AI : JOUEUR 1
+Time: 299 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+ NB_SAVE :47
+try deep:   5
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 4
+score :-35 play :(2,5)
+8 9
+---------
+---------
+-----X---
+----B----
+---BNN---
+---------
+---------
+---------
+
+    Réponse reçue du Joueur #1 [221 ms]: 8,10
+Tour #2
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [324 ms]: 9,10
+Tour #3
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 9      smallSizeX: 9
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+9 9
+---------
+---------
+---------
+-----N---
+----BB---
+---BNN---
+---------
+---------
+---------
+
+AI : JOUEUR 1
+Time: 299 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+ NB_SAVE :17
+try deep:   5
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 4
+score :-39 play :(4,3)
+9 9
+---------
+---------
+---------
+-----N---
+---XBB---
+---BNN---
+---------
+---------
+---------
+
+    Réponse reçue du Joueur #1 [221 ms]: 9,8
+Tour #3
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [322 ms]: 13,5
+Tour #4
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 12      smallSizeX: 12
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+12 12
+------------
+------------
+------------
+--------N---
+------NBB---
+------BNN---
+------------
+------------
+---B--------
+------------
+------------
+------------
+
+AI : JOUEUR 1
+Time: 296 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :38 play :(3,5)
+12 12
+------------
+------------
+------------
+-----X--N---
+------NBB---
+------BNN---
+------------
+------------
+---B--------
+------------
+------------
+------------
+
+    Réponse reçue du Joueur #1 [221 ms]: 8,7
+Tour #4
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [321 ms]: 11,10
+Tour #5
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 12      smallSizeX: 12
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+12 12
+------------
+------------
+------------
+-----N--N---
+------NBB---
+------BNN---
+--------B---
+------------
+---B--------
+------------
+------------
+------------
+
+AI : JOUEUR 1
+Time: 297 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :45 play :(3,7)
+12 12
+------------
+------------
+------------
+-----N-XN---
+------NBB---
+------BNN---
+--------B---
+------------
+---B--------
+------------
+------------
+------------
+
+    Réponse reçue du Joueur #1 [221 ms]: 8,9
+Tour #5
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [323 ms]: 8,8
+Tour #6
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 12      smallSizeX: 12
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+12 12
+------------
+------------
+------------
+-----NBNN---
+------NBB---
+------BNN---
+--------B---
+------------
+---B--------
+------------
+------------
+------------
+
+AI : JOUEUR 1
+Time: 298 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :31 play :(5,5)
+12 12
+------------
+------------
+------------
+-----NBNN---
+------NBB---
+-----XBNN---
+--------B---
+------------
+---B--------
+------------
+------------
+------------
+
+    Réponse reçue du Joueur #1 [221 ms]: 10,7
+Tour #6
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [330 ms]: 11,6
+Tour #7
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 12      smallSizeX: 12
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+12 12
+------------
+------------
+------------
+-----NBNN---
+------NBB---
+-----NBNN---
+----B---B---
+------------
+---B--------
+------------
+------------
+------------
+
+AI : JOUEUR 1
+Time: 298 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :-37 play :(6,5)
+12 12
+------------
+------------
+------------
+-----NBNN---
+------NBB---
+-----NBNN---
+----BX--B---
+------------
+---B--------
+------------
+------------
+------------
+
+    Réponse reçue du Joueur #1 [221 ms]: 11,7
+Tour #7
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [324 ms]: 9,7
+Tour #8
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 12      smallSizeX: 12
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+12 12
+------------
+------------
+------------
+-----NBNN---
+-----BNBB---
+-----NBNN---
+----BN--B---
+------------
+---B--------
+------------
+------------
+------------
+
+AI : JOUEUR 1
+Time: 297 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :-127 play :(2,4)
+12 12
+------------
+------------
+----X-------
+-----NBNN---
+-----BNBB---
+-----NBNN---
+----BN--B---
+------------
+---B--------
+------------
+------------
+------------
+
+    Réponse reçue du Joueur #1 [221 ms]: 7,6
+Tour #8
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [319 ms]: 6,5
+Tour #9
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 12      smallSizeX: 14
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+14 12
+------------
+------------
+------------
+---B--------
+----N-------
+-----NBNN---
+-----BNBB---
+-----NBNN---
+----BN--B---
+------------
+---B--------
+------------
+------------
+------------
+
+AI : JOUEUR 1
+Time: 295 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :-168 play :(4,8)
+14 12
+------------
+------------
+------------
+---B--------
+----N---X---
+-----NBNN---
+-----BNBB---
+-----NBNN---
+----BN--B---
+------------
+---B--------
+------------
+------------
+------------
+
+    Réponse reçue du Joueur #1 [221 ms]: 7,10
+Tour #9
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [320 ms]: 6,11
+Tour #10
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 13      smallSizeX: 14
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+14 13
+-------------
+-------------
+-------------
+---B-----B---
+----N---N----
+-----NBNN----
+-----BNBB----
+-----NBNN----
+----BN--B----
+-------------
+---B---------
+-------------
+-------------
+-------------
+
+AI : JOUEUR 1
+Time: 296 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :-262 play :(4,7)
+14 13
+-------------
+-------------
+-------------
+---B-----B---
+----N--XN----
+-----NBNN----
+-----BNBB----
+-----NBNN----
+----BN--B----
+-------------
+---B---------
+-------------
+-------------
+-------------
+
+    Réponse reçue du Joueur #1 [221 ms]: 7,9
+Tour #10
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [324 ms]: 7,7
+Tour #11
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 13      smallSizeX: 14
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+14 13
+-------------
+-------------
+-------------
+---B-----B---
+----NB-NN----
+-----NBNN----
+-----BNBB----
+-----NBNN----
+----BN--B----
+-------------
+---B---------
+-------------
+-------------
+-------------
+
+AI : JOUEUR 1
+Time: 296 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :-132 play :(6,9)
+14 13
+-------------
+-------------
+-------------
+---B-----B---
+----NB-NN----
+-----NBNN----
+-----BNBBX---
+-----NBNN----
+----BN--B----
+-------------
+---B---------
+-------------
+-------------
+-------------
+
+    Réponse reçue du Joueur #1 [221 ms]: 9,11
+Tour #11
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [321 ms]: 10,12
+Tour #12
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 14      smallSizeX: 14
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+14 14
+--------------
+--------------
+--------------
+---B-----B----
+----NB-NN-----
+-----NBNN-----
+-----BNBBN----
+-----NBNN-B---
+----BN--B-----
+--------------
+---B----------
+--------------
+--------------
+--------------
+
+AI : JOUEUR 1
+Time: 296 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :-57 play :(8,7)
+14 14
+--------------
+--------------
+--------------
+---B-----B----
+----NB-NN-----
+-----NBNN-----
+-----BNBBN----
+-----NBNN-B---
+----BN-XB-----
+--------------
+---B----------
+--------------
+--------------
+--------------
+
+    Réponse reçue du Joueur #1 [221 ms]: 11,9
+Tour #12
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [326 ms]: 8,12
+Tour #13
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 14      smallSizeX: 14
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+14 14
+--------------
+--------------
+--------------
+---B-----B----
+----NB-NN-----
+-----NBNN-B---
+-----BNBBN----
+-----NBNN-B---
+----BN-NB-----
+--------------
+---B----------
+--------------
+--------------
+--------------
+
+AI : JOUEUR 1
+Time: 296 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :-98 play :(10,5)
+14 14
+--------------
+--------------
+--------------
+---B-----B----
+----NB-NN-----
+-----NBNN-B---
+-----BNBBN----
+-----NBNN-B---
+----BN-NB-----
+--------------
+---B-X--------
+--------------
+--------------
+--------------
+
+    Réponse reçue du Joueur #1 [221 ms]: 13,7
+Tour #13
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [330 ms]: 12,8
+Tour #14
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 14      smallSizeX: 14
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+14 14
+--------------
+--------------
+--------------
+---B-----B----
+----NB-NN-----
+-----NBNN-B---
+-----BNBBN----
+-----NBNN-B---
+----BN-NB-----
+------B-------
+---B-N--------
+--------------
+--------------
+--------------
+
+AI : JOUEUR 1
+Time: 296 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :-186 play :(3,6)
+14 14
+--------------
+--------------
+--------------
+---B--X--B----
+----NB-NN-----
+-----NBNN-B---
+-----BNBBN----
+-----NBNN-B---
+----BN-NB-----
+------B-------
+---B-N--------
+--------------
+--------------
+--------------
+
+    Réponse reçue du Joueur #1 [221 ms]: 6,8
+Tour #14
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [324 ms]: 5,7
+Tour #15
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 14      smallSizeX: 15
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+15 14
+--------------
+--------------
+--------------
+-----B--------
+---B--N--B----
+----NB-NN-----
+-----NBNN-B---
+-----BNBBN----
+-----NBNN-B---
+----BN-NB-----
+------B-------
+---B-N--------
+--------------
+--------------
+--------------
+
+AI : JOUEUR 1
+Time: 295 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :-316 play :(10,5)
+15 14
+--------------
+--------------
+--------------
+-----B--------
+---B--N--B----
+----NB-NN-----
+-----NBNN-B---
+-----BNBBN----
+-----NBNN-B---
+----BN-NB-----
+-----XB-------
+---B-N--------
+--------------
+--------------
+--------------
+
+    Réponse reçue du Joueur #1 [222 ms]: 12,7
+Tour #15
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [320 ms]: 14,7
+Tour #16
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 14      smallSizeX: 16
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+16 14
+--------------
+--------------
+--------------
+-----B--------
+---B--N--B----
+----NB-NN-----
+-----NBNN-B---
+-----BNBBN----
+-----NBNN-B---
+----BN-NB-----
+-----NB-------
+---B-N--------
+-----B--------
+--------------
+--------------
+--------------
+
+AI : JOUEUR 1
+Time: 294 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :-453 play :(5,10)
+16 14
+--------------
+--------------
+--------------
+-----B--------
+---B--N--B----
+----NB-NN-X---
+-----NBNN-B---
+-----BNBBN----
+-----NBNN-B---
+----BN-NB-----
+-----NB-------
+---B-N--------
+-----B--------
+--------------
+--------------
+--------------
+
+    Réponse reçue du Joueur #1 [222 ms]: 7,12
+Tour #16
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [322 ms]: 7,11
+Tour #17
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 14      smallSizeX: 16
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+16 14
+--------------
+--------------
+--------------
+-----B--------
+---B--N--B----
+----NB-NNBN---
+-----NBNN-B---
+-----BNBBN----
+-----NBNN-B---
+----BN-NB-----
+-----NB-------
+---B-N--------
+-----B--------
+--------------
+--------------
+--------------
+
+AI : JOUEUR 1
+Time: 296 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :-568 play :(4,4)
+16 14
+--------------
+--------------
+--------------
+-----B--------
+---BX-N--B----
+----NB-NNBN---
+-----NBNN-B---
+-----BNBBN----
+-----NBNN-B---
+----BN-NB-----
+-----NB-------
+---B-N--------
+-----B--------
+--------------
+--------------
+--------------
+
+    Réponse reçue du Joueur #1 [222 ms]: 6,6
+Tour #17
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [323 ms]: 6,10
+Tour #18
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 14      smallSizeX: 16
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+16 14
+--------------
+--------------
+--------------
+-----B--------
+---BN-N-BB----
+----NB-NNBN---
+-----NBNN-B---
+-----BNBBN----
+-----NBNN-B---
+----BN-NB-----
+-----NB-------
+---B-N--------
+-----B--------
+--------------
+--------------
+--------------
+
+AI : JOUEUR 1
+Time: 299 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :-562 play :(3,7)
+16 14
+--------------
+--------------
+--------------
+-----B-X------
+---BN-N-BB----
+----NB-NNBN---
+-----NBNN-B---
+-----BNBBN----
+-----NBNN-B---
+----BN-NB-----
+-----NB-------
+---B-N--------
+-----B--------
+--------------
+--------------
+--------------
+
+    Réponse reçue du Joueur #1 [221 ms]: 5,9
+Tour #18
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [326 ms]: 9,13
+Tour #19
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 15      smallSizeX: 16
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+16 15
+---------------
+---------------
+---------------
+-----B-N-------
+---BN-N-BB-----
+----NB-NNBN----
+-----NBNN-B----
+-----BNBBN-B---
+-----NBNN-B----
+----BN-NB------
+-----NB--------
+---B-N---------
+-----B---------
+---------------
+---------------
+---------------
+
+AI : JOUEUR 1
+Time: 292 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+ NB_SAVE :0
+try deep:   5
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 4
+score :-569 play :(8,12)
+16 15
+---------------
+---------------
+---------------
+-----B-N-------
+---BN-N-BB-----
+----NB-NNBN----
+-----NBNN-B----
+-----BNBBN-B---
+-----NBNN-B-X--
+----BN-NB------
+-----NB--------
+---B-N---------
+-----B---------
+---------------
+---------------
+---------------
+
+    Réponse reçue du Joueur #1 [222 ms]: 10,14
+Tour #19
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [323 ms]: 6,9
+Tour #20
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 16      smallSizeX: 16
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+16 16
+----------------
+----------------
+----------------
+-----B-N--------
+---BN-NBBB------
+----NB-NNBN-----
+-----NBNN-B-----
+-----BNBBN-B----
+-----NBNN-B-N---
+----BN-NB-------
+-----NB---------
+---B-N----------
+-----B----------
+----------------
+----------------
+----------------
+
+AI : JOUEUR 1
+Time: 295 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :-357 play :(7,4)
+16 16
+----------------
+----------------
+----------------
+-----B-N--------
+---BN-NBBB------
+----NB-NNBN-----
+-----NBNN-B-----
+----XBNBBN-B----
+-----NBNN-B-N---
+----BN-NB-------
+-----NB---------
+---B-N----------
+-----B----------
+----------------
+----------------
+----------------
+
+    Réponse reçue du Joueur #1 [222 ms]: 9,6
+Tour #20
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [325 ms]: 8,6
+Tour #21
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 16      smallSizeX: 16
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+16 16
+----------------
+----------------
+----------------
+-----B-N--------
+---BN-NBBB------
+----NB-NNBN-----
+----BNBNN-B-----
+----NBNBBN-B----
+-----NBNN-B-N---
+----BN-NB-------
+-----NB---------
+---B-N----------
+-----B----------
+----------------
+----------------
+----------------
+
+AI : JOUEUR 1
+Time: 293 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :-348 play :(6,3)
+16 16
+----------------
+----------------
+----------------
+-----B-N--------
+---BN-NBBB------
+----NB-NNBN-----
+---XBNBNN-B-----
+----NBNBBN-B----
+-----NBNN-B-N---
+----BN-NB-------
+-----NB---------
+---B-N----------
+-----B----------
+----------------
+----------------
+----------------
+
+    Réponse reçue du Joueur #1 [222 ms]: 8,5
+Tour #21
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [320 ms]: 11,8
+Tour #22
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 16      smallSizeX: 16
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+16 16
+----------------
+----------------
+----------------
+-----B-N--------
+---BN-NBBB------
+----NB-NNBN-----
+---NBNBNN-B-----
+----NBNBBN-B----
+-----NBNN-B-N---
+----BNBNB-------
+-----NB---------
+---B-N----------
+-----B----------
+----------------
+----------------
+----------------
+
+AI : JOUEUR 1
+Time: 293 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 2
+score :-365 play :(4,5)
+16 16
+----------------
+----------------
+----------------
+-----B-N--------
+---BNXNBBB------
+----NB-NNBN-----
+---NBNBNN-B-----
+----NBNBBN-B----
+-----NBNN-B-N---
+----BNBNB-------
+-----NB---------
+---B-N----------
+-----B----------
+----------------
+----------------
+----------------
+
+    Réponse reçue du Joueur #1 [221 ms]: 6,7
+Tour #22
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [323 ms]: 13,8
+Tour #23
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 16      smallSizeX: 16
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+16 16
+----------------
+----------------
+----------------
+-----B-N--------
+---BNNNBBB------
+----NB-NNBN-----
+---NBNBNN-B-----
+----NBNBBN-B----
+-----NBNN-B-N---
+----BNBNB-------
+-----NB---------
+---B-NB---------
+-----B----------
+----------------
+----------------
+----------------
+
+AI : JOUEUR 1
+Time: 294 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+ NB_SAVE :0
+try deep:   5
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 4
+score :-99999996 play :(12,6)
+16 16
+----------------
+----------------
+----------------
+-----B-N--------
+---BNNNBBB------
+----NB-NNBN-----
+---NBNBNN-B-----
+----NBNBBN-B----
+-----NBNN-B-N---
+----BNBNB-------
+-----NB---------
+---B-NB---------
+-----BX---------
+----------------
+----------------
+----------------
+
+    Réponse reçue du Joueur #1 [222 ms]: 14,8
+Tour #23
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [321 ms]: 12,9
+Tour #24
+  Joueur #1  [temps alloué = 300 ms] ...
+smallSizeY: 16      smallSizeX: 16
+left_buffer: 3       rightBuffer: 3
+topBuffer: 3     downBuffer: 3
+16 16
+----------------
+----------------
+----------------
+-----B-N--------
+---BNNNBBB------
+----NB-NNBN-----
+---NBNBNN-B-----
+----NBNBBN-B----
+-----NBNN-B-N---
+----BNBNB-------
+-----NBB--------
+---B-NB---------
+-----BN---------
+----------------
+----------------
+----------------
+
+AI : JOUEUR 1
+Time: 295 ms
+ TRY TO MAX :1 AND MIN :1
+try deep:   2
+ NB_SAVE :0
+try deep:   4
+ NB_SAVE :0
+try deep:   5
+ NB_SAVE :30
+try deep:   6
+ NB_SAVE :30
+try deep:   7
+GOOOO BACK!!
+connect5.ia.models.TimeOver: Time Over
+----------------------------- LAST DEPTH : 6
+score :-99999998 play :(3,6)
+16 16
+----------------
+----------------
+----------------
+-----BXN--------
+---BNNNBBB------
+----NB-NNBN-----
+---NBNBNN-B-----
+----NBNBBN-B----
+-----NBNN-B-N---
+----BNBNB-------
+-----NBB--------
+---B-NB---------
+-----BN---------
+----------------
+----------------
+----------------
+
+    Réponse reçue du Joueur #1 [221 ms]: 5,8
+Tour #24
+  Joueur #2  [temps alloué = 300 ms] ...
+    Réponse reçue du Joueur #2 [22 ms]: 15,6
+********
+Partie terminée.   Gagnant=2
