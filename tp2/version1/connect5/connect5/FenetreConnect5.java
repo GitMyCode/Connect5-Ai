@@ -1,3 +1,4 @@
+
 /*
  * INF4230 - Intelligence artificielle
  * TP2 - Algorithme minimax avec élagage alpha-beta appliqué au jeu FenetreConnect5

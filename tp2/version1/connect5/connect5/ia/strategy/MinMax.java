@@ -9,125 +9,73 @@ import java.util.*;
  * Created by MB on 3/30/14.
  */
 
-
 public class MinMax {
-
-
-    static boolean pruned = false;
     static int currentPlayer;
     static int opponent;
     static int MAX_DEPTH = 4;
 
-
     static int nbcol;
-
-
     static int nbMAX;
     static int nbMIN;
     static int nbSaveInCloseList;
 
-    static int alpha = Integer.MIN_VALUE;
-    static int beta = Integer.MAX_VALUE;
-
     static boolean activateLookUp = false;
 
-    //static Map<Etat, int[]> closelist = new HashMap<Etat, int[]>();
     public static HashMap<Etat,Etat> closelist = new HashMap<Etat, Etat>();
 
-    public static int[] getMove (Etat etatInitial, int playerColor, int deep) throws TimeOver {
-        MAX_DEPTH = deep;
-        nbcol = GLOBAL.NBCOL;
-        opponent = (playerColor == 1) ? 2 : 1;
-        currentPlayer = playerColor;
-        nbMAX = 0;
-        nbMIN = 0;
-        nbSaveInCloseList =0;
-        //closelist = new HashMap<Etat, Etat>();
-
-
-        long time = System.currentTimeMillis();
-        if(deep > 2){
-            activateLookUp = true;
-        }else{
-            activateLookUp = false;
-        }
-
-        int[] play = minmax(etatInitial, 0, currentPlayer, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
-        System.out.println(" NB_SAVE :"+nbSaveInCloseList);
-        GLOBAL.LAST_DEPTH = deep;
-
-        return play;
-    }
-
     public static int[] minmax (Etat etat, int depth, int player, int alpha, int beta, int lastScore) throws TimeOver {
-
-
-
+        /* Arreter lorsque pas de temps pour continuer minmax */
         if (GLOBAL.timeUp()) {
             System.out.println("GOOOO BACK!!");
             throw new TimeOver("Time Over");
         }
-
 
         if(activateLookUp && depth != 0){
             if(closelist.containsKey(etat)){
                 Etat ref = closelist.get(etat);
                 nbSaveInCloseList++;
 
-                if(ref.lowerBound !=null && ref.lowerBound >= beta && ref.maxDepth == MAX_DEPTH){
+                if(ref.lowerBound != null && ref.lowerBound >= beta && ref.maxDepth == MAX_DEPTH){
                     return new int[] {-1, ref.lowerBound};
                 }
-                if(ref.upperBound !=null && ref.upperBound <= alpha && ref.maxDepth == MAX_DEPTH){
+                if(ref.upperBound != null && ref.upperBound <= alpha && ref.maxDepth == MAX_DEPTH){
                     return new int[] {-1, ref.upperBound};
                 }
-                if(ref.lowerBound !=null){
+                if(ref.lowerBound != null){
                     alpha = Math.max(alpha,ref.lowerBound);
                 }
-                if(ref.upperBound !=null){
+                if(ref.upperBound != null){
                     beta = Math.min(beta, ref.upperBound);
                 }
-
-
             }
-
         }
 
         int winner = 0;
-        if (Math.abs(lastScore+ 1000) > GLOBAL.ALMOST_WIN+40000) {
+        if (Math.abs(lastScore + 1000) > GLOBAL.ALMOST_WIN + 40000) {
             winner = (lastScore < 0) ? opponent : currentPlayer;
         }
 
-        if (winner != 0 || etat.isTerminal() || depth == MAX_DEPTH) {
 
+        if (winner != 0 || etat.isTerminal() || depth == MAX_DEPTH) {
             int deepPenality = (player != currentPlayer) ? depth : 0 - depth;
             if (winner != 0) {
                 int t = getScoreWinner(winner, player, depth);
-                //  closelist.put(etat,t);
                 return new int[]{-1, t};
             }
-            int score = lastScore; //etat.evaluate(player);
 
-            return new int[]{-1, score + deepPenality};
+            return new int[]{-1, lastScore + deepPenality};
         }
 
-
-        int bestScore;
         Integer currentScore = null;
         int bestMove = (player == currentPlayer) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
         TreeSet<Move> nextMoves = etat.getNextMoves(player);
 
         int a = alpha; // Pour garder alpha intact
         int b = beta; // Pour garder beta intact
-        //int limit = 20;
+
         while (!nextMoves.isEmpty()) {
 
             Move move = nextMoves.pollFirst();
-            /*if(bestMove == Integer.MAX_VALUE || bestMove == Integer.MIN_VALUE){
-                bestMove = move.score;
-            }*/
-           /* if(player == currentPlayer && move.score < -GLOBAL.CONNECT4_SCORE && limit< 15){
-                break;
-            }*/
 
             Etat next_step = etat.clone();
             next_step.depth= depth+1;
@@ -135,7 +83,6 @@ public class MinMax {
             next_step.playAndUpdate(move.move, player);
             //next_step.play(move.move,player);
             next_step.score = move.score; // garder l'évaluation dans l'Etat
-
 
             if (player == currentPlayer) {
                 nbMAX++;
@@ -153,8 +100,6 @@ public class MinMax {
                 if (a >= beta) {
                     break;
                 }
-
-
             } else {
                 nbMIN++;
                 currentScore = minmax(next_step, depth + 1, currentPlayer, alpha, b, move.score)[1];
@@ -171,7 +116,6 @@ public class MinMax {
                 }
             }
         }
-
 
         if(activateLookUp){
             Etat eRef = null;
@@ -191,43 +135,35 @@ public class MinMax {
 
     }
 
+    public static int[] getMove (Etat etatInitial, int playerColor, int deep) throws TimeOver {
+        MAX_DEPTH = deep;
+        nbcol = GLOBAL.NBCOL;
+        opponent = (playerColor == 1) ? 2 : 1;
+        currentPlayer = playerColor;
+        nbMAX = 0;
+        nbMIN = 0;
+        nbSaveInCloseList =0;
 
-    private class Key {
-        Etat etat;
-        boolean isLowerBound= false;
-        int score;
-
-        public Key(Etat e,Integer score){
-            etat = e;
-            this.score = score;
+        long time = System.currentTimeMillis();
+        if(deep > 2){
+            activateLookUp = true;
+        }else{
+            activateLookUp = false;
         }
 
+        int[] play = minmax(etatInitial, 0, currentPlayer, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
+        System.out.println(" NB_SAVE :"+nbSaveInCloseList);
+        GLOBAL.LAST_DEPTH = deep;
+
+        return play;
     }
 
-
-
     private static int getScoreWinner (int winner, int turn, int depth) {
-
-
         if (winner == opponent) {
             return (0 - GLOBAL.WIN) + depth;
         } else {
             return GLOBAL.WIN - depth;
         }
-
-
-    }
-
-    private static List<Integer> getPossibleMove (Grille g) {
-        List<Integer> moves = new ArrayList<Integer>();
-
-        for (int l = 0; l < g.getData().length; l++)
-            for (int c = 0; c < nbcol; c++)
-                if (g.getData()[l][c] == 0)
-                    moves.add(l * nbcol + c);
-
-
-        return moves;
     }
 
 }

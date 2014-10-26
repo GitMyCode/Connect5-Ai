@@ -9,6 +9,8 @@
 package connect5;
 
 import connect5.ia.JoueurArtificiel;
+import java.io.*;
+import java.util.*;
 
 /**
  *
@@ -101,6 +103,7 @@ public class JeuConnect5 implements Runnable {
         }
         fireMessage("********");
         fireMessage("Partie terminée.   Gagnant=" + gagnant);
+
     }
     
     public void setGrilleObserver(JeuObserver go){
@@ -112,7 +115,7 @@ public class JeuConnect5 implements Runnable {
         if(grilleObserver!=null)
             grilleObserver.message(msg);
     }
-    
+
     public boolean getErreur(){
         return erreur;
     }
