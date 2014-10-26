@@ -396,7 +396,6 @@ public class Etat {
 
 
                     /*Juste pour voir les vecteur dans un print pas necessaire pour le programme*/
-                    int[] tab_s = getTabSeq(i,D);
 
 
                     /*TODO ne marche pas! We must not count vector that have more than 5*/
@@ -407,6 +406,7 @@ public class Etat {
                     int nb_seqt = getSEQ(i,D,res); // nombre de jeton sur la ligne
 
                     Vector5 new_vector = new Vector5(nb_seqt,D,i);
+                    new_vector.tab_seq = getTabSeq(i,D);
                     new_vector.setIfDirectionnel(isBidirectionnel(i,i+D.step(4),D));
 
                     if (new_vector.suite == 5) {
@@ -436,7 +436,6 @@ public class Etat {
                     }
 
                     Vector5 old_ref;
-                    new_vector.tab_seq = tab_s;
 
                     /*Update the memo[][] to avoid count two vector in the same place same direction*/
 
