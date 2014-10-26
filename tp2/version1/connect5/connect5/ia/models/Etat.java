@@ -2,7 +2,6 @@ package connect5.ia.models;
 
 import connect5.Grille;
 import connect5.GrilleVerificateur;
-import connect5.ia.Utilitaires.Util;
 
 import java.util.*;
 
@@ -51,7 +50,7 @@ public class Etat {
 
 
     public Map<Dir.Axes,Map<Integer,Integer>> mapMemoAxesValue;
-    Map<Dir.Axes,Map<Integer,Integer>> mapAxesPointToStartPoint ;
+    public static Map<Dir.Axes,Map<Integer,Integer>> mapAxesPointToStartPoint ;
     Map<Dir.Axes,Set<Integer>> mapAxesStartPointSet ;
     Map<Dir.Axes,Map<Integer,Integer>> mapAngleDangerMAX;
     Map<Dir.Axes,Map<Integer,Integer>> mapAngleDangerMIN;
@@ -63,7 +62,6 @@ public class Etat {
 
     public int evaluationHere;
 
-    public static GrilleVerificateur checker;
 
     /*pour fonciton*/
     boolean playe1Won =false;
@@ -370,19 +368,24 @@ public class Etat {
 
 
 
-
+    /*
+    * THESE ARE TMPORARY VARIABLE THAT ARE RESET EACH TIME THIS FUNCTION IS CALLED
+    * - They are use to give more information to other method
+    * - Yes this is ugly
+    * */
     int MAXhigthestSeqThisAngle;
     int MINhigthestSeqThisAngle;
-
+    HashSet<Vector5> allV;
     public int axeAngleValue(int point, Dir D,int player){
+        /*Init temp variable that are global*/
         MAXhigthestSeqThisAngle =0;
         MINhigthestSeqThisAngle =0;
-        HashSet<Vector5> allV = new HashSet<Vector5>();
-        Map<Integer,Vector5> tempMemo = new HashMap<Integer, Vector5>();
-
+        allV = new HashSet<Vector5>();
         playe1Won =false;
         player2Won = false;
 
+
+        Map<Integer,Vector5> tempMemo = new HashMap<Integer, Vector5>();
         Dir.Axes axe = Dir.Axes.getA(D);
         for (int i= point; D.boundaries(i,5);i= i+ D.step(1)){
             if(true) {
@@ -403,7 +406,7 @@ public class Etat {
 
                     int nb_seqt = getSEQ(i,D,res); // nombre de jeton sur la ligne
 
-                    Vector5 new_vector = new Vector5(nb_seqt,D);
+                    Vector5 new_vector = new Vector5(nb_seqt,D,i);
                     new_vector.setIfDirectionnel(isBidirectionnel(i,i+D.step(4),D));
 
                     if (new_vector.suite == 5) {
@@ -472,7 +475,7 @@ public class Etat {
 
         for(Vector5 s : allV){
             int value = s.valueBirdirection; //(s.bidirectionnel && s.value>0)? s.value+1 : s.value;
-            //Dir.Axes a = Dir.Axes.getA(s.Direction);
+            //Dir.Axes a = Dir.Axes.getA(s.D);
             //int previous = mapMemoAxesValue.get(a).get(Dir.Axes.mapAxesPointToStartPoint.get(s.tab_seq[0]));
             if(s.value >0){
                 if(s.isMAXvector){
@@ -547,10 +550,11 @@ public class Etat {
     }
 
     public void initMemo(){
-        //checkAllArrayTreat();
         mapAxesPointToStartPoint = new HashMap<Dir.Axes, Map<Integer, Integer>>();
         mapAxesStartPointSet = new HashMap<Dir.Axes, Set<Integer>>();
         mapMemoAxesValue = new HashMap<Dir.Axes, Map<Integer, Integer>>();
+        mapTreat = new HashMap<Integer, Treat>();
+
         for(Dir.Axes a : Dir.Axes.values()){
             mapAxesPointToStartPoint.put(a, new HashMap<Integer, Integer>());
             mapAxesStartPointSet.put(a, new HashSet<Integer>());
@@ -584,6 +588,9 @@ public class Etat {
 
             }
         }
+
+        //checkAllArrayTreat();
+
 
 
         mapAngleDangerMAX = new HashMap<Dir.Axes, Map<Integer, Integer>>();
@@ -811,7 +818,7 @@ public class Etat {
 
 
                     Vector5 new_vector = new Vector5();
-                    new_vector.Direction = D;
+                    new_vector.D = D;
 
                     int nb_seqt=0;
                     if(one_dim[i + D.step(0)] == res){
@@ -1022,44 +1029,48 @@ public class Etat {
     public void checkAllArrayTreat(){
 
         for(int i=0; i< one_dim.length; i++){
-            checkDoubleTreat(i);
+            if(one_dim[i] ==0){
+                checkDoubleTreat(i);
+            }
         }
 
     }
 
-    public void checkDoubleTreat(int point){
+    public void checkDoubleTreat(int point ){
 
 
         HashSet<Dir.Axes> axesDone = new HashSet<Dir.Axes>();
         Vector5 v1 =null;
         Vector5 v2 =null;
 
-        for(Dir D : Dir.direction8){
-            if(!axesDone.contains(D) && D.boundaries(point,5)){
-                int player = getPlayerLine(point,D);
-                if(player ==1 || player == 2){
+        /*TODO
+        * Ce rappeler que ca marche pas si ya un vecteur d<un player et ensuite 2 d<un autre*/
+        for(Dir D : Dir.direction4){
+            Dir.Axes axe = Dir.Axes.getA(D);
+            int startPoint = mapAxesPointToStartPoint.get(axe).get(point);
 
-                    int seqBinary = getSEQ(point,D,player);
-                    int seqValue = Integer.bitCount(seqBinary);
-                    boolean isSuite = checkIfSuite(seqBinary,seqValue);
+            axeAngleValue(startPoint,D,1);
+            for(Vector5 v : allV){
 
-                    if(seqValue >3){
-                        axesDone.add(D.axe);
-
-                        int[] t = getTabSeq(point,D);
-                        Vector5 v = new Vector5(seqBinary,D);
-                        v.tab_seq = t;
-                        if(v1 ==null){
-                            v1 = v;
-                        }else {
-                            v2 = v;
-                        }
-                    }
+                if(v1!= null && v.isMAXvector != v1.isMAXvector){
+                    continue;
                 }
+
+                if(v.getThreatValue()>=3 && v.isNearPoint(point)){
+                    if(v1 ==null){
+                        v1 = v;
+                    }else {
+                        v2 = v;
+                    }
+                    int here=0;
+                }
+
             }
+
+
         }
 
-        if(v1 !=null && v2 != null){
+        if( (v1 !=null && v2 != null)){ // ((v1.getThreatValue() + v2.getThreatValue())> 6) ){
            Treat t = new Treat(v1,v2);
            mapTreat.put(point,t);
         }

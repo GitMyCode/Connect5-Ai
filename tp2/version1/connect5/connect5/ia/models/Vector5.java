@@ -10,26 +10,73 @@ public class Vector5 implements Comparable {
         public int value;
         public int valueBirdirection;
         public boolean bidirectionnel = false;
-        public Dir Direction;
+        public Dir D;
         public int[] tab_seq = new int[5];
         public boolean isMAXvector = false;
         public int binarySeq=0;
 
+        public int beginPoint;
+        public int endPoint;
+
+
         public Vector5(){}
 
         public Vector5(int binarySeq,Dir D ){
-            Direction = D;
+            this.D = D;
             this.binarySeq = binarySeq;
             value = Integer.bitCount(binarySeq);
             valueBirdirection = value;
-            /*Check if they are next to each other  ->   01110 :Yes  01011 : No*/
-            if ((5 - (Integer.numberOfLeadingZeros(binarySeq) - 27)) -
-                    Integer.numberOfTrailingZeros(binarySeq) == value) {
+            if (isSuite(binarySeq) ){
                 isCorded = true;
                 suite = value;
             }
         }
 
+        public Vector5( int binarySeq, Dir D, int beginPoint ){
+            this.D = D;
+            this.binarySeq = binarySeq;
+            value = Integer.bitCount(binarySeq);
+            valueBirdirection = value;
+            if (isSuite(binarySeq) ){
+                isCorded = true;
+                suite = value;
+            }
+            this.beginPoint = beginPoint;
+            this.endPoint = beginPoint +D.step(lastIndexBitOfSequence(binarySeq));
+
+        }
+
+        public boolean isNearPoint(int point){
+            Dir.Axes axe = Dir.Axes.getA(D);
+            int vectorAxesStartPoint = Etat.mapAxesPointToStartPoint.get(axe).get(beginPoint);
+            if(Etat.mapAxesPointToStartPoint.get(axe).get(point) != vectorAxesStartPoint){
+                return false;
+            }
+
+            int from = (D.opp().boundaries(beginPoint,2))? beginPoint + D.opp().step(1) : beginPoint ;
+            int to = (D.boundaries(endPoint,2))? endPoint + D.step(1) : endPoint ;
+
+            if( (from <= point && to >= point) || (from >= point && to <= point) ){
+                return true;
+            }
+
+            return false;
+
+        }
+
+
+        /*Check if they are next to each other  ->   01110 :Yes  01011 : No*/
+        public boolean isSuite(int binarySeq){
+            return (distanceStartToEnd(binarySeq)== value);
+        }
+        public int distanceStartToEnd(int binarySeq){
+            return ((5 - (Integer.numberOfLeadingZeros(binarySeq) - 27)) -
+                    Integer.numberOfTrailingZeros(binarySeq));
+        }
+
+        public int lastIndexBitOfSequence (int binarySeq){
+            return (5- (Integer.numberOfLeadingZeros(binarySeq)-27));
+        }
 
         public int getHeuristicVal(){
             int eval =0;
@@ -50,12 +97,16 @@ public class Vector5 implements Comparable {
 
         }
 
+        public boolean samePoint(Vector5 v2){
+            if(endPoint == v2.endPoint && beginPoint == v2.beginPoint){
+                return true;
+            }
+            if(endPoint == v2.beginPoint && beginPoint == v2.endPoint){
+                return true;
+            }
+            return false;
+        }
 
-/*
-        @Override
-        public boolean equals (Object obj) {
-
-        }*/
 
         @Override
         public int compareTo (Object o) {
@@ -83,6 +134,8 @@ public class Vector5 implements Comparable {
                 return valueBirdirection;
             }else if( valueBirdirection >4) {
                 return valueBirdirection;
+            }else if( (distanceStartToEnd(binarySeq)-value) <=1 ){
+                return valueBirdirection;
             }
             return value;
         }
@@ -102,7 +155,7 @@ public class Vector5 implements Comparable {
             n.moreThan5 = moreThan5;
             n.value = value;
             n.valueBirdirection = valueBirdirection;
-            n.Direction = Direction;
+            n.D = D;
 
             return n;
         }
@@ -118,4 +171,5 @@ public class Vector5 implements Comparable {
             return true;
 
         }
+
     }

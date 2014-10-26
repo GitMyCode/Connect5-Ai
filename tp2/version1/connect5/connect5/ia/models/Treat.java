@@ -8,6 +8,9 @@ public class Treat {
     public Vector5 treat1;
     public Vector5 treat2;
 
+    public int point;
+    public int player;
+    public boolean isMax =false;
 
     Treat(Vector5 v1, Vector5 v2){
         treat1 = v1;

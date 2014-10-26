@@ -48,6 +48,8 @@ public abstract class Util {
         System.out.println("Total theses vector: "+total);
     }
 
+
+
     public static boolean areAllEqual(int... values)
     {
         if (values.length == 0)
