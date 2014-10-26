@@ -169,7 +169,7 @@ public class JoueurArtificiel implements Joueur, Runnable {
         List<Integer> moves = new ArrayList<Integer>();
         moves.add(init.getNextMoves(GLOBAL.MAX).pollFirst().move);
         System.out.println(GLOBAL.showTimeRemain());
-        System.out.println(" TRY TO MAX :" + GLOBAL.MAX + " AND MIN :" + GLOBAL.MAX );
+        System.out.println(" TRY TO MAX :" + GLOBAL.MAX + " AND MIN :" + GLOBAL.MIN );
 
         int[] res = null;
         boolean stoped = false;
