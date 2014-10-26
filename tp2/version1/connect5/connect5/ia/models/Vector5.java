@@ -47,7 +47,7 @@ public class Vector5 implements Comparable {
         }
 
         public boolean isNearPoint(int point){
-            Dir.Axes axe = Dir.Axes.getA(D);
+            Dir.Axes axe = Dir.Axes.getAxe(D);
             int vectorAxesStartPoint = Etat.mapAxesPointToStartPoint.get(axe).get(beginPoint);
             if(Etat.mapAxesPointToStartPoint.get(axe).get(point) != vectorAxesStartPoint){
                 return false;
