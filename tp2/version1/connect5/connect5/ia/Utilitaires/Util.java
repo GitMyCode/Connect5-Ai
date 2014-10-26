@@ -69,10 +69,10 @@ public abstract class Util {
 
     static public void printAllStartPoint(Map<Dir.Axes,Map<Integer,Integer>> mapAxesStartPointSet,byte[] one_dim){
         for(Dir d : Dir.direction4){
-            Dir.Axes a = Dir.Axes.getA(d);
+            Dir.Axes a = Dir.Axes.getAxe(d);
             int test[] = new int[mapAxesStartPointSet.get(a).size()];
             int i=0;
-            System.out.println(a + " nbStartpoint:"+ test.length + " Axe: "+a);
+            System.out.println(a + " nbStartpoint:"+ test.length + " Axe: " + a);
 
             for( Integer entry : mapAxesStartPointSet.get(a).values()){
                 int startPoint = entry;
