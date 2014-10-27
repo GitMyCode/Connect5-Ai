@@ -396,7 +396,7 @@ public class JoueurArtificiel implements Joueur{
 
     @Override
     public String getAuteurs () {
-        return "Martin Bouchard (BOUM15078700)";
+        return "Martin Bouchard (BOUM15078700) et Nilovna Bascunan-Vasquez(BASN22518900)";
     }
 }
 
