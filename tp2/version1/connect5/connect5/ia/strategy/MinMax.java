@@ -142,6 +142,7 @@ public class MinMax {
         nbMAX = 0;
         nbMIN = 0;
         nbSaveInCloseList =0;
+        closelist.clear();
 
         long time = System.currentTimeMillis();
         if(deep > 2){
