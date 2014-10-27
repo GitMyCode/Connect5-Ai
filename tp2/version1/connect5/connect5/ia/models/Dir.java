@@ -77,14 +77,14 @@ public enum Dir {
     }
 
     abstract public int v(); // index pour déplacer vers la direction
-    abstract public Dir opp();
-    abstract public boolean boundaries (int index,int limit);
+    abstract public Dir opp(); // direction opposee
+    abstract public boolean boundaries (int index, int limit);
 
     public int step (int step){
         return this.v() * step;
     }
 
-    private static boolean checkBounderies(Set<Cardinal> cardinaux,int index, int limit){
+    private static boolean checkBounderies(Set<Cardinal> cardinaux, int index, int limit){
         for(Cardinal c: cardinaux){
             if(! c.validLimit(index, limit)){
                 return false;
