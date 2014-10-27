@@ -1,23 +1,13 @@
 package connect5.ia;
 
+import java.util.*;
 
 import connect5.Grille;
-import connect5.GrilleVerificateur;
 import connect5.Joueur;
 import connect5.Position;
 import connect5.ia.Utilitaires.Util;
 import connect5.ia.models.*;
 import connect5.ia.strategy.MinMax;
-import connect5.ia.strategy.NegaScout;
-
-import java.awt.image.LookupTable;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.*;
 
 
 public class JoueurArtificiel implements Joueur{
@@ -26,7 +16,6 @@ public class JoueurArtificiel implements Joueur{
 
     private int nbcol = 0;
     private int nbligne = 0;
-
 
     private int bufferX;
     private int bufferY;
@@ -68,28 +57,24 @@ public class JoueurArtificiel implements Joueur{
         GLOBAL.MAX = (((GLOBAL.FULL_NBCOL * GLOBAL.FULL_NBLIGNE) - casesvides.size()) % 2 == 0) ? 1 : 2;
         GLOBAL.MIN = (GLOBAL.MAX == 1) ? 2 : 1;
 
-        /*Pour le cas ou la grille est vide! on joue au centre*/
+        /* Si la grille est vide, jouer au centre */
         if (casesvides.size() == (GLOBAL.FULL_NBCOL * GLOBAL.FULL_NBLIGNE)) {
             System.out.println("first hit");
             return new Position(GLOBAL.FULL_NBLIGNE / 2, GLOBAL.FULL_NBCOL / 2);
         }
 
-        /* INITIALISATION du premier etat:  Il va cut la grille et la mettre dans l'etat */
-        Etat init = getInitStat(grille);
+        /* INITIALISATION du premier etat:  Reduction de la grille et l'ajouter a l'état */
+        Etat init = getInitState(grille);
 
-
-        /*Check pour savoir si un coup nous fait gagné immédiatement*/
+        /* Vérifier si possibilité de gagner immédiatement */
         TreeSet<Move> pq = init.getNextMoves(GLOBAL.MAX);
         Move MAXcheckWinMove = pq.pollFirst();
         if (MAXcheckWinMove.score == GLOBAL.WIN) {
-
             System.out.println("Try WIN: (" + (MAXcheckWinMove.move / GLOBAL.NBCOL) + "," + (MAXcheckWinMove.move % GLOBAL.NBCOL) + ")");
             int choix_converted = getMoveCutedGridToFullGrid(MAXcheckWinMove.move);
 
             return new Position(choix_converted / GLOBAL.FULL_NBCOL, choix_converted % GLOBAL.FULL_NBCOL);
         }
-
-
 
         System.out.println("AI : JOUEUR " + GLOBAL.MAX);
         int deep = 2;
@@ -97,7 +82,6 @@ public class JoueurArtificiel implements Joueur{
         moves.add(MAXcheckWinMove.move);
         System.out.println(GLOBAL.showTimeRemain());
         System.out.println(" TRY TO MAX :" + GLOBAL.MAX + " AND MIN :" + GLOBAL.MAX);
-
 
 
         /************************* BOUCLE MINMAX ********************************/
@@ -124,8 +108,6 @@ public class JoueurArtificiel implements Joueur{
         /***************************- FIN BOUCLE MINMAX -******************************/
 
 
-
-
         int choix = moves.get(moves.size() - 1);
         if (res != null) {
             System.out.println("----------------------------- LAST DEPTH : " + GLOBAL.LAST_DEPTH);
@@ -142,21 +124,51 @@ public class JoueurArtificiel implements Joueur{
         return new Position(choix_converted / GLOBAL.FULL_NBCOL, choix_converted % GLOBAL.FULL_NBCOL);
     }
 
+    /**
+     * Obtention du premier Etat
+     * */
+    public Etat getInitState(Grille grille) {
+        byte[] myGrid;
+        if (grille.getSize() > 81) {
+            byte[][] firstCut = cutGrid(grille);
+            byte[] finalCut = oneDimentionalArray(firstCut);
+            System.out.println(toStringOneDimWithCol(finalCut, firstCut[0].length, firstCut.length));
+            GLOBAL.NBCOL = firstCut[0].length;
+            GLOBAL.NBLIGNE = firstCut.length;
+            myGrid = finalCut;
+        } else {
+            myGrid = oneDimentionalArray(grille.getData());
+            GLOBAL.NBCOL = GLOBAL.FULL_NBCOL;
+            GLOBAL.NBLIGNE = GLOBAL.FULL_NBLIGNE;
+        }
 
+        /*INIT ETAT*/
+        GLOBAL.bufferX = bufferX;
+        GLOBAL.bufferY = bufferY;
+        GLOBAL.lowestX = lowestX;
+        GLOBAL.lowestY = lowestY;
+        Etat init = new Etat(myGrid, GLOBAL.MAX, GLOBAL.MIN);
+        init.initMemo();
+//        Direction.init_map(nbcol);
+        return init;
+    }
 
+    private byte[] oneDimentionalArray (byte[][] grille) {
+        int nbligne = grille.length;
+        int nbcol = grille[0].length;
 
+        byte[] one_dim = new byte[grille.length * grille[0].length];
 
+        for (int l = 0; l < nbligne; l++) {
+            System.arraycopy(grille[l], 0, one_dim, l * (nbcol), nbcol);
+        }
 
+        return one_dim;
+    }
 
-
-
-
-
-
-    /* JUSTE POUR LES TESTS
-    *
+    /*
+    * Fonction pour les tests
     * */
-
     public Position getProchainCoupTEST (Grille grille, int maxDepth) {
         GLOBAL.startTimer(Integer.MAX_VALUE);
         GLOBAL.FULL_NBCOL = grille.getData()[0].length;
@@ -176,9 +188,7 @@ public class JoueurArtificiel implements Joueur{
             return new Position(GLOBAL.FULL_NBLIGNE / 2, GLOBAL.FULL_NBCOL / 2);
         }
 
-
-        Etat init = getInitStat(grille);
-
+        Etat init = getInitState(grille);
 
         System.out.println("AI : JOUEUR " + GLOBAL.MAX);
         int deep = 2;
@@ -223,54 +233,8 @@ public class JoueurArtificiel implements Joueur{
         return new Position(choix_converted / GLOBAL.FULL_NBCOL, choix_converted % GLOBAL.FULL_NBCOL);
     }
 
-    public Etat getInitStat (Grille grille) {
 
-
-        byte[] myGrid;
-        if (grille.getSize() > 81) {
-            byte[][] firstCut = cutGrid(grille);
-            byte[] finalCut = oneDimentionalArray(firstCut);
-            System.out.println(toStringOneDimWithCol(finalCut, firstCut[0].length, firstCut.length));
-            GLOBAL.NBCOL = firstCut[0].length;
-            GLOBAL.NBLIGNE = firstCut.length;
-            myGrid = finalCut;
-        } else {
-            myGrid = oneDimentionalArray(grille.getData());
-            GLOBAL.NBCOL = GLOBAL.FULL_NBCOL;
-            GLOBAL.NBLIGNE = GLOBAL.FULL_NBLIGNE;
-        }
-
-
-        /*INIT ETAT*/
-        GLOBAL.bufferX = bufferX;
-        GLOBAL.bufferY = bufferY;
-        GLOBAL.lowestX = lowestX;
-        GLOBAL.lowestY = lowestY;
-        Etat init = new Etat(myGrid, GLOBAL.MAX, GLOBAL.MIN);
-        init.initMemo();
-        Direction.init_map(nbcol);
-        return init;
-
-    }
-
-
-
-
-    private byte[] oneDimentionalArray (byte[][] grille) {
-        int nbligne = grille.length;
-        int nbcol = grille[0].length;
-
-        byte[] one_dim = new byte[grille.length * grille[0].length];
-        //System.out.println("nb col:" +nbcol + "  nbligne: "+ nbligne);
-        for (int l = 0; l < nbligne; l++) {
-            System.arraycopy(grille[l], 0, one_dim, l * (nbcol), nbcol);
-        }
-
-        return one_dim;
-
-    }
-
-    /*Cette methode va convertir le point qui est sur la grille coupé vers un point sur la vrai grille*/
+    /* Cette methode convertit le point qui est sur la grille coupé vers un point sur la vrai grille*/
     private int getMoveCutedGridToFullGrid (int move) {
         int pos_x, pos_y;
         pos_x = ((move / GLOBAL.NBCOL)) + (lowestX - bufferX);
@@ -280,6 +244,7 @@ public class JoueurArtificiel implements Joueur{
     }
 
 
+    /* Couper la grille*/
     public byte[][] cutGrid (Grille grille) {
         int lenghtX = GLOBAL.FULL_NBLIGNE;
         int lengthY = GLOBAL.FULL_NBCOL;
@@ -364,23 +329,6 @@ public class JoueurArtificiel implements Joueur{
 
         bufferY = leftBuffer;
         bufferX = topBuffer;
-
-/*
-        if(smallx >= GLOBAL.FULL_NBLIGNE){
-            smallx = GLOBAL.FULL_NBLIGNE;
-            extendBufferX = 0;
-            lx[0] = 0;
-            bufferX = 0;
-            lowestX =0;
-        }
-        if(smally >= GLOBAL.FULL_NBCOL){
-            smally=  GLOBAL.FULL_NBCOL;
-            extendBufferY=0;
-            ly[1] = 0;
-            bufferY =0;
-            lowestY = 0;
-        }*/
-
 
         int smallSizeX = downBuffer + topBuffer + (hx[0] - lx[0] + 1);
         int smallSizeY = leftBuffer + rightBuffer + (hy[1] - ly[1] + 1);
