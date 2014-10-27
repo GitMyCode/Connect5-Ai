@@ -93,13 +93,16 @@ public enum Dir {
         return true;
     }
 
+    /***
+     * Valide la limite pour N, O, S, E
+     */
     public enum Cardinal{
         NORD{
             @Override boolean validLimit (int index, int limit) {
                 if(index < 0 || index >= GLOBAL.NBCOL * GLOBAL.NBLIGNE)
                     return false;
 
-                return  (index + TOP.v()* (limit-1)) >=0;
+                return  (index + TOP.v() * (limit - 1)) >= 0;
             }
         },
         SUD{
@@ -107,7 +110,7 @@ public enum Dir {
                 int length = GLOBAL.NBCOL * GLOBAL.NBLIGNE;
                 if(index < 0 || index >= length)
                     return false;
-                return (index+ DOWN.v()* (limit-1)) < length;
+                return (index + DOWN.v() * (limit - 1)) < length;
             }
         },
          OUEST{
@@ -151,8 +154,6 @@ public enum Dir {
         }
 
         public static final Map<Dir, Axes> lookup = new EnumMap<Dir, Axes>(Dir.class);
-        //  public static final Map<Axes,Map<Integer,Integer>> mapAxesPointToStartPoint = new HashMap<Axes, Map<Integer, Integer>>();
-        //  public static final Map<Axes,Set<Integer>> mapAxesStartPointSet = new HashMap<Axes, Set<Integer>>();
 
         static {
             for(Dir dir : Dir.values()){
