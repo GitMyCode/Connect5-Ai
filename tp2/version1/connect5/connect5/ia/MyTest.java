@@ -473,7 +473,23 @@ score :4999414 play :(10,6)
             "--------N----" +
             "-------------";
 
-
+    static String sixCatch5=//11 13  /*TODO: PASSED*/
+            "-----N------B" +
+            "-B---N-------" +
+            "-----N-------" +
+            "-----N-------" +
+            "---BB-BB-----" +
+            "-----N-------" +
+            "-----N----N--" +
+            "-------------" +
+            "--B----------" +
+            "--------N----" +
+            "-------------";
+    static String sixCatch6=//4 8  /*TODO: PASSED*/
+            "-BBBBBBB"+
+            "NBNBNBNN"+
+            "BNBNBNBN"+
+            "NNNNNNNB";
 
 
     public static int[] testByte(String theGrid,int nbligne, int nbcol){
@@ -504,7 +520,7 @@ score :4999414 play :(10,6)
         // Test B1
         System.out.println("Test #1");
         //nbligne = 12; nbcol = 12;
-        Grille g = new Grille(11,13,testByte(sixCatch4,11,13));
+        Grille g = new Grille(4,8,testByte(sixCatch6,4,8));
         Position coup = joueur.getProchainCoupTEST(g,2);
         System.out.println((coup.ligne==4 && coup.colonne==0) ? "Réussi": "Échoué");
 

@@ -396,7 +396,7 @@ public class Etat {
     /*
     * param:  pointplayed  is to mark the point when use causes morethan 5 to put it in mapDisabledPoint
     * */
-    public int axeAngleValue(int point, Dir D,int player,int pointPlayed){
+    public int axeAngleValue(int startPoint, Dir D,int player,int pointPlayed){
         /*Init temp variable that are global*/
         MAXhigthestSeqThisAngle =0;
         MINhigthestSeqThisAngle =0;
@@ -407,7 +407,7 @@ public class Etat {
 
         Map<Integer,Vector5> tempMemo = new HashMap<Integer, Vector5>();
         Dir.Axes axe = Dir.Axes.getAxe(D);
-        for (int i= point; D.boundaries(i,5);i= i+ D.step(1)){
+        for (int i= startPoint; D.boundaries(i,5);i= i+ D.step(1)){
             if(true) {
 
 
@@ -441,7 +441,7 @@ public class Etat {
                             Vector5 old_ref;
 
                             /*TODO a checker je considere que si il est proche (-1 et +1 de disctance) alors le point est en cause*/
-                            if(new_vector.isNearPoint(pointPlayed)){
+                            if(pointPlayed != -1 && new_vector.isNearPoint(pointPlayed)){
                                 mapDisabledPoint.get(axe).add(pointPlayed);
                             }
                             for (int v = 0; v < 6; v++) {
@@ -527,11 +527,11 @@ public class Etat {
 
 
         if(MAXhigthestSeqThisAngle >3 && MAXhigthestSeqThisAngle > higthestMAX){
-            higthestMAXAngle = new Angle(axe,point, MAXhigthestSeqThisAngle);
+            higthestMAXAngle = new Angle(axe,startPoint, MAXhigthestSeqThisAngle);
             higthestMAX = MAXhigthestSeqThisAngle;
         }
         if(MINhigthestSeqThisAngle > 3 && MINhigthestSeqThisAngle > higthestMIN){
-            hightestMINAngle = new Angle(axe,point,MINhigthestSeqThisAngle);
+            hightestMINAngle = new Angle(axe,startPoint,MINhigthestSeqThisAngle);
             higthestMIN = MINhigthestSeqThisAngle;
         }
 
