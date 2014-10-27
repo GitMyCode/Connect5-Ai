@@ -59,7 +59,6 @@ public class JoueurArtificiel implements Joueur{
 
         /* Si la grille est vide, jouer au centre */
         if (casesvides.size() == (GLOBAL.FULL_NBCOL * GLOBAL.FULL_NBLIGNE)) {
-            System.out.println("first hit");
             return new Position(GLOBAL.FULL_NBLIGNE / 2, GLOBAL.FULL_NBCOL / 2);
         }
 
@@ -70,26 +69,20 @@ public class JoueurArtificiel implements Joueur{
         TreeSet<Move> pq = init.getNextMoves(GLOBAL.MAX);
         Move MAXcheckWinMove = pq.pollFirst();
         if (MAXcheckWinMove.score == GLOBAL.WIN) {
-            System.out.println("Try WIN: (" + (MAXcheckWinMove.move / GLOBAL.NBCOL) + "," + (MAXcheckWinMove.move % GLOBAL.NBCOL) + ")");
             int choix_converted = getMoveCutedGridToFullGrid(MAXcheckWinMove.move);
 
             return new Position(choix_converted / GLOBAL.FULL_NBCOL, choix_converted % GLOBAL.FULL_NBCOL);
         }
 
-        System.out.println("AI : JOUEUR " + GLOBAL.MAX);
         int deep = 2;
         List<Integer> moves = new ArrayList<Integer>();
         moves.add(MAXcheckWinMove.move);
-        System.out.println(GLOBAL.showTimeRemain());
-        System.out.println(" TRY TO MAX :" + GLOBAL.MAX + " AND MIN :" + GLOBAL.MAX);
-
 
         /************************* BOUCLE MINMAX ********************************/
         int[] res = null;
         boolean stoped = false;
         while (!stoped) {
             try {
-                System.out.println("try deep:   " + deep);
                 res = MinMax.getMove(init, GLOBAL.MAX, deep);
                 deep += (deep >= 4) ? 1 : 2;
                 if (res != null)
@@ -110,14 +103,8 @@ public class JoueurArtificiel implements Joueur{
 
         int choix = moves.get(moves.size() - 1);
         if (res != null) {
-            System.out.println("----------------------------- LAST DEPTH : " + GLOBAL.LAST_DEPTH);
-            System.out.println("score :" + res[1] + " play :(" + res[0] / GLOBAL.NBCOL + "," + res[0] % GLOBAL.NBCOL + ")");
             init.play(res[0], 3);
-            System.out.println(Util.toStringOneDim(init.one_dim));
             init.unplay(res[0]);
-        } else {
-            System.out.println("res est  null----------------------");
-            System.out.println("score :" + MAXcheckWinMove.score + " play :(" + choix / GLOBAL.NBCOL + "," + choix % GLOBAL.NBCOL + ")");
         }
 
         int choix_converted = getMoveCutedGridToFullGrid(choix);
@@ -132,7 +119,6 @@ public class JoueurArtificiel implements Joueur{
         if (grille.getSize() > 81) {
             byte[][] firstCut = cutGrid(grille);
             byte[] finalCut = oneDimentionalArray(firstCut);
-            System.out.println(toStringOneDimWithCol(finalCut, firstCut[0].length, firstCut.length));
             GLOBAL.NBCOL = firstCut[0].length;
             GLOBAL.NBLIGNE = firstCut.length;
             myGrid = finalCut;
@@ -184,24 +170,19 @@ public class JoueurArtificiel implements Joueur{
         GLOBAL.MIN = (GLOBAL.MAX == 1) ? 2 : 1;
 
         if (casesvides.size() == (GLOBAL.FULL_NBCOL * GLOBAL.FULL_NBLIGNE)) {
-            System.out.println("first hit");
             return new Position(GLOBAL.FULL_NBLIGNE / 2, GLOBAL.FULL_NBCOL / 2);
         }
 
         Etat init = getInitState(grille);
 
-        System.out.println("AI : JOUEUR " + GLOBAL.MAX);
         int deep = 2;
         List<Integer> moves = new ArrayList<Integer>();
         moves.add(init.getNextMoves(GLOBAL.MAX).pollFirst().move);
-        System.out.println(GLOBAL.showTimeRemain());
-        System.out.println(" TRY TO MAX :" + GLOBAL.MAX + " AND MIN :" + GLOBAL.MIN);
 
         int[] res = null;
         boolean stoped = false;
         while (deep <= maxDepth && !stoped) {
             try {
-                System.out.println("try deep:   " + deep);
                 res = MinMax.getMove(init, GLOBAL.MAX, deep);
                 deep += (deep >= 4) ? 1 : 2;
                 if (res != null)
@@ -212,21 +193,14 @@ public class JoueurArtificiel implements Joueur{
                 }
 
             } catch (TimeOver e) {
-                System.out.println(e);
                 stoped = true;
             }
         }
         MinMax.closelist.clear();
         int choix = moves.get(moves.size() - 1);
         if (res != null) {
-            System.out.println("----------------------------- LAST DEPTH : " + GLOBAL.LAST_DEPTH);
-            System.out.println("score :" + res[1] + " play :(" + res[0] / GLOBAL.NBCOL + "," + res[0] % GLOBAL.NBCOL + ")");
             init.play(res[0], 3);
-            System.out.println(Util.toStringOneDim(init.one_dim));
             init.unplay(res[0]);
-        } else {
-            System.out.println("res est  null----------------------");
-            System.out.println("play :(" + choix / GLOBAL.NBCOL + "," + choix % GLOBAL.NBCOL + ")");
         }
 
         int choix_converted = getMoveCutedGridToFullGrid(choix);
@@ -334,11 +308,6 @@ public class JoueurArtificiel implements Joueur{
         int smallSizeY = leftBuffer + rightBuffer + (hy[1] - ly[1] + 1);
 
         /*TODO: remplacer par System.arrayCopy()*/
-      /*  int x =  (((smallx - extendBufferX) +lx[0] ) > GLOBAL.FULL_NBLIGNE)? 0: lx[0];
-        int y =  (((smally - extendBufferY) +ly[1] ) > GLOBAL.FULL_NBLIGNE)? 0: ly[1];*/
-        System.out.println("smallSizeY: " + smallSizeY + "      smallSizeX: " + smallSizeX);
-        System.out.println("left_buffer: " + leftBuffer + "       rightBuffer: " + rightBuffer);
-        System.out.println("topBuffer: " + topBuffer + "     downBuffer: " + downBuffer);
         byte[][] cpy = new byte[smallSizeX][smallSizeY];
         for (int i = 0; i < cutedNoBuffX; i++) {
             for (int j = 0; j < cutedNoBuffY; j++) {
@@ -346,15 +315,6 @@ public class JoueurArtificiel implements Joueur{
                 cpy[i + topBuffer][j + leftBuffer] = (byte) t;
             }
         }
-
-
-       /*
-        cpy[hx[0]][hx[1]] = 3;
-        cpy[lx[0]][lx[1]] = 4;
-        cpy[hy[0]][hy[1]] = 5;
-        cpy[ly[0]][ly[1]] = 6;
-*/
-
         return cpy;
 
     }

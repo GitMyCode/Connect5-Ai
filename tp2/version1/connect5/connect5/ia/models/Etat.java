@@ -146,7 +146,6 @@ public class Etat {
 
     private byte[] cloneByteArray(byte[] array){
         byte[] one_dim = new byte[array.length];
-        //System.out.println("nb col:" +nbcol + "  nbligne: "+ nbligne);
         System.arraycopy(array,0,one_dim,0,array.length);
         return one_dim;
     }
@@ -285,15 +284,6 @@ public class Etat {
         }
 
         int limit = (player_to_max == MAX_player) ? -GLOBAL.WIN: GLOBAL.WIN;
-
-        /*while(orderedMovesTree.size()>1){
-            if(orderedMovesTree.last().score == limit){
-                orderedMovesTree.pollLast();
-                System.out.println("cuted");
-            }else{
-                break;
-            }
-        }*/
 
         return orderedMovesTree;
     }
@@ -593,7 +583,6 @@ public class Etat {
             Dir.Axes a = Dir.Axes.getAxe(d);
             int test[] = new int[mapAxesStartPointSet.get(a).size()];
             int i=0;
-            //   System.out.println(a + " nbStartpoint:"+ test.length );
             for(Iterator<Integer> it = mapAxesStartPointSet.get(a).iterator(); it.hasNext(); ){
                 int startPoint = it.next();
                 test[i] =startPoint;
@@ -1000,7 +989,6 @@ public class Etat {
 
         private byte[] oneDimentionalArray(byte[][] grille){
         byte[] one_dim = new byte[nbcol * nbligne];
-        //System.out.println("nb col:" +nbcol + "  nbligne: "+ nbligne);
         for(int l=0 ; l < nbligne ; l++){
             System.arraycopy(grille[l],0,one_dim,l*(nbcol),nbcol);
         }

@@ -25,7 +25,6 @@ public class MinMax {
     public static int[] minmax (Etat etat, int depth, int player, int alpha, int beta, int lastScore) throws TimeOver {
         /* Arreter lorsque pas de temps pour continuer explo */
         if (GLOBAL.timeUp()) {
-            System.out.println("GOOOO BACK!!");
             throw new TimeOver("Time Over");
         }
 
@@ -152,7 +151,6 @@ public class MinMax {
         }
 
         int[] play = minmax(etatInitial, 0, currentPlayer, Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
-        System.out.println(" NB_SAVE :"+nbSaveInCloseList);
         GLOBAL.LAST_DEPTH = deep;
 
         return play;
