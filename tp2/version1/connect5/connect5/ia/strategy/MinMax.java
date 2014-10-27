@@ -1,9 +1,8 @@
 package connect5.ia.strategy;
 
-import connect5.Grille;
-import connect5.ia.models.*;
-
 import java.util.*;
+
+import connect5.ia.models.*;
 
 /**
  * Created by MB on 3/30/14.
@@ -24,7 +23,7 @@ public class MinMax {
     public static HashMap<Etat,Etat> closelist = new HashMap<Etat, Etat>();
 
     public static int[] minmax (Etat etat, int depth, int player, int alpha, int beta, int lastScore) throws TimeOver {
-        /* Arreter lorsque pas de temps pour continuer minmax */
+        /* Arreter lorsque pas de temps pour continuer explo */
         if (GLOBAL.timeUp()) {
             System.out.println("GOOOO BACK!!");
             throw new TimeOver("Time Over");
@@ -42,7 +41,7 @@ public class MinMax {
                     return new int[] {-1, ref.upperBound};
                 }
                 if(ref.lowerBound != null){
-                    alpha = Math.max(alpha,ref.lowerBound);
+                    alpha = Math.max(alpha, ref.lowerBound);
                 }
                 if(ref.upperBound != null){
                     beta = Math.min(beta, ref.upperBound);
