@@ -34,10 +34,10 @@ public abstract class GLOBAL {
     public static boolean END = false;
 
 
-    public static void startTimer(int delais){
+    public static void startTimer(int delai){
         END = false;
         timer = System.currentTimeMillis();
-        remain = delais;
+        remain = delai;
     }
 
     public static String showTimeRemain(){
@@ -54,7 +54,7 @@ public abstract class GLOBAL {
             return true;
         }
 
-        if(timeRemaining() < LIMITE ){
+        if(timeRemaining() < LIMITE){
             END = true;
             return true;
         }
