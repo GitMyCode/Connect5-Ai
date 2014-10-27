@@ -8,7 +8,6 @@ public abstract class GLOBAL {
     public static int MAX;
     public static int MIN;
 
-
     public static int NBCOL;
     public static int NBLIGNE;
 
@@ -21,7 +20,6 @@ public abstract class GLOBAL {
     public static int bufferY;
     public static int lowestX;
     public static int lowestY;
-
 
 
     public static final int ALMOST_WIN = 5000000; // 50 million
@@ -41,13 +39,10 @@ public abstract class GLOBAL {
         timer = System.currentTimeMillis();
         remain = delais;
     }
-    public static String showTimer(){
-        return ("Time: "+ (System.currentTimeMillis() - timer) + " ms" );
-    }
-    public static String showTimeRemain(){
-        return ("Time: "+ (remain-(System.currentTimeMillis() - timer)) + " ms" );
-    }
 
+    public static String showTimeRemain(){
+        return ("Time: " + (remain-(System.currentTimeMillis() - timer)) + " ms");
+    }
 
     public static long timeRemaining(){
         long passed = (System.currentTimeMillis() - timer);
@@ -62,7 +57,6 @@ public abstract class GLOBAL {
         if(timeRemaining() < LIMITE ){
             END = true;
             return true;
-
         }
 
         return false;
@@ -71,18 +65,16 @@ public abstract class GLOBAL {
     private int getMoveCutedGridToFullGrid(int move){
         int pos_x,pos_y;
         pos_x =  ((move/GLOBAL.NBCOL) ) + (lowestX - bufferX);
-        pos_y = ((move%GLOBAL.NBCOL) ) +  (lowestY - bufferY);
+        pos_y = ((move%GLOBAL.NBCOL) ) + (lowestY - bufferY);
 
         return  pos_x * GLOBAL.FULL_NBCOL + pos_y;
     }
 
-
-
-    public String toStringOneDim(byte[] data,int nbcol){
+    public String toStringOneDim(byte[] data, int nbcol){
         char[] table = {'-', 'N', 'B' };
         String result =  nbcol+ "\n";
 
-        int i=1;
+        int i = 1;
         for(byte b : data){
             char c = (char)b;
             result += table[b];
@@ -94,5 +86,4 @@ public abstract class GLOBAL {
 
         return result;
     }
-
 }
