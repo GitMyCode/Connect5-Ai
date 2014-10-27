@@ -15,9 +15,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-//import java.util.Date;
 import java.util.*;
-import java.io.*;
 
 /**
  *
@@ -87,8 +85,6 @@ public class ServeurJoueurConnect5 {
             System.out.println(" #clients actifs:" + JoueurRunner.compteur);
         }
 
-        public static int   compteur=0;
-
+        public static int   compteur = 0;
     }
-
 }
