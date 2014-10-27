@@ -2,38 +2,48 @@ package connect5.ia.models;
 
 /**
  * Created by MB on 10/9/2014.
+ * Diverses variables utilisees a travers le projet
  */
 public abstract class GLOBAL {
 
+    /* Joueur MIN et MAX */
     public static int MAX;
     public static int MIN;
 
+    /* Nombre de lignes / colonnes dans grille reduite */
     public static int NBCOL;
     public static int NBLIGNE;
 
+    /* Nombre lignes / colonnes dans grille complete */
     public static int FULL_NBCOL;
     public static int FULL_NBLIGNE;
+
+    /* La derniere profondeur atteinte par MinMax */
     public static int LAST_DEPTH;
 
-
+    /* Le "buffer" (espace supplementaire) pour la grille reduite */
     public static int bufferX;
     public static int bufferY;
+
+
     public static int lowestX;
     public static int lowestY;
-
 
     public static final int ALMOST_WIN = 5000000; // 50 million
     public static final int WIN = 100000000; // 100 million
     public static final int CONNECT4_SCORE = 100000; // 1 million
 
+    public static final int LIMITE = 80;
 
-    public static final int LIMITE =80;
-
+    /* Variables pour le timer */
     public static long timer;
     public static long remain;
     public static boolean END = false;
 
-
+    /**
+     * Demarre le timer
+     * @param delai Entier du temps maximum, en milliseconde
+     */
     public static void startTimer(int delai){
         END = false;
         timer = System.currentTimeMillis();
@@ -41,14 +51,21 @@ public abstract class GLOBAL {
     }
 
     public static String showTimeRemain(){
-        return ("Time: " + (remain-(System.currentTimeMillis() - timer)) + " ms");
+        return ("Time: " + (remain - (System.currentTimeMillis() - timer)) + " ms");
     }
 
+    /**
+     * @return Retourne le temps restant
+     */
     public static long timeRemaining(){
         long passed = (System.currentTimeMillis() - timer);
-        return remain-passed;
+        return remain - passed;
     }
 
+    /***
+     * Indique si le temps est écoulé
+     * @return true si temps écoulé
+     */
     public static boolean timeUp(){
         if(END){
             return true;
