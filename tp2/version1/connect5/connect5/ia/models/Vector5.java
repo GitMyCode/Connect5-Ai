@@ -64,6 +64,21 @@ public class Vector5 implements Comparable {
 
         }
 
+        /*The point is directly on the vector*/
+        public boolean containPoint(int point){
+           Dir.Axes axe = Dir.Axes.getAxe(D);
+            int vectorAxesStartPoint = Etat.mapAxesPointToStartPoint.get(axe).get(beginPoint);
+
+            /*Sur la meme ligne*/
+            if(Etat.mapAxesPointToStartPoint.get(axe).get(point) != vectorAxesStartPoint){
+                return false;
+            }
+            return (beginPoint <= point && point <= endPoint) || (beginPoint >= point && point >= endPoint);
+        }
+
+
+
+
 
         /*Check if they are next to each other  ->   01110 :Yes  01011 : No*/
         public boolean isSuite(int binarySeq){

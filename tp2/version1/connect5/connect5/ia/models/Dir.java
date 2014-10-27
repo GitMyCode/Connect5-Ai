@@ -136,7 +136,7 @@ public enum Dir {
 
     public enum Axes{
         VERTICAL(TOP, DOWN, 0),
-        HORIZONTAL(RIGHT, LEFT, 1),
+        HORIZONTAL(LEFT, RIGHT, 1),
         DIAGR(DOWNLEFT, TOPRIGHT, 2), // Diagonale /
         DIAGL(TOPLEFT, DOWNRIGHT, 3); // Diagonale \
 

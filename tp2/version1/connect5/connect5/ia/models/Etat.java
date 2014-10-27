@@ -3,6 +3,8 @@ package connect5.ia.models;
 import connect5.Grille;
 import connect5.GrilleVerificateur;
 
+import javax.swing.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -54,6 +56,9 @@ public class Etat {
     Map<Dir.Axes,Set<Integer>> mapAxesStartPointSet ;
     Map<Dir.Axes,Map<Integer,Integer>> mapAngleDangerMAX;
     Map<Dir.Axes,Map<Integer,Integer>> mapAngleDangerMIN;
+
+    Map<Dir.Axes,HashSet<Integer>> mapDisabledPoint;
+
 
     public Map<Integer,Treat> mapTreat = new HashMap<Integer, Treat>();
 
@@ -109,6 +114,7 @@ public class Etat {
         cloned.evaluationHere = this.evaluationHere;
         cloned.mapAxesPointToStartPoint = mapAxesPointToStartPoint;
         cloned.mapAxesStartPointSet = mapAxesStartPointSet;
+        cloned.mapDisabledPoint =  cloneMap2(mapDisabledPoint);
 
 
       /*
@@ -121,6 +127,17 @@ public class Etat {
 
 
         return cloned;
+    }
+
+    private Map<Dir.Axes,HashSet<Integer>> cloneMap2(Map<Dir.Axes,HashSet<Integer>> toClone){
+        Map<Dir.Axes,HashSet<Integer>> c = new HashMap<Dir.Axes, HashSet<Integer>>();
+        for(Map.Entry<Dir.Axes,HashSet<Integer>> entry : toClone.entrySet()){
+            c.put(entry.getKey(),new HashSet<Integer>());
+            for(Integer i : entry.getValue()){
+                c.get(entry.getKey()).add(i);
+            }
+        }
+        return c;
     }
 
 
@@ -212,7 +229,7 @@ public class Etat {
             Dir.Axes axe = Dir.Axes.getAxe(D);
             Integer startPoint = mapAxesPointToStartPoint.get(axe).get(move);
             oldScore += mapMemoAxesValue.get(axe).get(startPoint);
-            int thisAngleScore = axeAngleValue(startPoint, D,player);
+            int thisAngleScore = axeAngleValue(startPoint, D,player,move);
 
             thisScore+= thisAngleScore;
             updateAngleMaps(axe,startPoint);
@@ -376,7 +393,10 @@ public class Etat {
     int MAXhigthestSeqThisAngle;
     int MINhigthestSeqThisAngle;
     HashSet<Vector5> allV;
-    public int axeAngleValue(int point, Dir D,int player){
+    /*
+    * param:  pointplayed  is to mark the point when use causes morethan 5 to put it in mapDisabledPoint
+    * */
+    public int axeAngleValue(int point, Dir D,int player,int pointPlayed){
         /*Init temp variable that are global*/
         MAXhigthestSeqThisAngle =0;
         MINhigthestSeqThisAngle =0;
@@ -399,7 +419,7 @@ public class Etat {
 
 
                     /*TODO ne marche pas! We must not count vector that have more than 5*/
-                    if (tempMemo.containsKey(i)&& tempMemo.get(i).moreThan5) {
+                    if (tempMemo.containsKey(i)&& tempMemo.get(i).moreThan5 || mapDisabledPoint.get(axe).contains(pointPlayed) ) {
                         continue;
                     }
 
@@ -407,6 +427,10 @@ public class Etat {
 
                     Vector5 new_vector = new Vector5(nb_seqt,D,i);
                     new_vector.tab_seq = getTabSeq(i,D);
+
+                    if(containDisabledPoint(D,i,i+D.step(4)))
+                        continue;
+
                     new_vector.setIfDirectionnel(isBidirectionnel(i,i+D.step(4),D));
 
                     if (new_vector.suite == 5) {
@@ -415,13 +439,19 @@ public class Etat {
                         if (D.boundaries(i, 6) && one_dim[i + D.step(5)] == res) {
                             new_vector.moreThan5 = true;
                             Vector5 old_ref;
+
+                            /*TODO a checker je considere que si il est proche (-1 et +1 de disctance) alors le point est en cause*/
+                            if(new_vector.isNearPoint(pointPlayed)){
+                                mapDisabledPoint.get(axe).add(pointPlayed);
+                            }
                             for (int v = 0; v < 6; v++) {
                                 if ((nb_seqt & (power2[v])) != 0) {
-                                    old_ref = tempMemo.get(i+D.step(v));
+                                    int pointIndex = i+D.step(v);
+                                    old_ref = tempMemo.get(pointIndex);
                                     if (old_ref != null && !old_ref.moreThan5) {
                                         old_ref.value--;
                                     }
-                                    tempMemo.put(i+D.step(v),new_vector);
+                                    tempMemo.put(pointIndex,new_vector);
                                 }
                             }
                             continue;
@@ -522,7 +552,7 @@ public class Etat {
             Dir.Axes axe = Dir.Axes.getAxe(D);
             Integer startPoint = mapAxesPointToStartPoint.get(axe).get(move);
             oldScore += mapMemoAxesValue.get(axe).get(startPoint);
-            thisScore+= axeAngleValue(startPoint, D,player);
+            thisScore+= axeAngleValue(startPoint, D,player,move);
             checkP1win = (playe1Won)? true : checkP1win;
             checkP2win = (player2Won)? true : checkP2win;
 
@@ -553,14 +583,17 @@ public class Etat {
         mapAxesStartPointSet = new HashMap<Dir.Axes, Set<Integer>>();
         mapMemoAxesValue = new HashMap<Dir.Axes, Map<Integer, Integer>>();
         mapTreat = new HashMap<Integer, Treat>();
+        mapDisabledPoint = new HashMap<Dir.Axes, HashSet<Integer>>();
 
         for(Dir.Axes a : Dir.Axes.values()){
             mapAxesPointToStartPoint.put(a, new HashMap<Integer, Integer>());
             mapAxesStartPointSet.put(a, new HashSet<Integer>());
+            mapDisabledPoint.put(a, new HashSet<Integer>());
         }
 
 
         for(Dir.Axes a : Dir.Axes.values()){
+            int dsf=0;
             for(int i=0; i < GLOBAL.NBCOL* GLOBAL.NBLIGNE; i++) {
                 int x = i / GLOBAL.NBCOL;
                 int y = i % GLOBAL.NBCOL;
@@ -582,6 +615,17 @@ public class Etat {
                     default:
                         break;
                 }
+                if(i == 53){
+                    int s=0;
+                }
+
+
+
+
+
+
+
+
                 mapAxesStartPointSet.get(a).add(startPoint);
                 mapAxesPointToStartPoint.get(a).put(i, startPoint);
 
@@ -600,8 +644,41 @@ public class Etat {
             mapMemoAxesValue.put(a, new HashMap<Integer, Integer>());
             mapAngleDangerMAX.put(a, new HashMap<Integer, Integer>());
             mapAngleDangerMIN.put(a, new HashMap<Integer, Integer>());
+
+
+
             wtfMap.put(a, new HashMap<Integer, Map<Integer, Vector5>>());
         }
+
+
+        /*
+        * Play all moves to get all the deathlock (more than 5)
+        * */
+        for(int i =0; i<one_dim.length; i++){
+            if(one_dim[i]==0){
+
+                for(Dir D : Dir.direction4){
+                    Dir.Axes axe = Dir.Axes.getAxe(D);
+                    int startPoint = mapAxesPointToStartPoint.get(axe).get(i);
+
+                    play(i, MAX_player);
+                    axeAngleValue(startPoint,D,GLOBAL.MAX,i);
+                    unplay(i);
+
+
+                    play(i,MIN_player);
+                    axeAngleValue(startPoint,D,GLOBAL.MAX,i);
+                    unplay(i);
+                }
+            }
+        }
+
+
+
+
+        /*
+        * Now we find all the treat!
+        * */
         for(Dir d : Dir.direction4){
             Dir.Axes a = Dir.Axes.getAxe(d);
             int test[] = new int[mapAxesStartPointSet.get(a).size()];
@@ -610,14 +687,19 @@ public class Etat {
             for(Iterator<Integer> it = mapAxesStartPointSet.get(a).iterator(); it.hasNext(); ){
                 int startPoint = it.next();
                 test[i] =startPoint;
-                int eval = axeAngleValue(startPoint,d,MAX_player);
+
+                int eval = axeAngleValue(startPoint,d,MAX_player,-1);
                 evaluationHere += eval;
                 mapMemoAxesValue.get(a).put(startPoint,eval);
                 updateAngleMaps(a,startPoint);
 
+
+
+
                 i++;
             }
         }
+        int stop=0;
 /*        int t=0;
         for(Map m : mapMemoAxesValue.values()){
             for(Object i : m.values()){
@@ -693,10 +775,10 @@ public class Etat {
             }
 
             /*TODO ca ne derais jamais etre la c,est a cause d<un bug que je comprends pas*/
-            if(getMaxSeq() ==0 && getMinSeq() ==0){
+            /*if(getMaxSeq() ==0 && getMinSeq() ==0){
                 minAhead = higthestMIN;
                 maxAhead = higthestMAX;
-            }
+            }*/
 
 
 
@@ -847,11 +929,14 @@ public class Etat {
                             Vector5 old_ref;
                             for(int v=0;v<6;v++){
                                 if( (nb_seqt&(power2[v])) != 0){
-                                    old_ref = memo[axe.i][i + D.step(v)];
+                                    int indexCase = i+D.step(v);
+                                    mapDisabledPoint.get(axe).add(indexCase);
+
+                                    old_ref = memo[axe.i][indexCase];
                                     if(old_ref != null && !old_ref.moreThan5){
                                         old_ref.value--;
                                     }
-                                    memo[axe.i][i + D.step(v)] = new_vector;
+                                    memo[axe.i][indexCase] = new_vector;
                                 }
                             }
                             continue;
@@ -1048,7 +1133,7 @@ public class Etat {
             Dir.Axes axe = Dir.Axes.getAxe(D);
             int startPoint = mapAxesPointToStartPoint.get(axe).get(point);
 
-            axeAngleValue(startPoint, D, 1);
+            axeAngleValue(startPoint, D, 1,point);
             for(Vector5 v : allV){
 
                 if(v1!= null && v.isMAXvector != v1.isMAXvector){
@@ -1123,14 +1208,34 @@ public class Etat {
 
     public boolean isBidirectionnel(int index,int last_index, Dir D) {
         int step;
-        if (one_dim[index] != 0) {
+        Dir.Axes axe = Dir.Axes.getAxe(D);
+
+
+        for(Integer blocked : mapDisabledPoint.get(axe)){
+            if(index<= blocked && blocked >= last_index){
+                return false;
+            }
+            if(index >= blocked && blocked <= last_index){
+                return false;
+            }
+        }
+
+
+        if(mapDisabledPoint.get(axe).contains(index))
+            return false;
+
+        if (one_dim[index] != 0 ) {
+
 
             step = index + D.opp().v();
             if(!D.opp().boundaries(index,2)){
                 return false;
             }
 
-            if ( !D.opp().boundaries(index,2) && !D.opp().boundaries(step,5) || one_dim[step] != 0) {
+            if(mapDisabledPoint.get(axe).contains(step))
+                return false;
+
+            if ( !D.opp().boundaries(index,2) && !D.opp().boundaries(step,5) || one_dim[step] != 0 ) {
                 return false;
             }
         }
@@ -1142,6 +1247,10 @@ public class Etat {
                 return false;
 
             step = last_index + D.v();
+
+            /*Si c'est un point qui devrait*/
+            if(mapDisabledPoint.get(axe).contains(step))
+                return false;
 
             if (one_dim[step] != 0) {
                 return false;
@@ -1273,7 +1382,7 @@ public class Etat {
             for(Iterator<Integer> it = mapAxesStartPointSet.get(a).iterator(); it.hasNext(); ){
                 int startPoint = it.next();
              //   test[i] =startPoint;
-                int t = axeAngleValue(startPoint,d,player);
+                int t = axeAngleValue(startPoint,d,player,-1);
                 total += t;
               //  mapMemoAxesValue.get(a).put(startPoint,t);
                 if(higthestMIN> 3){
@@ -1289,5 +1398,23 @@ public class Etat {
         }
         return total;
     }
+
+
+    public boolean containDisabledPoint(Dir D,int from, int to){
+        Dir.Axes axe = Dir.Axes.getAxe(D);
+        int startPoint = mapAxesPointToStartPoint.get(axe).get(from);
+
+        for(Integer point : mapDisabledPoint.get(axe)){
+
+            if((from <= point && point <= to) || (from >= point && point >= to)){
+                if(mapAxesPointToStartPoint.get(axe).get(point) == startPoint){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
 
 }
