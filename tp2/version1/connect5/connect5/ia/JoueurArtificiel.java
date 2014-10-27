@@ -104,7 +104,7 @@ public class JoueurArtificiel implements Joueur{
                 stoped = true;
             }
         }
-        MinMax.closelist.clear(); /* Clear  le memo des etats */
+       // MinMax.closelist.clear(); /* Clear  le memo des etats */
         /***************************- FIN BOUCLE MINMAX -******************************/
 
 

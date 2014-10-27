@@ -177,4 +177,36 @@ public abstract class Util {
 
     }
 
+    /*public int calculateAllAngle(int player){
+        int total=0;
+
+        vector5MAX_2 = new LinkedList<Vector5>();
+        vector5MIN_2 = new LinkedList<Vector5>();
+
+        for(Dir d : Dir.direction4){
+            Dir.Axes a = Dir.Axes.getAxe(d);
+            //int test[] = new int[mapAxesStartPointSet.get(a).size()];
+            int i=0;
+            //   System.out.println(a + " nbStartpoint:"+ test.length );
+            for(Iterator<Integer> it = mapAxesStartPointSet.get(a).iterator(); it.hasNext(); ){
+                int startPoint = it.next();
+             //   test[i] =startPoint;
+                int t = axeAngleValue(startPoint,d,player,-1);
+                total += t;
+              //  mapMemoAxesValue.get(a).put(startPoint,t);
+                if(higthestMIN> 3){
+                    int df=0;
+                }
+                i++;
+            }
+
+*//*   System.out.println("all the startPoint: "+ Arrays.toString(test));
+            System.out.println(toStringVector(one_dim,test));*//*
+
+
+        }
+        return total;
+    }*/
+
+
 }
