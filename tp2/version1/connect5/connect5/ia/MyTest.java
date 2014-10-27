@@ -485,7 +485,8 @@ score :4999414 play :(10,6)
             "--B----------" +
             "--------N----" +
             "-------------";
-    static String sixCatch6=//4 8  /*TODO: PASSED*/
+
+    static String sixCatch6=//4 8  /*TODO: */
             "-BBBBBBB"+
             "NBNBNBNN"+
             "BNBNBNBN"+
