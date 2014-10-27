@@ -296,6 +296,21 @@ score :4999414 play :(10,6)
                         "------------" +
                         "------------";
 
+
+        static String getDoubleOUI4 =//11 9
+              //score  -214 (3,4)  TODO pas bon
+                        "---------" +
+                        "---------" +
+                        "---------" +
+                        "-----B---" +
+                        "---BN----" +
+                        "---NB----" +
+                        "---NBN---" +
+                        "----N----" +
+                        "---------" +
+                        "---------" +
+                        "---------";
+
         static String doubleOUI1= //8 12
                 "------------" +
                 "--------N---" +
@@ -433,6 +448,32 @@ score :4999414 play :(10,6)
                 "-------------" +
                 "-------------";
 
+    static String sixCatch3=//11 13  /*TODO: PASSED*/
+            "-----N-------" +
+            "-B---N-------" +
+            "-----N-------" +
+            "-----N-------" +
+            "--BBB-BBB----" +
+            "-----N-------" +
+            "-----N-------" +
+            "-------------" +
+            "-------------" +
+            "--------N----" +
+            "-------------";
+    static String sixCatch4=//11 13  /*TODO: PASSED*/
+            "-----N------B" +
+            "-B---N-------" +
+            "-----N-------" +
+            "-----N-------" +
+            "---BB-BB-----" +
+            "-----N-------" +
+            "-----N-------" +
+            "-------------" +
+            "--B----------" +
+            "--------N----" +
+            "-------------";
+
+
 
 
     public static int[] testByte(String theGrid,int nbligne, int nbcol){
@@ -463,7 +504,7 @@ score :4999414 play :(10,6)
         // Test B1
         System.out.println("Test #1");
         //nbligne = 12; nbcol = 12;
-        Grille g = new Grille(11,13,testByte(sixCatch2,11,13));
+        Grille g = new Grille(11,13,testByte(sixCatch4,11,13));
         Position coup = joueur.getProchainCoupTEST(g,2);
         System.out.println((coup.ligne==4 && coup.colonne==0) ? "Réussi": "Échoué");
 

@@ -4,10 +4,7 @@ import connect5.ia.*;
 import connect5.ia.models.*;
 import connect5.ia.models.Vector5;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by MB on 10/23/2014.
@@ -86,6 +83,22 @@ public abstract class Util {
     }
 
 
+    static public void printInvalidPoint(Map<Dir.Axes,HashSet<Integer>> points, byte[] grid){
+
+        for(Map.Entry<Dir.Axes,HashSet<Integer>> entry : points.entrySet()){
+            Dir.Axes axe = entry.getKey();
+            int tabPoint[] = new int[entry.getValue().size()];
+            int i=0;
+            System.out.println("--"+axe+"--");
+            for(Integer point : entry.getValue()){
+                tabPoint[i] = point;
+                i++;
+            }
+            System.out.println(toStringVector(grid,tabPoint));
+        }
+    }
+
+
     static public void printGridWithThisPoint(int point,byte[] grid){
 
         byte b = grid[point];
@@ -108,7 +121,6 @@ public abstract class Util {
             }
             i++;
         }
-
         return result;
     }
     static public void pintTotalMapMemoAxeValue(Map<Dir.Axes,Map<Integer,Integer>> mapMemoAxesValue){
@@ -118,7 +130,6 @@ public abstract class Util {
             for(Object i : m.values()){
                 t += (Integer) i;
             }
-
         }
         System.out.println(t);
 
